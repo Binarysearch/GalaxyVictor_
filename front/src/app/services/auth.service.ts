@@ -56,6 +56,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<SessionDTO> {
+    this.messagingService.send({id: 10, type: 'lol', payload: {lol: [1, 2, 3], kaka: 'popo'}});
     return this.http.post<SessionDTO>(this.loginUrl, {email: email, password: password}).pipe(
       tap<SessionDTO>((session: SessionDTO) => {
         this.onSessionStart(session);
@@ -77,7 +78,7 @@ export class AuthService {
     localStorage.setItem('sessionToken', session.token);
     this.currentSessionSubject.next(this.session);
     this.router.navigate([this.redirectUrl]);
-    this.messagingService.send({type: 'authToken', payload: session.token});
+    this.messagingService.send({id: 1, type: 'authToken', payload: session.token});
   }
 
   public get sessionToken() {

@@ -10,15 +10,15 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/socket")
 public class GvWebSocket implements WebSocket{
 
-	private final GvRequestDispatcher requestDispatcher;
+	private final RequestDispatcher requestDispatcher;
 	private final MessagingService messagingService;
 	private Session session;
 
 	public GvWebSocket() {
-		this(GvRequestDispatcher.getInstance(), GvMessagingService.getInstance());
+		this(BeanManager.get(RequestDispatcher.class), BeanManager.get(MessagingService.class));
 	}
 
-	public GvWebSocket(GvRequestDispatcher requestDispatcher, MessagingService messagingService) {
+	public GvWebSocket(RequestDispatcher requestDispatcher, MessagingService messagingService) {
 		this.requestDispatcher = requestDispatcher;
 		this.messagingService = messagingService;
 	}
@@ -36,7 +36,12 @@ public class GvWebSocket implements WebSocket{
 
 	@OnMessage
 	public String onMessage(String message){
-		return requestDispatcher.dispatch(this, message);
+		try {
+			return requestDispatcher.dispatch(this, message);
+		} catch (Exception e) {
+			return e.toString() + e.getMessage();
+		}
+		
 	}
 
 	@OnError
