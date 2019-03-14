@@ -1,4 +1,4 @@
-package net.desenlace;
+package com.galaxyvictor.websocket;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
