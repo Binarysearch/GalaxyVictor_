@@ -1,4 +1,4 @@
-package com.galaxyvictor.servlets;
+package com.galaxyvictor.servlet;
 
 import javax.servlet.annotation.WebServlet;
 

@@ -1,4 +1,4 @@
-package com.galaxyvictor.servlets;
+package com.galaxyvictor.servlet;
 
 
 public class MethodNotAllowedException extends HttpException {
