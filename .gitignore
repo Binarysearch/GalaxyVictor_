@@ -44,3 +44,4 @@ testem.log
 Thumbs.db
 /back/target/
 .vscode/
+back/src/main/webapp/
