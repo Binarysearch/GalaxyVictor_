@@ -1,19 +1,19 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/front/dist
-/front/tmp
-/front/out-tsc
+/dist
+/tmp
+/out-tsc
 
 # dependencies
-/front/node_modules
+/node_modules
 
 # profiling files
 chrome-profiler-events.json
 speed-measure-plugin.json
 
 # IDEs and editors
-/front/.idea
+/.idea
 .project
 .classpath
 .c9/
@@ -30,18 +30,15 @@ speed-measure-plugin.json
 .history/*
 
 # misc
-/front/.sass-cache
-/front/connect.lock
-/front/coverage
-/front/libpeerconnection.log
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
-/front/typings
+/typings
 
 # System Files
 .DS_Store
 Thumbs.db
-/back/target/
-.vscode/
-back/src/main/webapp/

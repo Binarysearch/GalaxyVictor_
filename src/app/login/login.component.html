@@ -1,0 +1,13 @@
+<div class="container box">
+  <h1>{{ ts.strings.login }}</h1>
+  <div class="field">
+    <label>{{ ts.strings.email }}</label>
+    <input #emailInput class="input" type="email" [(ngModel)]="email">
+  </div>
+  <div class="field">
+    <label>{{ ts.strings.password }}</label>
+    <input #passwordInput type="password" [(ngModel)]="password" (keydown.enter)="passwordKeyEnterDown()">
+  </div>
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <button class="btn" (click)="login()">{{ ts.strings.send }}</button>
+</div>

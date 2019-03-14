@@ -1,0 +1,6 @@
+<div class="container box">
+  <h1>{{ ts.strings.selectGalaxy }}</h1>
+  <ul>
+    <li *ngFor="let galaxy of galaxies" (click)="selectGalaxy(galaxy.id)">{{ galaxy.name }}</li>
+  </ul>
+</div>

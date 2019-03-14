@@ -1,0 +1,39 @@
+:host{
+    height: var(--header-height);
+    width: 100%;
+    position: absolute;
+    background-color: rgb(50, 50, 50);
+    color: rgb(200, 200, 200);
+    box-shadow: 4px 0px 10px var(--box-shadow-color);
+    z-index: 1001;
+}
+header {
+    display: flex;
+    height: 100%;
+}
+header > div:last-child {
+    margin-left: auto;
+}
+
+.btn-nav{
+    box-sizing: border-box;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    border:none;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: rgb(200, 200, 200);
+    padding: calc(var(--header-height)/4);
+    font-size: calc(var(--header-height)/2);
+    height: var(--header-height);
+}
+.btn-nav.active{
+    background-color: rgb(30, 30, 30);
+    color: white;
+}
+.btn-nav:hover{
+    background-color: black;
+    color: white;
+}
