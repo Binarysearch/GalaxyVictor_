@@ -1,4 +1,4 @@
-package com.galaxyvictor.websocket;
+package com.galaxyvictor.auth;
 
 
 

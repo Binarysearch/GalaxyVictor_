@@ -7,6 +7,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import com.galaxyvictor.ServiceManager;
+import com.galaxyvictor.auth.AuthService;
+
 @ServerEndpoint("/socket")
 public class GvWebSocket implements WebSocket{
 
@@ -16,7 +19,7 @@ public class GvWebSocket implements WebSocket{
 	private long civilizationId;
 
 	public GvWebSocket() {
-		this(BeanManager.get(MessagingService.class), BeanManager.get(AuthService.class));
+		this(ServiceManager.get(MessagingService.class), ServiceManager.get(AuthService.class));
 	}
 
 	public GvWebSocket(MessagingService messagingService, AuthService authService) {
