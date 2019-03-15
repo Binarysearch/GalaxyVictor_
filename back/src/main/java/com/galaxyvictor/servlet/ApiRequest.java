@@ -41,4 +41,12 @@ public class ApiRequest {
     public <T> T jsonPath(String path) {
         return (T) JsonPath.read(getRequestBody(), path);
     }
+
+    public String getToken() {
+        String token = originalRequest.getHeader("token");
+        if(token != null){
+            return token;
+        }
+        return "";
+    }
 }

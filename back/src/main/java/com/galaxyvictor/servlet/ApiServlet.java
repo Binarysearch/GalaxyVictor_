@@ -33,7 +33,7 @@ public abstract class ApiServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE");
-        response.setHeader("Access-Control-Allow-Headers", "content-type");
+        response.setHeader("Access-Control-Allow-Headers", "content-type, token");
     }
 
     @Override
@@ -43,11 +43,22 @@ public abstract class ApiServlet extends HttpServlet {
             ApiRequest request = new ApiRequest(req);
             response.getWriter().print(postRequest(request));
         } catch (Exception e) {
-            handlePostException(e, response);
+            handleException(e, response);
         }
     }
 
-    private void handlePostException(Exception e, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        try {
+            ApiRequest request = new ApiRequest(req);
+            response.getWriter().print(getRequest(request));
+        } catch (Exception e) {
+            handleException(e, response);
+        }
+    }
+
+    private void handleException(Exception e, HttpServletResponse response) throws IOException {
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
             response.setStatus(httpException.getStatusCode());
@@ -111,6 +122,10 @@ public abstract class ApiServlet extends HttpServlet {
     }
 
     protected String postRequest(ApiRequest request) throws SQLException{
+        throw new MethodNotAllowedException();
+    }
+
+    protected String getRequest(ApiRequest request) throws SQLException{
         throw new MethodNotAllowedException();
     }
 

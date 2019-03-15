@@ -23,3 +23,8 @@ CREATE TABLE civilizations(
     name text NOT NULL,
     usr bigint NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE galaxies(
+    id BIGSERIAL PRIMARY KEY,
+    name text NOT NULL
+);
