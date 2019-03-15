@@ -58,6 +58,17 @@ public abstract class ApiServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        try {
+            ApiRequest request = new ApiRequest(req);
+            response.getWriter().print(putRequest(request));
+        } catch (Exception e) {
+            handleException(e, response);
+        }
+    }
+
     private void handleException(Exception e, HttpServletResponse response) throws IOException {
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
@@ -126,6 +137,10 @@ public abstract class ApiServlet extends HttpServlet {
     }
 
     protected String getRequest(ApiRequest request) throws SQLException{
+        throw new MethodNotAllowedException();
+    }
+
+    protected String putRequest(ApiRequest request) throws SQLException{
         throw new MethodNotAllowedException();
     }
 
