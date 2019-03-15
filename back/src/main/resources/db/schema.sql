@@ -14,7 +14,7 @@ CREATE TABLE galaxies(
 );
 
 CREATE TABLE star_systems(
-    id BIGSERIAL PRIMARY KEY,
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     name text,
     galaxy bigint REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     x double precision NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE star_systems(
 );
 
 CREATE TABLE users(
-    id BIGSERIAL PRIMARY KEY,
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     galaxy bigint REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE SET NULL,
     email text NOT NULL UNIQUE,
     password text NOT NULL
@@ -36,8 +36,24 @@ CREATE TABLE sessions(
     usr integer NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE planets(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    orbit integer NOT NULL,
+    type integer NOT NULL,
+    size integer NOT NULL
+);
+
 CREATE TABLE civilizations(
-    id BIGSERIAL PRIMARY KEY,
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    galaxy bigint NOT NULL REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     name text NOT NULL,
+    homeworld bigint NOT NULL REFERENCES planets(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     usr bigint NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE known_star_systems(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
