@@ -13,6 +13,17 @@ CREATE TABLE galaxies(
     name text NOT NULL
 );
 
+CREATE TABLE star_systems(
+    id BIGSERIAL PRIMARY KEY,
+    name text,
+    galaxy bigint REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    x double precision NOT NULL,
+    y double precision NOT NULL,
+    type integer NOT NULL,
+    size integer NOT NULL,
+    explored boolean NOT NULL DEFAULT false
+);
+
 CREATE TABLE users(
     id BIGSERIAL PRIMARY KEY,
     galaxy bigint REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE SET NULL,

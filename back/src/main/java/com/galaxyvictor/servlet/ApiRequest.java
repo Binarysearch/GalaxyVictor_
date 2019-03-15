@@ -49,4 +49,14 @@ public class ApiRequest {
         }
         return "";
     }
+
+	public long getLongParam(String name, long defaultValue) {
+        String value = originalRequest.getParameter(name);
+        if (value != null) {
+            try {
+                return Long.parseLong(value);
+            } catch (Exception e) {}
+        }
+		return defaultValue;
+	}
 }
