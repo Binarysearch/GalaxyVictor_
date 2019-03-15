@@ -52,9 +52,11 @@ public class ContextListener implements ServletContextListener {
 
         String schema = getResourceAsString("/db/schema.sql");
         String procedures = getResourceAsString("/db/procedures.sql");
+        String installScript = getResourceAsString("/db/install.sql");
         
         dbs.executeSql(schema);
         dbs.executeSql(procedures);
+        dbs.executeSql(installScript);
 
         System.out.println();
         System.out.println("DATABASE SCHEMA CREATED");
