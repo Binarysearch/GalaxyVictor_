@@ -7,8 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.ApiServlet;
 
-@WebServlet(urlPatterns = "/api/login")
-public class LoginController extends ApiServlet {
+@WebServlet(urlPatterns = "/api/register")
+public class RegisterController extends ApiServlet {
 
 	private static final long serialVersionUID = -2952931963712964636L;
 
@@ -17,7 +17,7 @@ public class LoginController extends ApiServlet {
 		String email = request.jsonPath("$.email");
 		String password = request.jsonPath("$.password");
 
-		String result = executeQueryForJson("select core.login(?, ?);", email, password);
+		String result = executeQueryForJson("select core.register(?, ?);", email, password);
 
 		return result;
 	}
