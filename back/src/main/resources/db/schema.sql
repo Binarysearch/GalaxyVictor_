@@ -53,22 +53,22 @@ CREATE TABLE civilizations(
 );
 
 CREATE TABLE known_star_systems(
-    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE
+    star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(civilization, star_system)
 );
 
 CREATE TABLE visible_star_systems(
-    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
     star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    quantity integer NOT NULL DEFAULT 1
+    quantity integer NOT NULL DEFAULT 1,
+    PRIMARY KEY(civilization, star_system)
 );
 
 CREATE TABLE known_civilizations(
-    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     knows bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    known bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE
+    known bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(knows, known)
 );
 
 CREATE TABLE colonies(
