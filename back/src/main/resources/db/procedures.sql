@@ -171,7 +171,7 @@ CREATE OR REPLACE FUNCTION core.error(code_ integer, message_ text)
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$begin
-  RAISE exception using errcode=format('DC%s', code_), message=format('{"data":{}, "message":"%s"}', message_);
+  RAISE exception using errcode=format('GV%s', code_), message=format('{"data":{}, "message":"%s"}', message_);
 end;$function$;
 
 CREATE OR REPLACE FUNCTION core.random_string(length integer)
