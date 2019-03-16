@@ -321,6 +321,8 @@ begin
 
   insert into core.known_star_systems(civilization, star_system) values(civilization_id_, star_system_);
 
+  insert into core.known_civilizations(knows, known) values(civilization_id_, civilization_id_);
+
   return core.get_current_civilization(token_);
 end;$function$;
 
@@ -346,3 +348,33 @@ end;$function$;
 
 
 
+CREATE OR REPLACE FUNCTION core.get_civilizations(token_ text)
+ RETURNS json
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+  user_id_ bigint;
+  civilization_id_ bigint;
+begin
+
+  user_id_ = usr from core.sessions where id=token_;
+  
+  if (user_id_ is null) then
+    perform core.error(401, 'Invalid token');
+  end if;
+
+  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
+
+  if (civilization_id_ is null) then
+    perform core.error(400, 'User does not have civilization or galaxy selected');
+  end if;
+
+  result_ = (with cs as (
+
+    select c.id, c.name, c.homeworld from core.civilizations c join core.known_civilizations k on k.known=c.id where k.knows=civilization_id_
+
+  ) select array_to_json(array_agg(cs)) from cs);
+
+  return coalesce(result_, '[]')::json;
+end;$function$;
