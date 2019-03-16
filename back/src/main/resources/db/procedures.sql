@@ -323,6 +323,10 @@ begin
 
   insert into core.known_civilizations(knows, known) values(civilization_id_, civilization_id_);
 
+  insert into core.colonies(civilization, planet) values(civilization_id_, homeworld_id_);
+
+  insert into core.fleets(civilization, destination, origin, travel_start_time) values(civilization_id_, star_system_, star_system_, 0);
+
   return core.get_current_civilization(token_);
 end;$function$;
 
@@ -378,3 +382,72 @@ begin
 
   return coalesce(result_, '[]')::json;
 end;$function$;
+
+
+
+CREATE OR REPLACE FUNCTION core.get_colonies(token_ text)
+ RETURNS json
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+  user_id_ bigint;
+  civilization_id_ bigint;
+begin
+
+  user_id_ = usr from core.sessions where id=token_;
+  
+  if (user_id_ is null) then
+    perform core.error(401, 'Invalid token');
+  end if;
+
+  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
+
+  if (civilization_id_ is null) then
+    perform core.error(400, 'User does not have civilization or galaxy selected');
+  end if;
+
+  result_ = (with cs as (
+
+    select c.id, c.planet, c.civilization from core.colonies c join core.planets p on p.id=c.planet join core.visible_star_systems v on v.star_system=p.star_system where v.civilization=civilization_id_
+
+  ) select array_to_json(array_agg(cs)) from cs);
+
+  return coalesce(result_, '[]')::json;
+end;$function$;
+
+
+
+CREATE OR REPLACE FUNCTION core.get_fleets(token_ text)
+ RETURNS json
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+  user_id_ bigint;
+  civilization_id_ bigint;
+begin
+
+  user_id_ = usr from core.sessions where id=token_;
+  
+  if (user_id_ is null) then
+    perform core.error(401, 'Invalid token');
+  end if;
+
+  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
+
+  if (civilization_id_ is null) then
+    perform core.error(400, 'User does not have civilization or galaxy selected');
+  end if;
+
+  result_ = (with fs as (
+
+    select distinct f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f join core.visible_star_systems v on v.star_system=f.destination where v.civilization=civilization_id_ or f.civilization=civilization_id_
+
+  ) select array_to_json(array_agg(fs)) from fs);
+
+  return coalesce(result_, '[]')::json;
+end;$function$;
+
+
+

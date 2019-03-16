@@ -58,9 +58,31 @@ CREATE TABLE known_star_systems(
     star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE visible_star_systems(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL DEFAULT 1
+);
+
 CREATE TABLE known_civilizations(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     knows bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
     known bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE colonies(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    planet bigint NOT NULL REFERENCES planets(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE fleets(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    origin bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    travel_start_time bigint NOT NULL DEFAULT 0
+);
+
 
