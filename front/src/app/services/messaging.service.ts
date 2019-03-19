@@ -21,19 +21,15 @@ export interface Message {
   payload: any;
 }
 
-interface ExploringResultDTO {
-  starSystem: number;
+interface FinishTravelDTO {
   planets: PlanetDTO[];
+  fleets: FleetDTO[];
+  colonies: ColonyDTO[];
+  civilizations: CivilizationDTO[];
 }
 
 interface RemoveFleetDTO {
   id: number;
-}
-
-interface VisibilityGainedDTO {
-  fleets: FleetDTO[];
-  colonies: ColonyDTO[];
-  civilizations: CivilizationDTO[];
 }
 
 interface VisibilityLostDTO {
@@ -68,13 +64,33 @@ export class MessagingService {
 
     this.getMessages().subscribe((m: Message) => {
       console.log(m);
-      if (m.type === 'ExploringResult') {
-        const exploringResult = m.payload as ExploringResultDTO;
-        exploringResult.planets.forEach((p: PlanetDTO) => {
-          if (!this.store.getObjectById(p.id)) {
-            this.store.addPlanet(new Planet(p));
-          }
-        });
+      if (m.type === 'FinishTravel') {
+        const payload = m.payload as FinishTravelDTO;
+        if (payload.planets) {
+          payload.planets.forEach((p: PlanetDTO) => {
+            if (!this.store.getObjectById(p.id)) {
+              this.store.addPlanet(new Planet(p));
+            }
+          });
+        }
+        if (payload.civilizations) {
+          payload.civilizations.forEach((c: CivilizationDTO) => {
+            const civilization = this.store.getObjectById(c.id) as Civilization;
+            if (!civilization) {
+              this.store.addCivilization(new Civilization(c));
+            }
+          });
+        }
+        if (payload.fleets) {
+          payload.fleets.forEach((f: FleetDTO) => {
+            this.store.addFleet(new Fleet(f));
+          });
+        }
+        if (payload.colonies) {
+          payload.colonies.forEach((c: ColonyDTO) => {
+            this.store.addColony(new Colony(c));
+          });
+        }
       }
       if (m.type === 'RemoveFleet') {
         const payload = m.payload as RemoveFleetDTO;
@@ -118,22 +134,6 @@ export class MessagingService {
 
 
         }
-      }
-      if (m.type === 'VisibilityGained') {
-        const payload = m.payload as VisibilityGainedDTO;
-        payload.civilizations.forEach((c: CivilizationDTO) => {
-          const civilization = this.store.getObjectById(c.id) as Civilization;
-          if (!civilization) {
-            this.store.addCivilization(new Civilization(c));
-          }
-        });
-        payload.fleets.forEach((f: FleetDTO) => {
-          this.store.addFleet(new Fleet(f));
-        });
-        payload.colonies.forEach((c: ColonyDTO) => {
-          this.store.addColony(new Colony(c));
-        });
-
       }
 
     });

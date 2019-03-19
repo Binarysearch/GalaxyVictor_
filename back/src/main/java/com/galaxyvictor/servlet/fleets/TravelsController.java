@@ -42,7 +42,7 @@ public class TravelsController extends ApiServlet {
 		Message fleetMessage = new Message("Fleet", dbResponse.getFleet());
 		Message civilizationMessage = new Message("Civilization", dbResponse.getCivilization());
 
-		messagingService.sendMessageToCivilization(dbResponse.getFleet().getCivilization(), fleetMessage);
+		
 
 		boolean visibilityLost = true;
 
@@ -50,7 +50,9 @@ public class TravelsController extends ApiServlet {
 		if(dbResponse.getOriginCivilizations() != null){
 			for (long civId : dbResponse.getOriginCivilizations()) {
 				//if civilization still in origin star system dont send visibility lost message
-				visibilityLost &= (civId == dbResponse.getCivilization().getId());
+				if (civId == dbResponse.getCivilization().getId()) {
+					visibilityLost = false;
+				}
 				messagingService.sendMessageToCivilization(civId, new Message("RemoveFleet", new RemoveFleetDTO(fleet)));
 			}
 		}
@@ -59,8 +61,8 @@ public class TravelsController extends ApiServlet {
 		//send 'new civ' to destination civilizations
 		if(dbResponse.getDestinationCivilizations() != null){
 			for (long civId : dbResponse.getDestinationCivilizations()) {
-				messagingService.sendMessageToCivilization(civId, fleetMessage);
 				messagingService.sendMessageToCivilization(civId, civilizationMessage);
+				messagingService.sendMessageToCivilization(civId, fleetMessage);
 			}
 		}
 
@@ -69,6 +71,8 @@ public class TravelsController extends ApiServlet {
 			VisibilityLostDTO payload = new VisibilityLostDTO(dbResponse.getFleet().getOrigin());
         	messagingService.sendMessageToCivilization(dbResponse.getCivilization().getId(), new Message("VisibilityLost", payload));
 		}
+
+		messagingService.sendMessageToCivilization(dbResponse.getFleet().getCivilization(), fleetMessage);
 
 		futureEventService.addTravelEvent(dbResponse.getTravel());
 

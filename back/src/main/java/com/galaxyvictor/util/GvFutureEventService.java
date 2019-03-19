@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.servlet.fleets.ExploringResultDTO;
+import com.galaxyvictor.servlet.fleets.FinishTravelDbResponse;
 import com.galaxyvictor.servlet.fleets.Travel;
 import com.galaxyvictor.servlet.fleets.TravelList;
 import com.galaxyvictor.websocket.Message;
@@ -51,10 +52,18 @@ public class GvFutureEventService implements FutureEventService {
 			public void finish() {
 				try {
 					String result = databaseService.executeQueryForJson("select core.finish_travel(?);", travel.getFleet());
+					FinishTravelDbResponse dbResponse = new Gson().fromJson(result, FinishTravelDbResponse.class);
+					messagingService.sendMessageToCivilization(travel.getCivilization(), new Message("FinishTravel", dbResponse));
+					
+					//FinishTravelDbResponse dbResponse = new Gson().fromJson(result, FinishTravelDbResponse.class);
 
-					ExploringResultDTO exploringResultDTO = new Gson().fromJson(result, ExploringResultDTO.class);
+					//ExploringResultDTO exploringResultDTO = new Gson().fromJson(result, ExploringResultDTO.class);
 				
-					messagingService.sendMessageToCivilization(travel.getCivilization(), new Message("ExploringResult", exploringResultDTO));
+					//messagingService.sendMessageToCivilization(travel.getCivilization(), new Message("ExploringResult", exploringResultDTO));
+
+					//VisibilityGainedDTO payload = new VisibilityGainedDTO(fleets, colonies, new ArrayList<>(civilizations.values()));
+        	//messagingService.sendMessageToCivilization(civilization.getId(), new Message("VisibilityGained", payload));
+
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
