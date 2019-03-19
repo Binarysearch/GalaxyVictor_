@@ -3,7 +3,6 @@ package com.galaxyvictor.util;
 import java.sql.SQLException;
 
 import com.galaxyvictor.db.DatabaseService;
-import com.galaxyvictor.servlet.fleets.ExploringResultDTO;
 import com.galaxyvictor.servlet.fleets.FinishTravelDbResponse;
 import com.galaxyvictor.servlet.fleets.Travel;
 import com.galaxyvictor.servlet.fleets.TravelList;
