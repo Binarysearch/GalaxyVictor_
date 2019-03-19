@@ -93,3 +93,10 @@ CREATE TABLE travels(
 );
 
 
+CREATE TABLE ships(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    fleet bigint NOT NULL REFERENCES fleets(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    model_name text NOT NULL,
+    can_colonize boolean NOT NULL,
+    can_fight boolean NOT NULL
+);
