@@ -458,7 +458,9 @@ begin
 
   result_ = (with fs as (
 
-    select distinct f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f join core.visible_star_systems v on v.star_system=f.destination where v.civilization=civilization_id_ or f.civilization=civilization_id_
+    select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f join core.visible_star_systems v on v.star_system=f.destination where v.civilization=civilization_id_ and f.civilization <> civilization_id_
+    union
+    select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f where f.civilization = civilization_id_
 
   ) select array_to_json(array_agg(fs)) from fs);
 
@@ -538,8 +540,8 @@ begin
 
   result_ = (
     with ws_data as (select
-      (select row_to_json(dc) from (select civilization from core.visible_star_systems where star_system=destination_) as dc) as "destinationCivilizations",
-      (select row_to_json(oc) from (select civilization from core.visible_star_systems where star_system=origin_) as oc) as "originCivilizations",
+      (select array_to_json(array_agg(civilization)) from core.visible_star_systems where star_system=destination_) as "destinationCivilizations",
+      (select array_to_json(array_agg(civilization)) from core.visible_star_systems where star_system=origin_) as "originCivilizations",
       (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime" from core.fleets where id=fleet_) as f) as fleet,
       (select row_to_json(civ) from (select id, name from core.civilizations where id=civilization_id_) as civ) as civilization,
       (select row_to_json(tr) from (select t.fleet, civilization_id_ as civilization, ss0.x as x0, ss1.x as x1, ss0.y as y0, ss1.y as y1, 1 as speed, t.start_time as "startTime" from core.travels t join core.star_systems ss0 on ss0.id=t.origin join core.star_systems ss1 on ss1.id=t.destination where t.fleet=fleet_) as tr) as travel
