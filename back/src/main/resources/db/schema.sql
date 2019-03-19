@@ -85,4 +85,11 @@ CREATE TABLE fleets(
     travel_start_time bigint NOT NULL DEFAULT 0
 );
 
+CREATE TABLE travels(
+    fleet bigint PRIMARY KEY REFERENCES fleets(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    origin bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    start_time bigint NOT NULL
+);
+
 

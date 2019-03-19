@@ -5,6 +5,10 @@ CREATE SCHEMA tg;
 
 SET search_path TO tg;
 
+
+
+
+
 CREATE OR REPLACE FUNCTION tg.colonies_i_b()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -18,6 +22,11 @@ end;$function$;
 
 CREATE TRIGGER colonies_i_b BEFORE INSERT ON core.colonies FOR EACH ROW EXECUTE PROCEDURE tg.colonies_i_b();
 
+
+
+
+
+
 CREATE OR REPLACE FUNCTION tg.fleets_i_b()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -30,6 +39,11 @@ AS $function$begin
 end;$function$;
 
 CREATE TRIGGER fleets_i_b BEFORE INSERT ON core.fleets FOR EACH ROW EXECUTE PROCEDURE tg.fleets_i_b();
+
+
+
+
+
 
 
 

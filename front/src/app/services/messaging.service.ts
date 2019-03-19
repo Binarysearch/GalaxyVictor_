@@ -17,7 +17,6 @@ const DEV_SOCKET_URL = `ws://localhost:8080/socket`;
 const PROD_SOCKET_URL = `wss://galaxyvictor.com/socket/`;
 
 export interface Message {
-  id: number;
   type: string;
   payload: any;
 }
@@ -52,12 +51,10 @@ export class MessagingService {
       .connect((isDevMode()) ? DEV_SOCKET_URL : PROD_SOCKET_URL)
       .pipe(
         map((response: MessageEvent): Message => {
-          let id: number;
           let type: string;
           let payload: any;
           try {
             const data = JSON.parse(response.data);
-            id = data.id;
             type = data.type;
             payload = data.payload;
           } catch (error) {
@@ -65,7 +62,7 @@ export class MessagingService {
             payload = { name: error.name, message: error.message };
           }
 
-          return { id: id, type: type, payload: payload };
+          return {type: type, payload: payload };
         })
       );
 
@@ -140,8 +137,6 @@ export class MessagingService {
       }
 
     });
-    this.send({id: 9, type: 'Login', payload: {email: 'email', password: '12345'}});
-
   }
 
   send(msg: Message) {

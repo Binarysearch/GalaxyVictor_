@@ -2,6 +2,8 @@ package com.galaxyvictor.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -38,5 +40,27 @@ public class GvDatabaseService implements DatabaseService {
                 db.close();
             } catch (SQLException e) {}
         }
+    }
+
+    @Override
+    public String executeQueryForJson(String sql, Object... params) throws SQLException {
+        Connection db = getConnection();
+        try {
+            PreparedStatement st = db.prepareStatement(sql);
+
+            for (int i = 0; i < params.length; i++) {
+                st.setObject(i + 1, params[i]);
+            }
+
+            ResultSet r = st.executeQuery();
+            if (r.next()) {
+                return r.getString(1);
+            }
+        } finally {
+            try {
+                db.close();
+            } catch (SQLException e) {}
+        }
+        return null;
     }
 }

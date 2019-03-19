@@ -5,12 +5,23 @@ CREATE OR REPLACE FUNCTION core.get_civilization_by_token(token_ text)
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$declare
-  result_ bigint;
+  user_id_ bigint;
+  civilization_id_ bigint;
 begin
 
-  result_ = 1;
+  user_id_ = usr from core.sessions where id=token_;
+  
+  if (user_id_ is null) then
+    perform core.error(401, 'Invalid token');
+  end if;
 
-  return result_;
+  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
+
+  if (civilization_id_ is null) then
+    perform core.error(400, 'User does not have civilization or galaxy selected');
+  end if;
+
+  return civilization_id_;
 end;$function$;
 
 
@@ -312,10 +323,15 @@ begin
   end if;
 
   star_system_ = core.find_random_unexplored_system(galaxy_id_);
+  perform core.generate_planets(star_system_);
 
   update core.star_systems set name = home_star_name_, explored=true where id=star_system_;
 
-  insert into core.planets(star_system, orbit, type, size) values(star_system_, 3, 10, 3) returning id into homeworld_id_;
+  insert into core.planets(star_system, orbit, type, size) select star_system_, 3, 10, 3 
+  where not exists(select 1 from core.planets where star_system=star_system_ and orbit=3);
+  homeworld_id_ = id from core.planets where star_system = star_system_ and orbit=3;
+
+  update core.planets set type=10, size=3 where star_system=star_system_ and orbit=3;
 
   insert into core.civilizations(galaxy, name, homeworld, usr) values(galaxy_id_, name_, homeworld_id_, user_id_) returning id into civilization_id_;
 
@@ -448,6 +464,164 @@ begin
 
   return coalesce(result_, '[]')::json;
 end;$function$;
+
+
+
+CREATE OR REPLACE FUNCTION core.start_travel(fleet_ bigint, destination_ bigint, time_ bigint, token_ text)
+ RETURNS json
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+  user_id_ bigint;
+  civilization_id_ bigint;
+  origin_ bigint;
+begin
+
+  user_id_ = usr from core.sessions where id=token_;
+  
+  if (user_id_ is null) then
+    perform core.error(401, 'Invalid token');
+  end if;
+
+  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
+
+  if (civilization_id_ is null) then
+    perform core.error(400, 'User does not have civilization or galaxy selected');
+  end if;
+
+  --check if fleet exists
+  if (not exists(select 1 from core.fleets where id=fleet_)) then
+    perform core.error(404, 'Fleet not found');
+  end if;
+
+  --check if civilization owns fleet
+  if (not exists(select 1 from core.fleets where id=fleet_ and civilization=civilization_id_)) then
+    perform core.error(401, 'Not your fleet');
+  end if;
+
+  --check that is not travelling
+  if (exists(select 1 from core.travels where fleet=fleet_)) then
+    perform core.error(400, 'Fleet is already travelling');
+  end if;
+  
+  --check if destination exists
+  if (not exists(select 1 from core.star_systems where id=destination_)) then
+    perform core.error(404, 'Destination not found');
+  end if;
+
+  --check that destination and origin(previous dest) are not the same
+  if (exists(select 1 from core.fleets where id=fleet_ and destination=destination_)) then
+    perform core.error(400, 'Destination and origin are the same');
+  end if;
+
+  --update fleet
+  update core.fleets set destination=destination_, travel_start_time=time_ where id=fleet_;
+
+  --delete visibility from origin star_system
+  origin_ = (select origin from core.fleets where id=fleet_);
+  delete from core.visible_star_systems where civilization=civilization_id_ and star_system=origin_;
+
+  --insert travel
+  insert into core.travels(fleet, origin, destination, start_time) select id, origin, destination, travel_start_time from core.fleets where id=fleet_;
+  
+  --insert new known civilizations
+  --the civilizations with visibility in the target system go to meet the civilization owner of the fleet
+  insert into core.known_civilizations(knows, known) select civilization, civilization_id_ from core.visible_star_systems where star_system=destination_  
+  and not exists(select 1 from core.known_civilizations where knows=civilization and known=civilization_id_);
+
+
+  --enviar por ws 'remove fleet' para civilizaciones en sistema origen
+  --enviar por ws 'nueva civilizacion' para civilizaciones en sistema destino
+  --enviar por ws 'update fleet' para civilizaciones en sistema destino
+  --enviar visibility lost si procede
+
+  result_ = (
+    with ws_data as (select
+      (select row_to_json(dc) from (select civilization from core.visible_star_systems where star_system=destination_) as dc) as "destinationCivilizations",
+      (select row_to_json(oc) from (select civilization from core.visible_star_systems where star_system=origin_) as oc) as "originCivilizations",
+      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime" from core.fleets where id=fleet_) as f) as fleet,
+      (select row_to_json(civ) from (select id, name from core.civilizations where id=civilization_id_) as civ) as civilization,
+      (select row_to_json(tr) from (select t.fleet, civilization_id_ as civilization, ss0.x as x0, ss1.x as x1, ss0.y as y0, ss1.y as y1, 1 as speed, t.start_time as "startTime" from core.travels t join core.star_systems ss0 on ss0.id=t.origin join core.star_systems ss1 on ss1.id=t.destination where t.fleet=fleet_) as tr) as travel
+    ) select row_to_json(ws_data) from ws_data
+  );
+
+  return coalesce(result_, '{}')::json;
+end;$function$;
+
+
+
+CREATE OR REPLACE FUNCTION core.get_travels()
+ RETURNS json
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+begin
+
+  result_ = (with ts as (
+
+    select t.fleet, f.civilization, ss0.x as x0, ss1.x as x1, ss0.y as y0, ss1.y as y1, 1 as speed, t.start_time as "startTime" from core.travels t join core.fleets f on f.id=t.fleet join core.star_systems ss0 on ss0.id=t.origin join core.star_systems ss1 on ss1.id=t.destination
+
+  ) select array_to_json(array_agg(ts)) from ts);
+
+  return format('{"travels":%s}', coalesce(result_, '[]'))::json;
+end;$function$;
+
+
+
+
+CREATE OR REPLACE FUNCTION core.finish_travel(fleet_ bigint)
+ RETURNS json
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+  destination_ bigint;
+  civilization_ bigint;
+begin
+
+  destination_ = destination from core.fleets where id=fleet_;
+  civilization_ = civilization from core.fleets where id=fleet_;
+  delete from core.travels where fleet=fleet_;
+  update core.fleets set travel_start_time=0, origin=destination where id=fleet_;
+
+  insert into core.visible_star_systems(star_system, civilization) values(destination_, civilization_);
+  insert into core.known_star_systems(star_system, civilization) values(destination_, civilization_);
+
+  perform core.generate_planets(destination_);
+
+  result_ = (
+    with x as (select destination_ as "starSystem",
+      (select array_to_json(array_agg(p)) from (select id, star_system as "starSystem", orbit, type, size from core.planets where star_system=destination_) as p) as planets
+    ) select row_to_json(x) from x
+  );
+
+  return coalesce(result_, '{}')::json;
+end;$function$;
+
+
+
+CREATE OR REPLACE FUNCTION core.generate_planets(star_system_ bigint)
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  i integer;
+begin
+
+  i = 1;
+
+  while i <= 15 loop
+    if (random() < 0.3) then
+      insert into core.planets(star_system, orbit, type, size)
+      select star_system_, i, (random()*10+1)::integer, (random()*4+1)::integer;
+    end if;
+    i = i + 1;
+  end loop;
+
+end;$function$;
+
 
 
 

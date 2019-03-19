@@ -14,6 +14,8 @@ import com.galaxyvictor.auth.GvAuthService;
 import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.db.DbData;
 import com.galaxyvictor.db.GvDatabaseService;
+import com.galaxyvictor.util.FutureEventService;
+import com.galaxyvictor.util.GvFutureEventService;
 import com.galaxyvictor.websocket.GvMessagingService;
 import com.galaxyvictor.websocket.MessagingService;
 
@@ -26,6 +28,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         DatabaseService dbs = new GvDatabaseService(DbData.getConnectionData());
+        MessagingService mgs = new GvMessagingService();
         if (DROP_AND_CREATE_DATABASE_SCHEMA_ON_STARTUP) {
             try {
                 
@@ -36,8 +39,9 @@ public class ContextListener implements ServletContextListener {
             }
         }
         ServiceManager.addService(DatabaseService.class, dbs);
-        ServiceManager.addService(MessagingService.class, new GvMessagingService());
+        ServiceManager.addService(MessagingService.class, mgs);
         ServiceManager.addService(AuthService.class, new GvAuthService(dbs));
+        ServiceManager.addService(FutureEventService.class, new GvFutureEventService(dbs, mgs));
     }
 
     @Override

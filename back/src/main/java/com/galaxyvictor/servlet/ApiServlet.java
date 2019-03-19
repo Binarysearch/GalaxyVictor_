@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.json.Json;
@@ -149,23 +147,6 @@ public abstract class ApiServlet extends HttpServlet {
     }
 
     protected String executeQueryForJson(String sql, Object... params) throws SQLException {
-        Connection db = getDbConnection();
-        try {
-            PreparedStatement st = db.prepareStatement(sql);
-
-            for (int i = 0; i < params.length; i++) {
-                st.setObject(i + 1, params[i]);
-            }
-
-            ResultSet r = st.executeQuery();
-            if (r.next()) {
-                return r.getString(1);
-            }
-        } finally {
-            try {
-                db.close();
-            } catch (SQLException e) {}
-        }
-        return null;
+        return databaseService.executeQueryForJson(sql, params);
     }
 }
