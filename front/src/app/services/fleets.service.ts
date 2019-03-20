@@ -34,19 +34,13 @@ export class FleetsService {
 
   startTravel(fleet: Fleet, destination: StarSystem): any {
     if (fleet.ships.length === fleet.selectedShips.length) {
-      this.http.post<TravelDTO>(this.travelsUrl, {fleet: fleet.id, destination: destination.id})
-      .subscribe((travel: TravelDTO) => {
-
-      });
+      this.http.post<TravelDTO>(this.travelsUrl, {fleet: fleet.id, destination: destination.id}).subscribe();
     } else {
       const shipIds = [];
       fleet.selectedShips.forEach(s => {
         shipIds.push(s.id);
       });
-      this.http.post<TravelDTO>(this.fleetsUrl, {ships: shipIds, destination: destination.id})
-      .subscribe((travel: TravelDTO) => {
-
-      });
+      this.http.post<TravelDTO>(this.fleetsUrl, {ships: shipIds, destination: destination.id}).subscribe();
     }
 
   }
