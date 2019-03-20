@@ -24,6 +24,3 @@ from g cross join i cross join j;
 
 select core.create_civilization('Humanos', 'Sol', (select id from core.sessions limit 1));
 select core.create_civilization('Klingons', 'Kronos', (select id from core.sessions limit 1 offset 1));
---insert into core.planets(star_system, orbit, type, size) values(1, 3, 10, 3);
---insert into core.civilizations(galaxy, name, homeworld, usr) values(1, 'Humanos', 1, 1);
---insert into core.known_star_systems(civilization, star_system) values(1, 1);

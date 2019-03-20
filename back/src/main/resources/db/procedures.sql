@@ -272,6 +272,7 @@ CREATE OR REPLACE FUNCTION core.get_current_civilization(token_ text)
 AS $function$declare
   result_ json;
   user_id_ bigint;
+  civilization_id_ bigint;
 begin
 
   user_id_ = usr from core.sessions where id=token_;
@@ -280,14 +281,18 @@ begin
     perform core.error(401, 'Invalid token');
   end if;
 
+  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
+
+  if (civilization_id_ is null) then
+    perform core.error(400, 'User does not have civilization or galaxy selected');
+  end if;
 
   result_ = (with ss as (
 
     select c.id, c.name, 
     (select row_to_json(h) from (select p.id, p.star_system as "starSystem", p.orbit, p.type, p.size from core.planets p where p.id=c.homeworld) as h) as homeworld 
     from core.civilizations c 
-    join core.users u on u.id=c.usr and u.galaxy=c.galaxy
-    where u.id=user_id_
+    where c.id=civilization_id_
 
   ) select row_to_json(ss) from ss);
 

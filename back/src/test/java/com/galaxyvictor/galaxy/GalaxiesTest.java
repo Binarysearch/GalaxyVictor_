@@ -72,7 +72,6 @@ public class GalaxiesTest {
 
         given(request.getToken()).willReturn(token);
         given(request.jsonPath("$.id")).willReturn(galaxyId);
-        given(request.jsonPath("$.password")).willReturn("12345");
 
         String response = currentGalaxyController.putRequest(request);
         
@@ -93,6 +92,7 @@ public class GalaxiesTest {
         assertNotNull(read(response, "$.user.id"));
         assertNotNull(read(response, "$.user.currentGalaxy"));
         assertEquals((int) read(response, "$.user.currentGalaxy.id"), galaxyId);
+        assertEquals(read(response, "$.user.currentGalaxy.name"), galaxyName);
         assertEquals(read(response, "$.user.email"), "test@email.com");
 
     }

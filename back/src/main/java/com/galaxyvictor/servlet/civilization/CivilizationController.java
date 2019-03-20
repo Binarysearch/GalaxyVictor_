@@ -9,9 +9,22 @@ import com.galaxyvictor.servlet.ApiServlet;
 import com.google.gson.Gson;
 
 @WebServlet(urlPatterns = "/api/civilization")
-public class CurrentCivilizationController extends ApiServlet {
+public class CivilizationController extends ApiServlet {
 
 	private static final long serialVersionUID = -2952931963712964636L;
+
+	@Override
+	public String postRequest(ApiRequest request) throws SQLException {
+		String token = request.getToken();
+		String name = request.jsonPath("$.name");
+		String homeStarName = request.jsonPath("$.homeStarName");
+
+		String result = executeQueryForJson("select core.create_civilization(?, ?, ?);", name, homeStarName, token);
+
+		UserCivilizationDTO dto = new Gson().fromJson(result, UserCivilizationDTO.class);
+		dto.setServerTime(System.currentTimeMillis());
+		return new Gson().toJson(dto);
+	}
 
 	@Override
 	public String getRequest(ApiRequest request) throws SQLException {
