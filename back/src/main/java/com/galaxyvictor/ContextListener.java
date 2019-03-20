@@ -3,6 +3,8 @@ package com.galaxyvictor;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletContextEvent;
@@ -18,6 +20,8 @@ import com.galaxyvictor.util.FutureEventService;
 import com.galaxyvictor.util.GvFutureEventService;
 import com.galaxyvictor.websocket.GvMessagingService;
 import com.galaxyvictor.websocket.MessagingService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 @WebListener
@@ -55,18 +59,27 @@ public class ContextListener implements ServletContextListener {
         System.out.println();
 
         String schema = getResourceAsString("/db/schema.sql");
-        String procedures = getResourceAsString("/db/procedures.sql");
         String triggers = getResourceAsString("/db/triggers.sql");
         String installScript = getResourceAsString("/db/install.sql");
         
         dbs.executeSql(schema);
-        dbs.executeSql(procedures);
+        createDbProcedures(dbs);
         dbs.executeSql(triggers);
         dbs.executeSql(installScript);
 
         System.out.println();
         System.out.println("DATABASE SCHEMA CREATED");
         System.out.println();
+    }
+
+    private void createDbProcedures(DatabaseService dbs) {
+        String procedureList = getResourceAsString("/db/procedures/list.json");
+        List<String> list = new Gson().fromJson(procedureList, new TypeToken<ArrayList<String>>(){}.getType());
+        for (String fileName : list) {
+            String procedure = getResourceAsString("/db/procedures/" + fileName);
+            System.out.println("CREATING PROCEDURE: '" + fileName + "' ........");
+            dbs.executeSql(procedure);
+        }
     }
 
     private String getResourceAsString(String path) {
