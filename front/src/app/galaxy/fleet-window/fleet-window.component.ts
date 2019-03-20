@@ -116,7 +116,6 @@ export class FleetWindowComponent implements OnInit {
     if (!this.fleet.ships) {
       this.core.getFleetShips(this.fleet.id).subscribe((ships: ShipDTO[]) => {
         this.fleet.ships = [];
-        this.fleet.selectedShips = [];
         ships.forEach(s => {
           const ship = new Ship(s);
           ship.fleet = this.fleet;
