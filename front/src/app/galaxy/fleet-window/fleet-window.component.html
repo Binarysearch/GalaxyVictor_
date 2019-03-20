@@ -19,7 +19,7 @@
       <hr>
       <h4>{{ ts.strings.ships }}</h4>
       <div *ngIf="shipsLoaded">
-        <div *ngFor="let ship of fleet.ships">{{ ts.strings.ship + ' ' + ship.id + ': ' + ship.modelName }} <i *ngIf="ship.canColonize" class="fa fa-globe pointer" aria-hidden="true" [title]="ts.strings.colonyShip"></i> <i *ngIf="ship.canFight" class="fa fa-fighter-jet pointer" aria-hidden="true" [title]="ts.strings.fighterShip"></i> <i *ngIf="!ship.canColonize && !ship.canFight" class="fa fa-eye pointer" aria-hidden="true" [title]="ts.strings.explorerShip"></i> </div>
+        <app-ship *ngFor="let ship of fleet.ships" [ship]="ship" [selected]="isShipSelected(ship)" (select)="onShipSelected(ship);" (deselect)="onShipDeselected(ship);"></app-ship>
       </div>
     </div>
   </div>
