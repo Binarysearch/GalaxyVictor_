@@ -12,6 +12,7 @@ import com.galaxyvictor.ContextListener;
 import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.auth.RegisterController;
 import com.galaxyvictor.servlet.civilization.CivilizationController;
+import com.galaxyvictor.servlet.civilization.CivilizationsController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
@@ -22,6 +23,7 @@ public class CivilizationsTest {
 
     private String token;
     private CivilizationController civilizationController;
+    private CivilizationsController civilizationsController;
 
     private int civilizationId;
     private int homeworldId;
@@ -52,12 +54,27 @@ public class CivilizationsTest {
 
         //create civilizations controller
         civilizationController = new CivilizationController();
+        civilizationsController = new CivilizationsController();
     }
 
     @Test
     public void testAll() throws SQLException {
         testCreateCivilization();
         testGetCurrentCivilization();
+        testGetCivilizations();
+    }
+
+    private void testGetCivilizations() throws SQLException {
+        ApiRequest request = mock(ApiRequest.class);
+
+        given(request.getToken()).willReturn(token);
+
+        String response = civilizationsController.getRequest(request);
+
+        assertEquals((int) read(response, "[0].id"), civilizationId);
+        assertEquals(read(response, "[0].name"), civilizationName);
+        assertEquals((int) read(response, "[0].homeworld"), homeworldId);
+        
     }
 
     private void testCreateCivilization() throws SQLException {
