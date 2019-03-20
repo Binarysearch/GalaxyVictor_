@@ -14,6 +14,7 @@ import com.galaxyvictor.servlet.auth.AuthController;
 import com.galaxyvictor.servlet.auth.RegisterController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
+import com.galaxyvictor.servlet.galaxies.StarSystemsController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,7 @@ public class GalaxiesTest {
     private CurrentGalaxyController currentGalaxyController;
     private GalaxiesController galaxiesController;
     private AuthController authController;
+    private StarSystemsController starSystemsController;
 
     private String token;
     private String galaxyName;
@@ -44,13 +46,30 @@ public class GalaxiesTest {
         currentGalaxyController = new CurrentGalaxyController();
         galaxiesController = new GalaxiesController();
         authController = new AuthController();
+        starSystemsController = new StarSystemsController();
     }
 
     @Test
     public void testAll() throws SQLException {
         getGalaxiesTest();
         selectGalaxyTest();
-        authTest();
+        authTestWithGalaxy();
+        getStarSystemsTest();
+    }
+
+    private void getStarSystemsTest() throws SQLException {
+        ApiRequest request = mock(ApiRequest.class);
+
+        given(request.getToken()).willReturn(token);
+
+        String response = starSystemsController.getRequest(request);
+
+        assertNotNull(read(response, "[0].id"));
+        assertNotNull(read(response, "[0].x"));
+        assertNotNull(read(response, "[0].y"));
+        assertNotNull(read(response, "[0].type"));
+        assertNotNull(read(response, "[0].size"));
+
     }
 
     public void getGalaxiesTest() throws SQLException {
@@ -80,7 +99,7 @@ public class GalaxiesTest {
 
     }
     
-    public void authTest() throws SQLException {
+    public void authTestWithGalaxy() throws SQLException {
 
         ApiRequest request = mock(ApiRequest.class);
 
