@@ -1,4 +1,6 @@
 [
+    "require_civ.sql",
+    "start_travel.sql",
     "get_civilization_by_token.sql",
     "register.sql",
     "login.sql",
@@ -8,5 +10,6 @@
     "error.sql",
     "random_string.sql",
     "get_star_systems.sql",
+    "split_fleet.sql",
     "procedures.sql"
 ]

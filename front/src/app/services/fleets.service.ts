@@ -40,7 +40,7 @@ export class FleetsService {
       fleet.selectedShips.forEach(s => {
         shipIds.push(s.id);
       });
-      this.http.post<TravelDTO>(this.fleetsUrl, {ships: shipIds, destination: destination.id}).subscribe();
+      this.http.post<TravelDTO>(this.fleetsUrl, {fleet: fleet.id, ships: shipIds, destination: destination.id}).subscribe();
     }
 
   }
