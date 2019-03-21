@@ -18,16 +18,17 @@ begin
   --if destination already has a fleet, merge the incoming fleet into the orbiting one
   existing_fleet_ = id from core.fleets where civilization=civilization_ and destination=destination_ and origin=destination_;
   update core.fleets set travel_start_time=0, origin=destination where id=fleet_;
-  if (existing_fleet_ is not null) then
-    update core.ships set fleet=existing_fleet_ where fleet=fleet_;
-    delete from core.fleets where id=fleet_;
-    delete from core.visible_star_systems where star_system=destination_;
-  end if;
 
   ss_was_known_ = (exists(select 1 from core.known_star_systems where star_system=destination_ and civilization=civilization_));
   ss_was_visible_ = (exists(select 1 from core.visible_star_systems where star_system=destination_ and civilization=civilization_));
 
   insert into core.visible_star_systems(star_system, civilization) values(destination_, civilization_);
+
+  if (existing_fleet_ is not null) then
+    update core.ships set fleet=existing_fleet_ where fleet=fleet_;
+    delete from core.fleets where id=fleet_;
+    delete from core.visible_star_systems where star_system=destination_ and civilization=civilization_;
+  end if;
   
   if (not ss_was_known_) then
     insert into core.known_star_systems(star_system, civilization) values(destination_, civilization_);
