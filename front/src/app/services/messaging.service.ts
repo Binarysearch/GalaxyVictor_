@@ -104,8 +104,6 @@ export class MessagingService {
         const fleet = this.store.getObjectById(payload.id) as Fleet;
         const newFleet = new Fleet(payload);
         if (fleet) {
-          newFleet.ships = fleet.ships;
-          newFleet.selectedShips = fleet.selectedShips;
           this.store.removeFleet(fleet);
         }
         this.store.addFleet(newFleet);

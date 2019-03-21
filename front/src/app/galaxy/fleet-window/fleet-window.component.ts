@@ -26,7 +26,6 @@ export class FleetWindowComponent implements OnInit {
       const status = JSON.parse(statusString);
       this.maximized = status.maximized;
     }
-    this.loadShips();
   }
 
   get title(): string {
@@ -108,22 +107,25 @@ export class FleetWindowComponent implements OnInit {
     return this.ts.strings.orbiting;
   }
 
-  get shipsLoaded(): boolean {
-    return this.fleet.ships != null;
+  get ships(): Ship[] {
+    if (!this.fleet.ships) {
+      this.fleet.ships = [];
+      this.loadShips();
+    }
+    return this.fleet.ships;
   }
 
   loadShips() {
-    if (!this.fleet.ships) {
-      this.core.getFleetShips(this.fleet.id).subscribe((ships: ShipDTO[]) => {
-        this.fleet.ships = [];
-        ships.forEach(s => {
-          const ship = new Ship(s);
-          ship.fleet = this.fleet;
-          this.fleet.ships.push(ship);
-          this.fleet.selectedShips.push(ship);
-        });
+    this.core.getFleetShips(this.fleet.id).subscribe((ships: ShipDTO[]) => {
+      this.fleet.ships = [];
+      this.fleet.selectedShips = [];
+      ships.forEach(s => {
+        const ship = new Ship(s);
+        ship.fleet = this.fleet;
+        this.fleet.ships.push(ship);
+        this.fleet.selectedShips.push(ship);
       });
-    }
+    });
   }
 
   onShipSelected(ship: Ship) {
