@@ -8,16 +8,47 @@ import com.galaxyvictor.servlet.galaxies.PlanetDTO;
 
 public class FinishTravelDbResponse {
 
+    private long incomingFleetId;
+    private FleetDTO resultingFleet;
     private List<PlanetDTO> planets;
     private List<FleetDTO> fleets;
     private List<ColonyDTO> colonies;
     private List<CivilizationDTO> civilizations;
+    private List<Long> destinationCivilizations;
 
     /**
      * @return the planets
      */
     public List<PlanetDTO> getPlanets() {
         return planets;
+    }
+
+    /**
+     * @return the resultingFleet
+     */
+    public FleetDTO getResultingFleet() {
+        return resultingFleet;
+    }
+
+    /**
+     * @param resultingFleet the resultingFleet to set
+     */
+    public void setResultingFleet(FleetDTO resultingFleet) {
+        this.resultingFleet = resultingFleet;
+    }
+
+    /**
+     * @return the destinationCivilizations
+     */
+    public List<Long> getDestinationCivilizations() {
+        return destinationCivilizations;
+    }
+
+    /**
+     * @param destinationCivilizations the destinationCivilizations to set
+     */
+    public void setDestinationCivilizations(List<Long> destinationCivilizations) {
+        this.destinationCivilizations = destinationCivilizations;
     }
 
     /**
@@ -67,6 +98,20 @@ public class FinishTravelDbResponse {
      */
     public void setCivilizations(List<CivilizationDTO> civilizations) {
         this.civilizations = civilizations;
+    }
+
+    /**
+     * @return the incomingFleetId
+     */
+    public long getIncomingFleetId() {
+        return incomingFleetId;
+    }
+
+    /**
+     * @param incomingFleetId the incomingFleetId to set
+     */
+    public void setIncomingFleetId(long incomingFleetId) {
+        this.incomingFleetId = incomingFleetId;
     }
 
 }

@@ -1,6 +1,7 @@
 [
     "require_civ.sql",
     "start_travel.sql",
+    "finish_travel.sql",
     "get_civilization_by_token.sql",
     "register.sql",
     "login.sql",
