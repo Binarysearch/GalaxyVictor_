@@ -21,6 +21,7 @@ begin
   if (existing_fleet_ is not null) then
     update core.ships set fleet=existing_fleet_ where fleet=fleet_;
     delete from core.fleets where id=fleet_;
+    delete from core.visible_star_systems where star_system=destination_;
   end if;
 
   ss_was_known_ = (exists(select 1 from core.known_star_systems where star_system=destination_ and civilization=civilization_));
