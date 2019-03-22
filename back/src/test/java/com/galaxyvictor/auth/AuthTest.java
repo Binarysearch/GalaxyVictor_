@@ -1,52 +1,25 @@
 package com.galaxyvictor.auth;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
 import static com.jayway.jsonpath.JsonPath.read;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 import java.sql.SQLException;
 
-import com.galaxyvictor.ContextListener;
+import com.galaxyvictor.BaseTest;
 import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.auth.AuthController;
 import com.galaxyvictor.servlet.auth.LoginController;
-import com.galaxyvictor.servlet.auth.RegisterController;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AuthTest {
+public class AuthTest extends BaseTest {
 
-    private AuthController authController;
-    private LoginController loginController;
-    private String token;
-
-    @Before
-    public void setup() throws SQLException {
-        new ContextListener().contextInitialized(null);
-
-        ApiRequest request = mock(ApiRequest.class);
-
-        given(request.jsonPath("$.email")).willReturn("test@email.com");
-        given(request.jsonPath("$.password")).willReturn("12345");
-
-        String response = new RegisterController().postRequest(request);
-
-        token = read(response, "$.token");
-
-        authController = new AuthController();
-        loginController = new LoginController();
-    }
 
     @Test
-    public void testAll() throws SQLException {
-        loginTest();
-        authTest();
-    }
-
     public void loginTest() throws SQLException {
 
         ApiRequest request = mock(ApiRequest.class);
@@ -54,7 +27,7 @@ public class AuthTest {
         given(request.jsonPath("$.email")).willReturn("test@email.com");
         given(request.jsonPath("$.password")).willReturn("12345");
 
-        String response = loginController.postRequest(request);
+        String response = new LoginController().postRequest(request);
         
         assertNotNull(read(response, "$.token"));
         assertNotNull(read(response, "$.user.id"));
@@ -63,13 +36,14 @@ public class AuthTest {
 
     }
 
+    @Test
     public void authTest() throws SQLException {
 
         ApiRequest request = mock(ApiRequest.class);
 
         given(request.getRequestBody()).willReturn(token);
 
-        String response = authController.postRequest(request);
+        String response = new AuthController().postRequest(request);
         
         assertNotNull(read(response, "$.token"));
         assertNotNull(read(response, "$.user.id"));

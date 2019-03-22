@@ -1,47 +1,39 @@
 package com.galaxyvictor.galaxy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static com.jayway.jsonpath.JsonPath.read;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 import java.sql.SQLException;
 
-import com.galaxyvictor.ContextListener;
+import com.galaxyvictor.BaseTest;
 import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.auth.AuthController;
-import com.galaxyvictor.servlet.auth.RegisterController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 import com.galaxyvictor.servlet.galaxies.StarSystemsController;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class GalaxiesTest {
+public class GalaxiesTest extends BaseTest {
 
     private CurrentGalaxyController currentGalaxyController;
     private GalaxiesController galaxiesController;
     private AuthController authController;
     private StarSystemsController starSystemsController;
 
-    private String token;
+    
     private String galaxyName;
     private int galaxyId;
 
-    @Before
-    public void setup() throws SQLException {
-        new ContextListener().contextInitialized(null);
+    @BeforeEach
+    public void setupGalaxiesTest() throws SQLException {
+        
 
-        ApiRequest request = mock(ApiRequest.class);
-
-        given(request.jsonPath("$.email")).willReturn("test@email.com");
-        given(request.jsonPath("$.password")).willReturn("12345");
-
-        String response = new RegisterController().postRequest(request);
-
-        token = read(response, "$.token");
+        
 
         currentGalaxyController = new CurrentGalaxyController();
         galaxiesController = new GalaxiesController();

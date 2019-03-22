@@ -1,27 +1,25 @@
 package com.galaxyvictor.civilizations;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static com.jayway.jsonpath.JsonPath.read;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 import java.sql.SQLException;
 
-import com.galaxyvictor.ContextListener;
+import com.galaxyvictor.BaseTest;
 import com.galaxyvictor.servlet.ApiRequest;
-import com.galaxyvictor.servlet.auth.RegisterController;
 import com.galaxyvictor.servlet.civilization.CivilizationController;
 import com.galaxyvictor.servlet.civilization.CivilizationsController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class CivilizationsTest {
+public class CivilizationsTest extends BaseTest {
 
-    private String token;
     private CivilizationController civilizationController;
     private CivilizationsController civilizationsController;
 
@@ -29,16 +27,8 @@ public class CivilizationsTest {
     private int homeworldId;
     private String civilizationName = "Morlocks";
 
-    @Before
-    public void setup() throws SQLException {
-        new ContextListener().contextInitialized(null);
-
-        //register user
-        ApiRequest registerRequest = mock(ApiRequest.class);
-        given(registerRequest.jsonPath("$.email")).willReturn("test@email.com");
-        given(registerRequest.jsonPath("$.password")).willReturn("12345");
-        String registerResponse = new RegisterController().postRequest(registerRequest);
-        token = read(registerResponse, "$.token");
+    @BeforeEach
+    public void setupCivilizationTest() throws SQLException {
 
         //get galaxies
         ApiRequest getGalaxiesRequest = mock(ApiRequest.class);
