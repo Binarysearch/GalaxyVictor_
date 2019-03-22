@@ -1,0 +1,8 @@
+[
+    "colonies_i_b.sql",
+    "fleets_i_b.sql",
+    "colony_buildings_i_b.sql",
+    "colony_buildings_d_b.sql",
+    "colony_resources_i_b.sql",
+    "triggers.sql"
+]

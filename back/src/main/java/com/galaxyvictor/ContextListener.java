@@ -65,12 +65,14 @@ public class ContextListener implements ServletContextListener {
         System.out.println();
 
         String schema = getResourceAsString("/db/schema.sql");
-        String triggers = getResourceAsString("/db/triggers.sql");
         String installScript = getResourceAsString("/db/install.sql");
         
         dbs.executeSql(schema);
+        
         createDbProcedures(dbs);
-        dbs.executeSql(triggers);
+        createDbTriggers(dbs);
+        
+        System.out.println("\nCREATING INITIAL DATA\n");
         dbs.executeSql(installScript);
 
         System.out.println();
@@ -79,12 +81,24 @@ public class ContextListener implements ServletContextListener {
     }
 
     private void createDbProcedures(DatabaseService dbs) {
+        System.out.println("\nCREATING PROCEDURES\n");
         String procedureList = getResourceAsString("/db/procedures/list.json");
         List<String> list = new Gson().fromJson(procedureList, new TypeToken<ArrayList<String>>(){}.getType());
         for (String fileName : list) {
             String procedure = getResourceAsString("/db/procedures/" + fileName);
-            System.out.println("CREATING PROCEDURE: '" + fileName + "' ........");
+            System.out.println("CREATING PROCEDURE: '" + fileName + "' ...");
             dbs.executeSql(procedure);
+        }
+    }
+
+    private void createDbTriggers(DatabaseService dbs) {
+        System.out.println("\nCREATING TRIGGERS\n");
+        String triggerList = getResourceAsString("/db/triggers/list.json");
+        List<String> list = new Gson().fromJson(triggerList, new TypeToken<ArrayList<String>>(){}.getType());
+        for (String fileName : list) {
+            String trigger = getResourceAsString("/db/triggers/" + fileName);
+            System.out.println("CREATING TRIGGER: '" + fileName + "' ...");
+            dbs.executeSql(trigger);
         }
     }
 

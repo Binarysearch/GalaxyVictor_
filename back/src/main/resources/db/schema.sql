@@ -4,6 +4,10 @@ DROP SCHEMA IF EXISTS core CASCADE;
 
 CREATE SCHEMA core;
 
+DROP SCHEMA IF EXISTS tg CASCADE;
+
+CREATE SCHEMA tg;
+
 SET search_path TO core;
 
 
@@ -103,14 +107,12 @@ CREATE TABLE ships(
 
 CREATE TABLE resource_types(
     id text PRIMARY KEY,
-    name text NOT NULL,
-    description text NOT NULL
+    name text NOT NULL
 );
 
 CREATE TABLE colony_building_types(
     id text PRIMARY KEY,
-    name text NOT NULL,
-    description text NOT NULL
+    name text NOT NULL
 );
 
 CREATE TABLE colony_building_types_resources(
@@ -120,10 +122,23 @@ CREATE TABLE colony_building_types_resources(
     PRIMARY KEY(building_type, resource_type)
 );
 
+CREATE TABLE colony_building_types_costs(
+    building_type text REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    resource_type text REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL CHECK (quantity >= 0),
+    PRIMARY KEY(building_type, resource_type)
+);
+
 CREATE TABLE colony_buildings(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     colony bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE colony_building_orders(
+    colony bigint PRIMARY KEY REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    started_time bigint NOT NULL
 );
 
 CREATE TABLE colony_resources(

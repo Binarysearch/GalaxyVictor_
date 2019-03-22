@@ -81,6 +81,7 @@ AS $function$declare
   homeworld_id_ bigint;
   civilization_id_ bigint;
   fleet_id_ bigint;
+  colony_id_ bigint;
 begin
 
   user_id_ = usr from core.sessions where id=token_;
@@ -112,7 +113,9 @@ begin
 
   insert into core.known_civilizations(knows, known) values(civilization_id_, civilization_id_);
 
-  insert into core.colonies(civilization, planet) values(civilization_id_, homeworld_id_);
+  insert into core.colonies(civilization, planet) values(civilization_id_, homeworld_id_) returning id into colony_id_;
+
+  insert into core.colony_buildings(colony, building_type) values(colony_id_, 'imperial capital');
 
   insert into core.fleets(civilization, destination, origin, travel_start_time) values(civilization_id_, star_system_, star_system_, 0) returning id into fleet_id_;
 

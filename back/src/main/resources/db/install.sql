@@ -1,3 +1,39 @@
+insert into core.resource_types(id, name) values
+('wood', 'Madera'),
+('energy', 'Energia'),
+('iron', 'Hierro');
+
+
+insert into core.colony_building_types(id, name) values
+('imperial capital', 'Capital imperial'),
+('colony base', 'Base colonial'),
+('sawmill', 'Serreria'),
+('wind power plant', 'Planta de enrgia eolica'),
+('iron mine', 'Mina de hierro');
+
+
+insert into CORE.colony_building_types_resources(building_type, resource_type, quantity) values
+('imperial capital', 'energy', 10),
+('imperial capital', 'wood', 5),
+('imperial capital', 'iron', 5),
+('colony base', 'energy', 10),
+('wind power plant', 'energy', 5),
+('sawmill', 'energy', -2),
+('sawmill', 'wood', 2),
+('iron mine', 'energy', -2),
+('iron mine', 'iron', 2);
+
+insert into CORE.colony_building_types_costs(building_type, resource_type, quantity) values
+('wind power plant', 'wood', 5),
+('wind power plant', 'iron', 50),
+('sawmill', 'wood', 10),
+('iron mine', 'wood', 50);
+
+-----------------------------------------------------------------
+------------                               ----------------------
+------------           TEST DATA           ----------------------
+------------                               ----------------------
+-----------------------------------------------------------------
 
 select core.register('admin@galaxyvictor.com', '12345');
 select core.register('otro@galaxyvictor.com', '12345');
