@@ -11,7 +11,6 @@ import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.ApiServlet;
 import com.galaxyvictor.websocket.Message;
 import com.galaxyvictor.websocket.MessagingService;
-import com.google.gson.Gson;
 
 @WebServlet(urlPatterns = "/api/fleets")
 public class FleetsController extends ApiServlet {
@@ -47,9 +46,8 @@ public class FleetsController extends ApiServlet {
 
 		Array shipIds = getDbConnection().createArrayOf("bigint", ships.toArray(new Integer[ships.size()]));
 
-		String result = executeQueryForJson("select core.split_fleet(?, ?, ?, ?, ?);", fleet, shipIds, destination, time, token);
+		SplitFleetDbResponse dbResponse = executeQueryForObject("select core.split_fleet(?, ?, ?, ?, ?);", SplitFleetDbResponse.class, fleet, shipIds, destination, time, token);
 
-		SplitFleetDbResponse dbResponse = new Gson().fromJson(result, SplitFleetDbResponse.class);
 
 		travelsService.reportTravelStarted(dbResponse.getStartTravelDbResponse());
 
@@ -60,7 +58,7 @@ public class FleetsController extends ApiServlet {
 			}
 		}
 
-		return result;
+		return "{}";
 	}
 
 

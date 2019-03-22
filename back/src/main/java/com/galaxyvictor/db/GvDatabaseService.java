@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.google.gson.Gson;
+
 public class GvDatabaseService implements DatabaseService {
 
     private DatabaseConnectionData dbData;
@@ -62,5 +64,11 @@ public class GvDatabaseService implements DatabaseService {
             } catch (SQLException e) {}
         }
         return null;
+    }
+
+    @Override
+    public <T> T executeQueryForObject(String sql, Class<? extends T> c, Object... params) throws SQLException {
+        String result = executeQueryForJson(sql, params);
+        return new Gson().fromJson(result, c);
     }
 }

@@ -7,7 +7,6 @@ import com.galaxyvictor.servlet.civilization.VisibilityLostDTO;
 import com.galaxyvictor.util.FutureEventService;
 import com.galaxyvictor.websocket.Message;
 import com.galaxyvictor.websocket.MessagingService;
-import com.google.gson.Gson;
 
 public class TravelsService {
 
@@ -23,10 +22,7 @@ public class TravelsService {
     }
 
     public void startTravel(long fleet, long destination, long time, String token) throws SQLException {
-        String result = databaseService.executeQueryForJson("select core.start_travel(?, ?, ?, ?);", fleet, destination, time, token);
-
-		Gson gson = new Gson();
-		StartTravelDbResponse dbResponse = gson.fromJson(result, StartTravelDbResponse.class);
+        StartTravelDbResponse dbResponse = databaseService.executeQueryForObject("select core.start_travel(?, ?, ?, ?);", StartTravelDbResponse.class, fleet, destination, time, token);
         reportTravelStarted(dbResponse);
     }
 

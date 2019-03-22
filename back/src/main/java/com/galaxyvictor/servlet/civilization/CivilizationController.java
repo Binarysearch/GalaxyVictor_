@@ -19,9 +19,8 @@ public class CivilizationController extends ApiServlet {
 		String name = request.jsonPath("$.name");
 		String homeStarName = request.jsonPath("$.homeStarName");
 
-		String result = executeQueryForJson("select core.create_civilization(?, ?, ?);", name, homeStarName, token);
 
-		UserCivilizationDTO dto = new Gson().fromJson(result, UserCivilizationDTO.class);
+		UserCivilizationDTO dto = executeQueryForObject("select core.create_civilization(?, ?, ?);", UserCivilizationDTO.class, name, homeStarName, token);
 		dto.setServerTime(System.currentTimeMillis());
 		return new Gson().toJson(dto);
 	}
@@ -29,9 +28,8 @@ public class CivilizationController extends ApiServlet {
 	@Override
 	public String getRequest(ApiRequest request) throws SQLException {
 		String token = request.getToken();
-		String result = executeQueryForJson("select core.get_current_civilization(?);", token);
 
-		UserCivilizationDTO dto = new Gson().fromJson(result, UserCivilizationDTO.class);
+		UserCivilizationDTO dto = executeQueryForObject("select core.get_current_civilization(?);", UserCivilizationDTO.class, token);
 		dto.setServerTime(System.currentTimeMillis());
 		return new Gson().toJson(dto);
 	}

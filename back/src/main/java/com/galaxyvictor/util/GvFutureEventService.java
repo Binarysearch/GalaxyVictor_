@@ -9,7 +9,6 @@ import com.galaxyvictor.servlet.fleets.Travel;
 import com.galaxyvictor.servlet.fleets.TravelList;
 import com.galaxyvictor.websocket.Message;
 import com.galaxyvictor.websocket.MessagingService;
-import com.google.gson.Gson;
 
 public class GvFutureEventService implements FutureEventService {
 
@@ -22,8 +21,7 @@ public class GvFutureEventService implements FutureEventService {
         this.messagingService = messagingService;
         eventManager.start();
 		try {
-			String result = databaseService.executeQueryForJson("select core.get_travels();");
-			TravelList list = new Gson().fromJson(result, TravelList.class);
+			TravelList list = databaseService.executeQueryForObject("select core.get_travels();", TravelList.class);
 			if(list != null && list.getTravels() != null){
 				for (Travel travel : list.getTravels()) {
 					addTravelEvent(travel);
@@ -51,8 +49,7 @@ public class GvFutureEventService implements FutureEventService {
 			@Override
 			public void finish() {
 				try {
-					String result = databaseService.executeQueryForJson("select core.finish_travel(?);", travel.getFleet());
-					FinishTravelDbResponse dbResponse = new Gson().fromJson(result, FinishTravelDbResponse.class);
+					FinishTravelDbResponse dbResponse = databaseService.executeQueryForObject("select core.finish_travel(?);", FinishTravelDbResponse.class, travel.getFleet());
 					messagingService.sendMessageToCivilization(travel.getCivilization(), new Message("FinishTravel", dbResponse));
 					
 					if (dbResponse.getResultingFleet() != null) {
@@ -64,15 +61,6 @@ public class GvFutureEventService implements FutureEventService {
 							}
 						}
 					}
-					//FinishTravelDbResponse dbResponse = new Gson().fromJson(result, FinishTravelDbResponse.class);
-
-					//ExploringResultDTO exploringResultDTO = new Gson().fromJson(result, ExploringResultDTO.class);
-				
-					//messagingService.sendMessageToCivilization(travel.getCivilization(), new Message("ExploringResult", exploringResultDTO));
-
-					//VisibilityGainedDTO payload = new VisibilityGainedDTO(fleets, colonies, new ArrayList<>(civilizations.values()));
-        	//messagingService.sendMessageToCivilization(civilization.getId(), new Message("VisibilityGained", payload));
-
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

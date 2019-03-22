@@ -149,4 +149,9 @@ public abstract class ApiServlet extends HttpServlet {
     protected String executeQueryForJson(String sql, Object... params) throws SQLException {
         return databaseService.executeQueryForJson(sql, params);
     }
+
+    protected <T> T executeQueryForObject(String sql, Class<? extends T> c, Object... params) throws SQLException {
+        return databaseService.executeQueryForObject(sql, c, params);
+    }
+
 }

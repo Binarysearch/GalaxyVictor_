@@ -11,4 +11,5 @@ public interface DatabaseService {
     
     public String executeQueryForJson(String sql, Object... params) throws SQLException;
     
+    public <T> T executeQueryForObject(String sql, Class<? extends T> c, Object... params) throws SQLException ;
 }
