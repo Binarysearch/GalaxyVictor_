@@ -69,6 +69,7 @@ export class TextService {
     passwordsDontMatch: 'Las contraseñas no coinciden',
     unknown: 'Desconocido',
     status: 'Estado',
+    debug: 'Depuración',
     na: 'N/A'
   };
 

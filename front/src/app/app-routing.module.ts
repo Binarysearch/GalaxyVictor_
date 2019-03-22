@@ -13,6 +13,7 @@ import { LandingComponent } from './landing/landing.component';
 import { SelectGalaxyGuard } from './services/select-galaxy-guard.service';
 import { GalaxiesComponent } from './galaxies/galaxies.component';
 import { CivilizationsComponent } from './civilizations/civilizations.component';
+import { DebugComponent } from './debug/debug.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'research', component: ResearchComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'debug', component: DebugComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
