@@ -16,4 +16,20 @@
       </tr>
     </tbody>
   </table>
+  <hr>
+  <h3>Conexiones por websocket</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Civilizacion</th>
+        <th>Conexiones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let connection of connections">
+        <td>{{ connection.civilization }}</td>
+        <td><div *ngFor="let id of connection.socketIds">{{ id }}</div></td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -1,6 +1,8 @@
 package com.galaxyvictor.websocket;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.Session;
@@ -9,20 +11,20 @@ import com.google.gson.Gson;
 
 public class GvMessagingService implements MessagingService {
 
-	private ConcurrentHashMap<Long, ConcurrentHashMap<String, WebSocket>> connections = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<String, Long> reverseConnections = new ConcurrentHashMap<>();
-	
-	@Override
-	public void onConnectionCreated(WebSocket webSocket) {
-		Session session = webSocket.getSession();
-		addConnection(webSocket.getCivilizationId(), webSocket);
-        reverseConnections.put(session.getId(), webSocket.getCivilizationId());
-	}
+    private ConcurrentHashMap<Long, ConcurrentHashMap<String, WebSocket>> connections = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Long> reverseConnections = new ConcurrentHashMap<>();
 
-	@Override
-	public void onConnectionClosed(WebSocket webSocket) {
-		Session session = webSocket.getSession();
-		String sessionId = session.getId();
+    @Override
+    public void onConnectionCreated(WebSocket webSocket) {
+        Session session = webSocket.getSession();
+        addConnection(webSocket.getCivilizationId(), webSocket);
+        reverseConnections.put(session.getId(), webSocket.getCivilizationId());
+    }
+
+    @Override
+    public void onConnectionClosed(WebSocket webSocket) {
+        Session session = webSocket.getSession();
+        String sessionId = session.getId();
         if (sessionId != null) {
             long civilizationId = reverseConnections.get(sessionId);
             ConcurrentHashMap<String, WebSocket> webSockets = connections.get(civilizationId);
@@ -36,9 +38,9 @@ public class GvMessagingService implements MessagingService {
             System.out.println(connections.size());
             System.out.println(reverseConnections.size());
         }
-	}
-	
-	private void addConnection(long civilizationId, WebSocket webSocket) {
+    }
+
+    private void addConnection(long civilizationId, WebSocket webSocket) {
         ConcurrentHashMap<String, WebSocket> webSockets = connections.get(civilizationId);
         if (webSockets == null) {
             webSockets = new ConcurrentHashMap<>();
@@ -46,13 +48,12 @@ public class GvMessagingService implements MessagingService {
 
         webSockets.put(webSocket.getSession().getId(), webSocket);
         connections.put(civilizationId, webSockets);
-	}
-	
-	public void sendMessageToCivilization(long civilizationId, Message message) {
+    }
+
+    public void sendMessageToCivilization(long civilizationId, Message message) {
         ConcurrentHashMap<String, WebSocket> webSockets = connections.get(civilizationId);
         if (webSockets != null) {
             Gson gson = new Gson();
-            
 
             String messageString = gson.toJson(message);
             for (WebSocket ws : webSockets.values()) {
@@ -63,5 +64,18 @@ public class GvMessagingService implements MessagingService {
                 }
             }
         }
+    }
+
+    @Override
+    public Map<Long, Map<String, WebSocket>> getConnections() {
+        Map<Long, Map<String, WebSocket>> result = new HashMap<>();
+        result.putAll(connections);
+        /*for (Entry<Long, ConcurrentHashMap<String, WebSocket>> e : connections.entrySet()) {
+            Map<String, WebSocket> connectionMap = new HashMap<>();
+            connectionMap.putAll(e.getValue());
+            result.put(e.getKey(), value)
+        }*/
+
+        return result;
     }
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
-import { AsincTaskDTO } from 'src/app/dtos/asinc-task';
+import { AsincTaskDTO } from '../../dtos/asinc-task';
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SessionDTO } from '../dtos/session';
-import { GalaxyDTO } from '../dtos/galaxy';
 import { Store } from '../store';
 
 @Injectable({
