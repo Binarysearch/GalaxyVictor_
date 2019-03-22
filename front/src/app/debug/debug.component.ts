@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AsincTaskDTO } from '../dtos/asinc-task';
+import { AsincTasksService } from '../services/debug/asinc-tasks.service';
 
 @Component({
   selector: 'app-debug',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DebugComponent implements OnInit {
 
-  constructor() { }
+  tasks: AsincTaskDTO[] = [];
+
+  constructor(private asinkTasksService: AsincTasksService) { }
 
   ngOnInit() {
+    this.asinkTasksService.getAsincTasks().subscribe((tasks: AsincTaskDTO[]) => {
+      this.tasks = tasks;
+    });
   }
 
 }
