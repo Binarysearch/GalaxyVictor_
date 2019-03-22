@@ -3,13 +3,29 @@ package com.galaxyvictor.servlet.debug;
 
 public class AsincTaskDTO {
 
+    private long id;
     private String type;
     private double remainingTime;
 
     public AsincTaskDTO() {
     }
 
-    public AsincTaskDTO(String type, double remainingTime){
+    /**
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public AsincTaskDTO(long id, String type, double remainingTime) {
+        this.id = id;
         this.type = type;
         this.remainingTime = remainingTime;
     }

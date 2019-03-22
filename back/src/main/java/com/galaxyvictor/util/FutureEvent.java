@@ -11,4 +11,6 @@ public abstract class FutureEvent{
 
 	public abstract void finish();
 
+	public abstract long getId();
+
 }

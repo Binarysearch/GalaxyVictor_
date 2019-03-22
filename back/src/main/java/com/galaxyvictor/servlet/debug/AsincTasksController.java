@@ -31,7 +31,7 @@ public class AsincTasksController extends ApiServlet {
 		List<FutureEvent> events = futureEventService.getEvents();
 		
 		List<AsincTaskDTO> tasks = events.stream().map((e) -> {
-			return new AsincTaskDTO(e.getClass().getSimpleName(), e.getRemainingTime());
+			return new AsincTaskDTO(e.getId(), e.getClass().getSimpleName(), e.getRemainingTime());
 		}).collect(Collectors.toList());
 
 		return new Gson().toJson(tasks);

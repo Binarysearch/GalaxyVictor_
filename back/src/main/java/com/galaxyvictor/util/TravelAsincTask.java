@@ -51,4 +51,9 @@ public class TravelAsincTask extends FutureEvent {
         }
     }
 
+    @Override
+    public long getId() {
+        return travel.getFleet();
+    }
+
 }
