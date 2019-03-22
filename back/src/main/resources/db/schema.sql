@@ -100,3 +100,36 @@ CREATE TABLE ships(
     can_colonize boolean NOT NULL,
     can_fight boolean NOT NULL
 );
+
+CREATE TABLE resource_types(
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    description text NOT NULL
+);
+
+CREATE TABLE colony_building_types(
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    description text NOT NULL
+);
+
+CREATE TABLE colony_building_types_resources(
+    building_type text REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    resource_type text REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL,
+    PRIMARY KEY(building_type, resource_type)
+);
+
+CREATE TABLE colony_buildings(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    colony bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE colony_resources(
+    colony bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL CHECK (quantity >= 0),
+    PRIMARY KEY(colony, resource_type)
+);
+
