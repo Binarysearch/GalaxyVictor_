@@ -13,5 +13,6 @@
     "get_star_systems.sql",
     "split_fleet.sql",
     "get_colony_buildings.sql",
+    "get_colony_resources.sql",
     "procedures.sql"
 ]

@@ -14,6 +14,7 @@ import com.galaxyvictor.servlet.civilization.CivilizationController;
 import com.galaxyvictor.servlet.civilization.CivilizationsController;
 import com.galaxyvictor.servlet.civilization.ColoniesController;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingsController;
+import com.galaxyvictor.servlet.civilization.ColonyResourcesController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
@@ -85,6 +86,21 @@ public class ColonyDetailsTest extends BaseTest {
         
         assertNotNull(read(colonyBuildingsResponse, "[0].id"));
         assertEquals(read(colonyBuildingsResponse, "[0].building_type"), "imperial capital");
+    }
+
+    @Test
+    @Order(3)
+    public void testGetColonyResources() throws SQLException {
+
+        //Colony buildings
+        ApiRequest colonyResourcesRequest = mock(ApiRequest.class);
+        given(colonyResourcesRequest.getToken()).willReturn(token);
+        given(colonyResourcesRequest.jsonPath("$.colony")).willReturn(colonyId);
+        String colonyResourcesResponse = new ColonyResourcesController().getRequest(colonyResourcesRequest);
+        
+        assertNotNull(read(colonyResourcesResponse, "[0].resource_type"));
+        assertNotNull(read(colonyResourcesResponse, "[0].quantity"));
+        
     }
 
     @Test
