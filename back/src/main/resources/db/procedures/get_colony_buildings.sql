@@ -11,7 +11,7 @@ begin
 
   -- if civilization does not own the colony throw error
   if (not exists(select 1 from core.colonies where id=colony_ and civilization=civilization_id_)) then
-    perform core.error(401, 'Colony not yours');
+    perform core.error(401, format('Colony %L not yours', colony_));
   end if;
 
   result_ = (with x as (

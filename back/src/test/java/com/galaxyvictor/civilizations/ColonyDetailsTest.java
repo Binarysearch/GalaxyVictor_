@@ -18,17 +18,23 @@ import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
+@TestMethodOrder(OrderAnnotation.class)
 public class ColonyDetailsTest extends BaseTest {
 
     private static int civilizationId;
+
+    private static int colonyId;
     private static int homeworldId;
     private static String civilizationName = "Psilons";
 
     @BeforeAll
     public static void setupTest() throws SQLException {
-
+        //MethodOrderer.OrderAnnotation;
         //get galaxies
         ApiRequest getGalaxiesRequest = mock(ApiRequest.class);
         given(getGalaxiesRequest.getToken()).willReturn(token);
@@ -53,16 +59,23 @@ public class ColonyDetailsTest extends BaseTest {
     }
 
     @Test
-    public void testGetColonyDetails() throws SQLException {
+    @Order(1)
+    public void testGetColony() throws SQLException {
 
 
         ApiRequest coloniesRequest = mock(ApiRequest.class);
         given(coloniesRequest.getToken()).willReturn(token);
         String coloniesResponse = new ColoniesController().getRequest(coloniesRequest);
-
-        int colonyId = (int) read(coloniesResponse, "[0].id");
+        
+        colonyId = (int) read(coloniesResponse, "[0].id");
         assertEquals((int) read(coloniesResponse, "[0].civilization"), civilizationId);
         assertEquals((int) read(coloniesResponse, "[0].planet"), homeworldId);
+
+    }
+
+    @Test
+    @Order(2)
+    public void testGetColonyBuildings() throws SQLException {
 
         //Colony buildings
         ApiRequest colonyBuildingsRequest = mock(ApiRequest.class);
