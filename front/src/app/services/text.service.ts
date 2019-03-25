@@ -68,6 +68,7 @@ export class TextService {
     invalidLoginCredentials: 'Email o Contraseña incorrecta',
     passwordsDontMatch: 'Las contraseñas no coinciden',
     unknown: 'Desconocido',
+    buildings: 'Edificios',
     status: 'Estado',
     debug: 'Depuración',
     na: 'N/A'

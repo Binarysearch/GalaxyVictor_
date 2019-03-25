@@ -1,4 +1,3 @@
-import { AuthService } from './auth.service';
 import { Injectable, isDevMode } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { UserCivilizationDTO } from '../dtos/user-civilization';
@@ -11,7 +10,10 @@ import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
 import { ColoniesService } from './colonies.service';
 import { FleetsService } from './fleets.service';
-import { Planet } from '../game-objects/planet';
+import { ColonyBuildingType } from '../game-objects/colony-building-type';
+import { ColonyBuildingTypeDTO } from '../dtos/colony-building-type';
+import { ResourceTypeDTO } from '../dtos/resource-type';
+import { ResourceType } from '../game-objects/resource-type';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,9 @@ export class CivilizationsService {
   private civilizationUrl = this.host + '/api/civilization';
   private civilizationsUrl = this.host + '/api/civilizations';
 
+  private buildingTypesUrl = this.host + '/api/colony-building-types';
+  private resourceTypesUrl = this.host + '/api/resource-types';
+
   private _currentCivilization: UserCivilizationDTO;
   private currentCivilizationSubject: Subject<UserCivilizationDTO> = new Subject<UserCivilizationDTO>();
   private currentGalaxyId: number;
@@ -31,11 +36,41 @@ export class CivilizationsService {
      private coloniesService: ColoniesService, private fleetsService: FleetsService) {
     this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
       if (currentGalaxy) {
+        this.loadTypes();
         this.currentGalaxyId = currentGalaxy.id;
       } else {
         this.currentGalaxyId = null;
       }
-      //this.reloadCurrentCivilization();
+    });
+  }
+
+
+
+  private loadBuildingTypes() {
+    this.http.get<ColonyBuildingTypeDTO[]>(this.buildingTypesUrl)
+    .subscribe((data: ColonyBuildingTypeDTO[]) => {
+      data.forEach(c => {
+        const buildingType = new ColonyBuildingType(c);
+        c.resources.forEach(r => {
+          buildingType.resources.push({resourceType: this.store.getResourceType(r.type), quantity: r.quantity});
+        });
+        this.store.addColonyBuildingType(buildingType);
+      });
+    }, (error: any) => {
+      console.log(error);
+    });
+  }
+
+  private loadTypes() {
+    this.http.get<ResourceTypeDTO[]>(this.resourceTypesUrl)
+    .subscribe((data: ResourceTypeDTO[]) => {
+      data.forEach(c => {
+        const resourceType = new ResourceType(c);
+        this.store.addResourceType(resourceType);
+      });
+      this.loadBuildingTypes();
+    }, (error: any) => {
+      console.log(error);
     });
   }
 
@@ -44,7 +79,6 @@ export class CivilizationsService {
       {galaxyId: galaxyId, name: civilizationName, homeStarName: homeStarName}
       ).pipe(
       tap<UserCivilizationDTO>((civ: UserCivilizationDTO) => {
-        //this.store.addPlanet(new Planet(civ.homeworld));
         this.currentCivilizationSubject.next(civ);
         this.store.serverTime = civ.serverTime;
         this.store.userCivilization = civ;
@@ -61,7 +95,6 @@ export class CivilizationsService {
     if (this.currentGalaxyId) {
       this.http.get<UserCivilizationDTO>(this.civilizationUrl + `?galaxy=${this.currentGalaxyId}`)
         .subscribe((data: UserCivilizationDTO) => {
-          //this.store.addPlanet(new Planet(data.homeworld));
           this.currentCivilizationSubject.next(data);
           this.store.serverTime = data.serverTime;
           this.store.userCivilization = data;

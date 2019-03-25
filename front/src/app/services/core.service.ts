@@ -14,6 +14,8 @@ import { Store } from '../store';
 import { StarSystem } from '../game-objects/star-system';
 import { Fleet } from '../game-objects/fleet';
 import { ShipDTO } from '../dtos/ship';
+import { ColoniesService } from './colonies.service';
+import { ColonyBuildingDTO } from '../dtos/colony-building';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +29,7 @@ export class CoreService {
     private shipsService: ShipsService,
     private store: Store,
     private civilizationsService: CivilizationsService,
+    private coloniesService: ColoniesService,
     private galaxiesService: GalaxiesService
   ) { }
 
@@ -81,4 +84,10 @@ export class CoreService {
   public getFleetShips(fleetId: number): Observable<ShipDTO[]> {
     return this.shipsService.getFleetShips(fleetId);
   }
+
+  public getColonyBuildings(colonyId: number): Observable<ColonyBuildingDTO[]> {
+    return this.coloniesService.getColonyBuildings(colonyId);
+  }
+
+
 }

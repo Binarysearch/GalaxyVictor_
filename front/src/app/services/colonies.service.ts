@@ -3,6 +3,8 @@ import { Injectable, isDevMode } from '@angular/core';
 import { ColonyDTO } from '../dtos/colony';
 import { Store } from '../store';
 import { Colony } from '../game-objects/colony';
+import { ColonyBuildingDTO } from '../dtos/colony-building';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class ColoniesService  {
   private host = (isDevMode()) ? 'http://localhost:8080' : 'https://galaxyvictor.com';
 
   private coloniesUrl = this.host + '/api/colonies';
+  private buildingsUrl = this.host + '/api/colony-buildings';
 
 
   constructor(private http: HttpClient, private store: Store) {
@@ -29,4 +32,7 @@ export class ColoniesService  {
     });
   }
 
+  getColonyBuildings(colonyId: number): Observable<ColonyBuildingDTO[]> {
+    return this.http.get<ColonyBuildingDTO[]>(this.buildingsUrl + `?colony=${colonyId}`);
+  }
 }

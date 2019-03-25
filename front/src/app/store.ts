@@ -1,3 +1,5 @@
+import { ResourceType } from './game-objects/resource-type';
+import { ColonyBuildingType } from './game-objects/colony-building-type';
 import { GalaxyDTO } from './dtos/galaxy';
 import { GameObject } from './game-objects/game-object';
 import { Injectable } from '@angular/core';
@@ -15,6 +17,8 @@ import { UserCivilizationDTO } from './dtos/user-civilization';
 export class Store {
 
   private objects: Map<number, GameObject> = new Map();
+  private colonyBuildingTypes: Map<string, ColonyBuildingType> = new Map();
+  private resourceTypes: Map<string, ResourceType> = new Map();
 
   private _starSystems: StarSystem[] = [];
   private _planets: Planet[] = [];
@@ -157,4 +161,21 @@ export class Store {
   public get userCivilization(): UserCivilizationDTO {
     return this._userCivilization;
   }
+
+  public addColonyBuildingType(type: ColonyBuildingType) {
+    this.colonyBuildingTypes.set(type.id, type);
+  }
+
+  public getColonyBuildingType(typeId: string): ColonyBuildingType {
+    return this.colonyBuildingTypes.get(typeId);
+  }
+
+  public addResourceType(type: ResourceType) {
+    this.resourceTypes.set(type.id, type);
+  }
+
+  public getResourceType(typeId: string): ResourceType {
+    return this.resourceTypes.get(typeId);
+  }
+
 }

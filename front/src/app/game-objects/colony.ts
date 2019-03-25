@@ -2,12 +2,14 @@ import { ColonyDTO } from './../dtos/colony';
 import { GameObject } from './game-object';
 import { Planet } from './planet';
 import { Civilization } from './civilization';
+import { ColonyBuilding } from './colony-building';
 
 export class Colony implements GameObject {
 
   id: number;
   planet: Planet;
   civilization: Civilization;
+  buildings: ColonyBuilding[];
   planetId: number;
   civilizationId: number;
 
