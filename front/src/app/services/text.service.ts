@@ -71,6 +71,7 @@ export class TextService {
     buildings: 'Edificios',
     status: 'Estado',
     debug: 'Depuración',
+    viewColony: 'Ver colonia',
     na: 'N/A'
   };
 

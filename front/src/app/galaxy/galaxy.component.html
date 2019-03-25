@@ -3,4 +3,5 @@
 <app-star-system-window *ngIf="galaxyMap.selected && galaxyMap.selected.objectType === 'StarSystem'" [starSystem]="galaxyMap.selected" (closeButton)="galaxyMap.deselect()"></app-star-system-window>
 <app-planet-window *ngIf="galaxyMap.selected && galaxyMap.selected.objectType === 'Planet'" [planet]="galaxyMap.selected" (closeButton)="galaxyMap.deselect()"></app-planet-window>
 <app-fleet-window *ngIf="galaxyMap.selected && galaxyMap.selected.objectType === 'Fleet'" [fleet]="galaxyMap.selected" (closeButton)="galaxyMap.deselect()"></app-fleet-window>
+<app-colony-window *ngIf="galaxyMap.selected && galaxyMap.selected.objectType === 'Colony'" [colony]="galaxyMap.selected" (closeButton)="galaxyMap.deselect()"></app-colony-window>
 <app-create-civilization-window *ngIf="createCivilizationWindowVisible"></app-create-civilization-window>

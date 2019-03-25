@@ -1,8 +1,4 @@
 <div>
   <div>{{ ts.strings.civilization }}: {{ colony.civilization.name }}</div>
-  <div>
-    <h4>{{ ts.strings.buildings }}</h4>
-    <div *ngFor="let building of buildings">{{ building.type.name }}</div>
-  </div>
-
+  <button class='btn' (click)="viewColonyClicked()">{{ ts.strings.viewColony }}</button>
 </div>
