@@ -31,6 +31,7 @@ import { ColonyDetailsComponent } from './galaxy/planet-window/colony-details/co
 import { FleetWindowComponent } from './galaxy/fleet-window/fleet-window.component';
 import { ShipComponent } from './galaxy/fleet-window/ship/ship.component';
 import { DebugComponent } from './debug/debug.component';
+import { ColonyWindowComponent } from './galaxy/colony-window/colony-window.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { DebugComponent } from './debug/debug.component';
     ColonyDetailsComponent,
     FleetWindowComponent,
     ShipComponent,
-    DebugComponent
+    DebugComponent,
+    ColonyWindowComponent
   ],
   imports: [
     BrowserModule,
