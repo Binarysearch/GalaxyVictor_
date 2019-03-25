@@ -6,6 +6,7 @@ import { Store } from '../store';
 import { Colony } from '../game-objects/colony';
 import { ColonyBuildingDTO } from '../dtos/colony-building';
 import { Observable } from 'rxjs';
+import { ColonyBuildingTypeDTO } from '../dtos/colony-building-type';
 
 @Injectable({
   providedIn: 'root'
@@ -42,4 +43,12 @@ export class ColoniesService  {
     return this.http.get<ColonyResourceDTO[]>(this.resourcesUrl + `?colony=${colonyId}`);
   }
 
+  changeColonyBuildingOrder(colonyId: number, buildingTypeId: number): void {
+    this.http.post<ColonyBuildingTypeDTO>(this.buildingsUrl, {colony: colonyId, buildingType: buildingTypeId})
+      .subscribe((type: ColonyBuildingTypeDTO) => {
+        const colony = this.store.getObjectById(colonyId) as Colony;
+        colony.buildingOrder = type.id;
+        colony.buildingOrderName = type.name;
+      });
+  }
 }

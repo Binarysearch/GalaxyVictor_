@@ -83,4 +83,9 @@ export class ColonyWindowComponent implements OnInit {
   get availableBuildingTypes(): ColonyBuildingType[] {
     return this.store.colonyBuildingTypes;
   }
+
+  changeBuildingOrder(buildingTypeId: number) {
+    this.core.changeColonyBuildingOrder(this.colony.id, buildingTypeId);
+  }
+
 }

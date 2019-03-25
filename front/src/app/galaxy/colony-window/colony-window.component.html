@@ -6,7 +6,7 @@
   <div class="body">
 
     <div *ngIf="selectingBuildingOrder">
-      <div *ngFor="let buildingType of availableBuildingTypes" class='select-building-btn' [class.selected]="colony.buildingOrder === buildingType.id">
+      <div *ngFor="let buildingType of availableBuildingTypes" (click)="changeBuildingOrder(buildingType.id)" class='select-building-btn' [class.selected]="colony.buildingOrder === buildingType.id">
         {{ buildingType.name }}:
         <div class='building-type-resource' *ngFor="let res of buildingType.resources">{{ res.resourceType.name + ' ' + res.quantity }} </div>
       </div>
