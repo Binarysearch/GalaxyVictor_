@@ -20,4 +20,17 @@ public class ColonyBuildingsController extends ApiServlet {
 
 		return result;
 	}
+
+	@Override
+	public String postRequest(ApiRequest request) throws SQLException {
+		String token = request.getToken();
+		int colony = request.jsonPath("$.colony");
+		String type = request.jsonPath("$.buildingType");
+		long time = System.currentTimeMillis();
+		String result = executeQueryForJson("select core.set_colony_building_order(?, ?, ?, ?);", colony, type, time, token);
+
+		return result;
+	}
+
+
 }

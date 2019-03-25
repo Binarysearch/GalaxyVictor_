@@ -85,6 +85,7 @@ export class ColonyWindowComponent implements OnInit {
   }
 
   changeBuildingOrder(buildingTypeId: number) {
+    this.selectingBuildingOrder = false;
     this.core.changeColonyBuildingOrder(this.colony.id, buildingTypeId);
   }
 

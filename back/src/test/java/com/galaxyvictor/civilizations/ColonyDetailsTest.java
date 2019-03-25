@@ -135,6 +135,24 @@ public class ColonyDetailsTest extends BaseTest {
     }
 
     @Test
+    @Order(4)
+    public void testSetColonyBuildingOrder() throws SQLException {
+        ApiRequest request = mock(ApiRequest.class);
+
+        given(request.getToken()).willReturn(token);
+        given(request.jsonPath("$.colony")).willReturn((int) colonyId);
+        given(request.jsonPath("$.buildingType")).willReturn("wind power plant");
+
+        String response = new ColonyBuildingsController().postRequest(request);
+        
+        assertEquals(read(response, "$.id"), "wind power plant");
+        assertEquals(read(response, "$.name"), "Planta de enrgia eolica");
+        assertEquals(read(response, "$.resources[0].type"), "energy");
+        assertEquals((int) read(response, "$.resources[0].quantity"), 5);
+        
+    }
+
+    @Test
     public void testGetResourceTypes() throws SQLException {
         ApiRequest request = mock(ApiRequest.class);
 
