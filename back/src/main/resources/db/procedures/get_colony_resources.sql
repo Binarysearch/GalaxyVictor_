@@ -16,7 +16,7 @@ begin
 
   result_ = (with x as (
     
-    select resource_type, quantity from core.colony_resources where colony=colony_
+    select resource_type as type, quantity from core.colony_resources where colony=colony_
 
   ) select array_to_json(array_agg(x)) from x);
 

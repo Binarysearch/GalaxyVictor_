@@ -14,5 +14,7 @@
     "split_fleet.sql",
     "get_colony_buildings.sql",
     "get_colony_resources.sql",
+    "get_resource_types.sql",
+    "get_colony_building_types.sql",
     "procedures.sql"
 ]

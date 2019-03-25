@@ -16,7 +16,7 @@ begin
 
   result_ = (with x as (
     
-    select id, building_type from core.colony_buildings where colony=colony_
+    select id, building_type as type from core.colony_buildings where colony=colony_
 
   ) select array_to_json(array_agg(x)) from x);
 

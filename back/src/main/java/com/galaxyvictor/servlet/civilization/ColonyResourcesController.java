@@ -15,7 +15,7 @@ public class ColonyResourcesController extends ApiServlet {
 	@Override
 	public String getRequest(ApiRequest request) throws SQLException {
 		String token = request.getToken();
-		int colony = request.jsonPath("$.colony");
+		long colony = request.getLongParam("colony", 0);
 		String result = executeQueryForJson("select core.get_colony_resources(?, ?);", colony, token);
 
 		return result;

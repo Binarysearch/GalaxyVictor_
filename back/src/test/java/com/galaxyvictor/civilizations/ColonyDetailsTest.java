@@ -13,8 +13,10 @@ import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.civilization.CivilizationController;
 import com.galaxyvictor.servlet.civilization.CivilizationsController;
 import com.galaxyvictor.servlet.civilization.ColoniesController;
+import com.galaxyvictor.servlet.civilization.ColonyBuildingTypesController;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingsController;
 import com.galaxyvictor.servlet.civilization.ColonyResourcesController;
+import com.galaxyvictor.servlet.civilization.ResourceTypesController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
@@ -29,7 +31,7 @@ public class ColonyDetailsTest extends BaseTest {
 
     private static int civilizationId;
 
-    private static int colonyId;
+    private static long colonyId;
     private static int homeworldId;
     private static String civilizationName = "Psilons";
 
@@ -81,11 +83,11 @@ public class ColonyDetailsTest extends BaseTest {
         //Colony buildings
         ApiRequest colonyBuildingsRequest = mock(ApiRequest.class);
         given(colonyBuildingsRequest.getToken()).willReturn(token);
-        given(colonyBuildingsRequest.jsonPath("$.colony")).willReturn(colonyId);
+        given(colonyBuildingsRequest.getLongParam("colony", 0)).willReturn(colonyId);
         String colonyBuildingsResponse = new ColonyBuildingsController().getRequest(colonyBuildingsRequest);
         
         assertNotNull(read(colonyBuildingsResponse, "[0].id"));
-        assertEquals(read(colonyBuildingsResponse, "[0].building_type"), "imperial capital");
+        assertEquals(read(colonyBuildingsResponse, "[0].type"), "imperial capital");
     }
 
     @Test
@@ -95,10 +97,10 @@ public class ColonyDetailsTest extends BaseTest {
         //Colony buildings
         ApiRequest colonyResourcesRequest = mock(ApiRequest.class);
         given(colonyResourcesRequest.getToken()).willReturn(token);
-        given(colonyResourcesRequest.jsonPath("$.colony")).willReturn(colonyId);
+        given(colonyResourcesRequest.getLongParam("colony", 0)).willReturn(colonyId);
         String colonyResourcesResponse = new ColonyResourcesController().getRequest(colonyResourcesRequest);
         
-        assertNotNull(read(colonyResourcesResponse, "[0].resource_type"));
+        assertNotNull(read(colonyResourcesResponse, "[0].type"));
         assertNotNull(read(colonyResourcesResponse, "[0].quantity"));
         
     }
@@ -116,4 +118,34 @@ public class ColonyDetailsTest extends BaseTest {
         assertEquals((int) read(response, "[0].homeworld"), homeworldId);
         
     }
+
+    @Test
+    public void testGetColonyBuildingTypes() throws SQLException {
+        ApiRequest request = mock(ApiRequest.class);
+
+        given(request.getToken()).willReturn(token);
+
+        String response = new ColonyBuildingTypesController().getRequest(request);
+
+        assertNotNull(read(response, "[0].id"));
+        assertNotNull(read(response, "[0].name"));
+        assertNotNull(read(response, "[0].resources[0].type"));
+        assertNotNull(read(response, "[0].resources[0].quantity"));
+        
+    }
+
+    @Test
+    public void testGetResourceTypes() throws SQLException {
+        ApiRequest request = mock(ApiRequest.class);
+
+        given(request.getToken()).willReturn(token);
+
+        String response = new ResourceTypesController().getRequest(request);
+
+        assertNotNull(read(response, "[0].id"));
+        assertNotNull(read(response, "[0].name"));
+        
+    }
+
+
 }
