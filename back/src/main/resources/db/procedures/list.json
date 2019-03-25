@@ -18,5 +18,6 @@
     "get_colony_building_types.sql",
     "set_colony_building_order.sql",
     "finish_colony_building_order.sql",
+    "get_colony_building_orders.sql",
     "procedures.sql"
 ]

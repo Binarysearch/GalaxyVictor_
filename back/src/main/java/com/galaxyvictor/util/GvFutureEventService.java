@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrder;
+import com.galaxyvictor.servlet.civilization.ColonyBuildingOrderList;
 import com.galaxyvictor.servlet.fleets.Travel;
 import com.galaxyvictor.servlet.fleets.TravelList;
 import com.galaxyvictor.websocket.MessagingService;
@@ -20,12 +21,24 @@ public class GvFutureEventService implements FutureEventService {
 		this.messagingService = messagingService;
 		eventManager.start();
 		try {
-			TravelList list = databaseService.executeQueryForObject("select core.get_travels();", TravelList.class);
-			if (list != null && list.getTravels() != null) {
-				for (Travel travel : list.getTravels()) {
+
+			// Add travels to queue
+			TravelList travelList = databaseService.executeQueryForObject("select core.get_travels();", TravelList.class);
+			if (travelList != null && travelList.getTravels() != null) {
+				for (Travel travel : travelList.getTravels()) {
 					addTravelEvent(travel);
 				}
 			}
+
+			// Add colony buildings to queue
+			ColonyBuildingOrderList orderList = databaseService.executeQueryForObject("select core.get_colony_building_orders();", ColonyBuildingOrderList.class);
+			if (orderList != null && orderList.getOrders() != null) {
+				for (ColonyBuildingOrder order : orderList.getOrders()) {
+					addColonyBuildingEvent(order);
+				}
+			}
+
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
