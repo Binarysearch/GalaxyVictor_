@@ -1,3 +1,4 @@
+import { ColonyResourceDTO } from './../dtos/colony-resource';
 import { ShipsService } from './ships.service';
 import { CivilizationsService } from './civilizations.service';
 import { GalaxiesService } from './galaxies.service';
@@ -87,6 +88,10 @@ export class CoreService {
 
   public getColonyBuildings(colonyId: number): Observable<ColonyBuildingDTO[]> {
     return this.coloniesService.getColonyBuildings(colonyId);
+  }
+
+  public getColonyResources(colonyId: number): Observable<ColonyResourceDTO[]> {
+    return this.coloniesService.getColonyResources(colonyId);
   }
 
 

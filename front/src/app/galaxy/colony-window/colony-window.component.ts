@@ -1,3 +1,5 @@
+import { ColonyResourceDTO } from './../../dtos/colony-resource';
+import { ColonyResource } from './../../game-objects/colony-resource';
 import { Colony } from './../../game-objects/colony';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { TextService } from 'src/app/services/text.service';
@@ -34,6 +36,14 @@ export class ColonyWindowComponent implements OnInit {
     return this.colony.buildings;
   }
 
+  get resources(): ColonyResource[] {
+    if (!this.colony.resources) {
+      this.colony.resources = [];
+      this.loadResources();
+    }
+    return this.colony.resources;
+  }
+
   loadBuildings() {
     this.core.getColonyBuildings(this.colony.id).subscribe((buildings: ColonyBuildingDTO[]) => {
       this.colony.buildings = [];
@@ -41,6 +51,17 @@ export class ColonyWindowComponent implements OnInit {
         const building = new ColonyBuilding(b);
         building.type = this.store.getColonyBuildingType(b.type);
         this.colony.buildings.push(building);
+      });
+    });
+  }
+
+  loadResources() {
+    this.core.getColonyResources(this.colony.id).subscribe((resources: ColonyResourceDTO[]) => {
+      this.colony.resources = [];
+      resources.forEach(r => {
+        const resource = new ColonyResource(r);
+        resource.type = this.store.getResourceType(r.type);
+        this.colony.resources.push(resource);
       });
     });
   }

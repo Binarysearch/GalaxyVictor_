@@ -1,3 +1,4 @@
+import { ColonyResourceDTO } from './../dtos/colony-resource';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
 import { ColonyDTO } from '../dtos/colony';
@@ -15,6 +16,7 @@ export class ColoniesService  {
 
   private coloniesUrl = this.host + '/api/colonies';
   private buildingsUrl = this.host + '/api/colony-buildings';
+  private resourcesUrl = this.host + '/api/colony-resources';
 
 
   constructor(private http: HttpClient, private store: Store) {
@@ -35,4 +37,9 @@ export class ColoniesService  {
   getColonyBuildings(colonyId: number): Observable<ColonyBuildingDTO[]> {
     return this.http.get<ColonyBuildingDTO[]>(this.buildingsUrl + `?colony=${colonyId}`);
   }
+
+  getColonyResources(colonyId: number): Observable<ColonyResourceDTO[]> {
+    return this.http.get<ColonyResourceDTO[]>(this.resourcesUrl + `?colony=${colonyId}`);
+  }
+
 }

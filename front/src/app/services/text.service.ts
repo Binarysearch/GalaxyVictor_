@@ -72,6 +72,7 @@ export class TextService {
     status: 'Estado',
     debug: 'Depuración',
     viewColony: 'Ver colonia',
+    resources: 'Recursos',
     na: 'N/A'
   };
 

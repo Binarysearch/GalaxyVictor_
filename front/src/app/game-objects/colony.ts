@@ -3,6 +3,7 @@ import { GameObject } from './game-object';
 import { Planet } from './planet';
 import { Civilization } from './civilization';
 import { ColonyBuilding } from './colony-building';
+import { ColonyResource } from './colony-resource';
 
 export class Colony implements GameObject {
 
@@ -10,6 +11,7 @@ export class Colony implements GameObject {
   planet: Planet;
   civilization: Civilization;
   buildings: ColonyBuilding[];
+  resources: ColonyResource[];
   planetId: number;
   civilizationId: number;
 
