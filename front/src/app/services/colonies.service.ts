@@ -46,9 +46,7 @@ export class ColoniesService  {
   changeColonyBuildingOrder(colonyId: number, buildingTypeId: number): void {
     this.http.post<ColonyBuildingTypeDTO>(this.buildingsUrl, {colony: colonyId, buildingType: buildingTypeId})
       .subscribe((type: ColonyBuildingTypeDTO) => {
-        const colony = this.store.getObjectById(colonyId) as Colony;
-        colony.buildingOrder = type.id;
-        colony.buildingOrderName = type.name;
+
       });
   }
 }

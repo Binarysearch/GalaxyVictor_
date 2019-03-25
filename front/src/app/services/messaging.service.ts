@@ -28,6 +28,16 @@ interface FinishTravelDTO {
   civilizations: CivilizationDTO[];
 }
 
+interface ColonyBuildingOrderDTO {
+  colony: number;
+  buildingTypeId: string;
+  name: string;
+}
+
+interface FinishColonyBuildingDTO {
+  colony: number;
+}
+
 interface RemoveFleetDTO {
   id: number;
 }
@@ -97,6 +107,24 @@ export class MessagingService {
         const fleet = this.store.getObjectById(payload.id) as Fleet;
         if (fleet) {
           this.store.removeFleet(fleet);
+        }
+      }
+      if (m.type === 'ColonyBuildingOrder') {
+        const payload = m.payload as ColonyBuildingOrderDTO;
+        const colony = this.store.getObjectById(payload.colony) as Colony;
+        if (colony) {
+          colony.buildingOrder = payload.buildingTypeId;
+          colony.buildingOrderName = payload.name;
+        }
+      }
+      if (m.type === 'FinishColonyBuilding') {
+        const payload = m.payload as FinishColonyBuildingDTO;
+        const colony = this.store.getObjectById(payload.colony) as Colony;
+        if (colony) {
+          colony.buildingOrder = null;
+          colony.buildingOrderName = null;
+          colony.buildings = null;
+          colony.resources = null;
         }
       }
       if (m.type === 'Fleet') {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FutureEventManager {
 
@@ -14,6 +15,8 @@ public class FutureEventManager {
         }
 
     });
+
+    private final ConcurrentHashMap<Long, FutureEvent> eventMap = new ConcurrentHashMap<>();
 
     private final Thread thread = new Thread(){
         public void run(){
@@ -30,6 +33,7 @@ public class FutureEventManager {
                         if(tiempo <= 0){
                             synchronized(events){
                                 events.poll();
+                                eventMap.remove(ev.getId());
                             }
                             ev.finish();
                         }else{
@@ -60,6 +64,7 @@ public class FutureEventManager {
 	public void addFutureEvent(FutureEvent ev) {
         synchronized(events){
             events.add(ev);
+            eventMap.put(ev.getId(), ev);
             thread.interrupt();
         }
 	}
@@ -67,6 +72,16 @@ public class FutureEventManager {
 	public List<FutureEvent> getEvents() {
         synchronized(events){
             return new ArrayList<>(events);
+        }
+	}
+
+	public void removeEvent(long id) {
+        FutureEvent ev = eventMap.get(id);
+        if(ev != null){
+            synchronized(events){
+                events.remove(ev);
+                eventMap.remove(id);
+            }
         }
 	}
 }

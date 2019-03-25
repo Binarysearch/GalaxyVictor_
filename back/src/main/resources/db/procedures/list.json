@@ -17,5 +17,6 @@
     "get_resource_types.sql",
     "get_colony_building_types.sql",
     "set_colony_building_order.sql",
+    "finish_colony_building_order.sql",
     "procedures.sql"
 ]

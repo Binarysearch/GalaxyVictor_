@@ -145,10 +145,11 @@ public class ColonyDetailsTest extends BaseTest {
 
         String response = new ColonyBuildingsController().postRequest(request);
         
-        assertEquals(read(response, "$.id"), "wind power plant");
+        assertEquals(read(response, "$.buildingTypeId"), "wind power plant");
         assertEquals(read(response, "$.name"), "Planta de enrgia eolica");
-        assertEquals(read(response, "$.resources[0].type"), "energy");
-        assertEquals((int) read(response, "$.resources[0].quantity"), 5);
+        assertEquals((int) read(response, "$.colony"), colonyId);
+        assertEquals(read(response, "$.costs[0].resourceType"), "iron");
+        assertEquals((int) read(response, "$.costs[0].quantity"), 50);
         
     }
 

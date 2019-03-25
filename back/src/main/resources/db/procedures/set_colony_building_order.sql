@@ -14,12 +14,15 @@ begin
     perform core.error(401, format('Colony %L not yours', colony_));
   end if;
 
-  update core.colony_building_orders set building_type = building_type_, started_time=time_ where colony=colony_;
+update core.colony_building_orders set building_type = building_type_, started_time=time_ where colony=colony_;
+  insert into core.colony_building_orders(colony, building_type, started_time) select colony_, building_type_, time_ where not exists(select 1 from core.colony_building_orders where colony=colony_);
+  
 
   result_ = (with x as (
 
-    select id, name,
-    (select array_to_json(array_agg(r)) from (select resource_type as type, quantity from core.colony_building_types_resources where building_type=id) as r) as resources
+    select id as "buildingTypeId", name, colony_ as colony, time_ as "startedTime", civilization_id_ as civilization,
+    (select array_to_json(array_agg(r)) from (select resource_type as "resourceType", quantity from core.colony_building_types_costs where building_type=id) as r) as costs,
+    (select array_to_json(array_agg(r)) from (select resource_type as "resourceType", quantity from core.colony_resources where colony=colony_) as r) as colonyResources
      from core.colony_building_types where id=building_type_
 
   ) select row_to_json(x) from x);

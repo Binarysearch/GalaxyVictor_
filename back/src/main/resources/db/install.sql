@@ -24,7 +24,6 @@ insert into CORE.colony_building_types_resources(building_type, resource_type, q
 ('iron mine', 'iron', 2);
 
 insert into CORE.colony_building_types_costs(building_type, resource_type, quantity) values
-('wind power plant', 'wood', 5),
 ('wind power plant', 'iron', 50),
 ('sawmill', 'wood', 10),
 ('iron mine', 'wood', 50);

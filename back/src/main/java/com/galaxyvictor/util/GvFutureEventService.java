@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.galaxyvictor.db.DatabaseService;
+import com.galaxyvictor.servlet.civilization.ColonyBuildingOrder;
 import com.galaxyvictor.servlet.fleets.Travel;
 import com.galaxyvictor.servlet.fleets.TravelList;
 import com.galaxyvictor.websocket.MessagingService;
@@ -38,6 +39,16 @@ public class GvFutureEventService implements FutureEventService {
 	@Override
 	public List<FutureEvent> getEvents() {
 		return eventManager.getEvents();
+	}
+
+	@Override
+	public void cancelColonyBuildingEvent(long colonyId) {
+		eventManager.removeEvent(colonyId);
+	}
+
+	@Override
+	public void addColonyBuildingEvent(ColonyBuildingOrder order) {
+		eventManager.addFutureEvent(new ColonyBuildingAsincTask(order, databaseService, messagingService));
 	}
 
 }
