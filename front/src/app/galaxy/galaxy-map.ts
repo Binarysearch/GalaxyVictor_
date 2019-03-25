@@ -224,6 +224,5 @@ export class GalaxyMap {
   public select(id: number) {
     this.camera.follow(null);
     this._selected = id;
-    console.log(this.selected.objectType);
   }
 }

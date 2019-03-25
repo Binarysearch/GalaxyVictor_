@@ -17,10 +17,11 @@ import { UserCivilizationDTO } from './dtos/user-civilization';
 export class Store {
 
   private objects: Map<number, GameObject> = new Map();
-  private colonyBuildingTypes: Map<string, ColonyBuildingType> = new Map();
+  private colonyBuildingTypesMap: Map<string, ColonyBuildingType> = new Map();
   private resourceTypes: Map<string, ResourceType> = new Map();
 
   private _starSystems: StarSystem[] = [];
+  private _colonyBuildingTypes: ColonyBuildingType[] = [];
   private _planets: Planet[] = [];
   private _civilizations: Civilization[] = [];
   private _colonies: Colony[] = [];
@@ -163,11 +164,12 @@ export class Store {
   }
 
   public addColonyBuildingType(type: ColonyBuildingType) {
-    this.colonyBuildingTypes.set(type.id, type);
+    this.colonyBuildingTypesMap.set(type.id, type);
+    this._colonyBuildingTypes.push(type);
   }
 
   public getColonyBuildingType(typeId: string): ColonyBuildingType {
-    return this.colonyBuildingTypes.get(typeId);
+    return this.colonyBuildingTypesMap.get(typeId);
   }
 
   public addResourceType(type: ResourceType) {
@@ -178,4 +180,7 @@ export class Store {
     return this.resourceTypes.get(typeId);
   }
 
+  public get colonyBuildingTypes(): ColonyBuildingType[] {
+    return this._colonyBuildingTypes;
+  }
 }

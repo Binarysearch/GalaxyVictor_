@@ -69,8 +69,12 @@ export class TextService {
     passwordsDontMatch: 'Las contraseñas no coinciden',
     unknown: 'Desconocido',
     buildings: 'Edificios',
+    buildingOrder: 'En contrucción',
+    noBuildingOrder: 'Sin ordenes de contrucción',
+    changeBuildingOrder: 'Cambiar orden de construcción',
     status: 'Estado',
     debug: 'Depuración',
+    cancel: 'Cancelar',
     viewColony: 'Ver colonia',
     resources: 'Recursos',
     na: 'N/A'

@@ -1,3 +1,4 @@
+import { ColonyBuildingType } from './../../game-objects/colony-building-type';
 import { ColonyResourceDTO } from './../../dtos/colony-resource';
 import { ColonyResource } from './../../game-objects/colony-resource';
 import { Colony } from './../../game-objects/colony';
@@ -18,6 +19,7 @@ export class ColonyWindowComponent implements OnInit {
   @Input() colony: Colony;
   @Output() closeButton = new EventEmitter();
 
+  selectingBuildingOrder: boolean;
 
   constructor(public ts: TextService, private core: CoreService, private store: Store) { }
 
@@ -70,4 +72,15 @@ export class ColonyWindowComponent implements OnInit {
     this.closeButton.emit();
   }
 
+  changeBuildingOrderClicked() {
+    this.selectingBuildingOrder = true;
+  }
+
+  cancelChangeBuildingOrderClicked() {
+    this.selectingBuildingOrder = false;
+  }
+
+  get availableBuildingTypes(): ColonyBuildingType[] {
+    return this.store.colonyBuildingTypes;
+  }
 }

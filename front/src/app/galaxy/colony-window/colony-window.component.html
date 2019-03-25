@@ -4,13 +4,28 @@
     <div class="close-button" (click)="closeButtonClick();"><i class="fa fa-times" aria-hidden="true"></i></div>
   </div>
   <div class="body">
-    <div>
-      <h4>{{ ts.strings.buildings }}</h4>
-      <div *ngFor="let building of buildings">{{ building.type.name }}</div>
+
+    <div *ngIf="selectingBuildingOrder">
+      <div *ngFor="let buildingType of availableBuildingTypes" class='select-building-btn' [class.selected]="colony.buildingOrder === buildingType.id">
+        {{ buildingType.name }}:
+        <div class='building-type-resource' *ngFor="let res of buildingType.resources">{{ res.resourceType.name + ' ' + res.quantity }} </div>
+      </div>
+      <button class='btn'(click)="cancelChangeBuildingOrderClicked()" [title]="ts.strings.cancel">{{ ts.strings.cancel }}</button>
     </div>
-    <div>
-      <h4>{{ ts.strings.resources }}</h4>
-      <div *ngFor="let resource of resources">{{ resource.type.name }}: {{ resource.quantity }}</div>
+
+    <div *ngIf="!selectingBuildingOrder">
+      <div>
+        <h4>{{ ts.strings.buildingOrder }}</h4>
+        <button class='btn'(click)="changeBuildingOrderClicked()" [title]="ts.strings.changeBuildingOrder">{{ (colony.buildingOrder)?colony.buildingOrderName:ts.strings.noBuildingOrder }}</button>
+      </div>
+      <div>
+        <h4>{{ ts.strings.buildings }}</h4>
+        <div *ngFor="let building of buildings">{{ building.type.name }}</div>
+      </div>
+      <div>
+        <h4>{{ ts.strings.resources }}</h4>
+        <div *ngFor="let resource of resources">{{ resource.type.name }}: {{ resource.quantity }}</div>
+      </div>
     </div>
 
   </div>

@@ -12,6 +12,8 @@ export class Colony implements GameObject {
   civilization: Civilization;
   buildings: ColonyBuilding[];
   resources: ColonyResource[];
+  buildingOrder: string;
+  buildingOrderName: string;
   planetId: number;
   civilizationId: number;
 
@@ -19,6 +21,8 @@ export class Colony implements GameObject {
     this.id = data.id;
     this.planetId = data.planet;
     this.civilizationId = data.civilization;
+    this.buildingOrder = data.buildingOrder;
+    this.buildingOrderName = data.buildingOrderName;
   }
 
   get objectType() { return 'Colony'; }

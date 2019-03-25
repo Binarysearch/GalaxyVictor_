@@ -203,7 +203,7 @@ begin
 
   result_ = (with cs as (
 
-    select c.id, c.planet, c.civilization from core.colonies c join core.planets p on p.id=c.planet join core.visible_star_systems v on v.star_system=p.star_system where v.civilization=civilization_id_
+    select c.id, c.planet, c.civilization, bo.building_type as "buildingOrder", bt.name as "buildingOrderName" from core.colonies c join core.planets p on p.id=c.planet join core.visible_star_systems v on v.star_system=p.star_system left join core.colony_building_orders bo on bo.colony=c.id left join core.colony_building_types bt on bt.id=bo.building_type where v.civilization=civilization_id_
 
   ) select array_to_json(array_agg(cs)) from cs);
 
