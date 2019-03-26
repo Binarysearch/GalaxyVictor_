@@ -20,6 +20,7 @@ export class ColonyWindowComponent implements OnInit {
   @Output() closeButton = new EventEmitter();
 
   selectingBuildingOrder: boolean;
+  private _availableBuildingTypes: ColonyBuildingType[];
 
   constructor(public ts: TextService, private core: CoreService, private store: Store) { }
 
@@ -65,6 +66,7 @@ export class ColonyWindowComponent implements OnInit {
         resource.type = this.store.getResourceType(r.type);
         this.colony.resources.push(resource);
       });
+      this._availableBuildingTypes = null;
     });
   }
 
@@ -81,7 +83,29 @@ export class ColonyWindowComponent implements OnInit {
   }
 
   get availableBuildingTypes(): ColonyBuildingType[] {
-    return this.store.colonyBuildingTypes;
+    if (this.colony.resources && !this._availableBuildingTypes) {
+
+      this._availableBuildingTypes = [];
+
+      //maps resource -> quantity
+      const resourceMap = new Map<string, number>();
+      this.colony.resources.forEach(r => {
+        resourceMap.set(r.type.id, r.quantity);
+      });
+
+      //check for every building type that there are enought of every resource
+      this.store.colonyBuildingTypes.forEach(bt => {
+        let available = true;
+        bt.resources.forEach(r => {
+          const availableQuantity = resourceMap.get(r.resourceType.id);
+          available = available && (availableQuantity + r.quantity >= 0);
+        });
+        if (available) {
+          this._availableBuildingTypes.push(bt);
+        }
+      });
+    }
+    return this._availableBuildingTypes;
   }
 
   changeBuildingOrder(buildingTypeId: number) {
