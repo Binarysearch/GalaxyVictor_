@@ -81,6 +81,7 @@ public class FutureEventManager {
             synchronized(events){
                 events.remove(ev);
                 eventMap.remove(id);
+                thread.interrupt();
             }
         }
 	}
