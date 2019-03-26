@@ -12,7 +12,7 @@ begin
 
   result_ = (with x as (
     
-    select id, name,
+    select id, name, buildable,
     (select array_to_json(array_agg(r)) from (select resource_type as type, quantity from core.colony_building_types_resources where building_type=id) as r) as resources
      from core.colony_building_types
 

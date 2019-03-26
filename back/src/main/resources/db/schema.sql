@@ -112,7 +112,8 @@ CREATE TABLE resource_types(
 
 CREATE TABLE colony_building_types(
     id text PRIMARY KEY,
-    name text NOT NULL
+    name text NOT NULL,
+    buildable boolean NOT NULL
 );
 
 CREATE TABLE colony_building_types_resources(

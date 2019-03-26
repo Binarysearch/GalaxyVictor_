@@ -95,13 +95,15 @@ export class ColonyWindowComponent implements OnInit {
 
       //check for every building type that there are enought of every resource
       this.store.colonyBuildingTypes.forEach(bt => {
-        let available = true;
-        bt.resources.forEach(r => {
-          const availableQuantity = resourceMap.get(r.resourceType.id);
-          available = available && (availableQuantity + r.quantity >= 0);
-        });
-        if (available) {
-          this._availableBuildingTypes.push(bt);
+        if (bt.buildable) {
+          let available = true;
+          bt.resources.forEach(r => {
+            const availableQuantity = resourceMap.get(r.resourceType.id);
+            available = available && (availableQuantity + r.quantity >= 0);
+          });
+          if (available) {
+            this._availableBuildingTypes.push(bt);
+          }
         }
       });
     }

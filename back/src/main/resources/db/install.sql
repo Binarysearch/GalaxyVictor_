@@ -4,12 +4,12 @@ insert into core.resource_types(id, name) values
 ('iron', 'Hierro');
 
 
-insert into core.colony_building_types(id, name) values
-('imperial capital', 'Capital imperial'),
-('colony base', 'Base colonial'),
-('sawmill', 'Serreria'),
-('wind power plant', 'Planta de enrgia eolica'),
-('iron mine', 'Mina de hierro');
+insert into core.colony_building_types(id, name, buildable) values
+('imperial capital', 'Capital imperial', false),
+('colony base', 'Base colonial', false),
+('sawmill', 'Serreria', true),
+('wind power plant', 'Planta de enrgia eolica', true),
+('iron mine', 'Mina de hierro', true);
 
 
 insert into CORE.colony_building_types_resources(building_type, resource_type, quantity) values
