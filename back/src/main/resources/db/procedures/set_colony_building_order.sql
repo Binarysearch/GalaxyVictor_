@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION core.set_colony_building_order(colony_ bigint, buildi
 AS $function$declare
   result_ json;
   civilization_id_ bigint;
+  lacking_resource_ text;
 begin
 
   civilization_id_ = core.require_civ(token_);
@@ -14,7 +15,14 @@ begin
     perform core.error(401, format('Colony %L not yours', colony_));
   end if;
 
-update core.colony_building_orders set building_type = building_type_, started_time=time_ where colony=colony_;
+  -- Check that there are enought resources in colony
+  if (exists(select 1 from core.colony_building_types_resources cbtr
+      join core.colony_resources cr on cr.resource_type=cbtr.resource_type
+      where cbtr.building_type=building_type_ and cr.colony=colony_ and cr.quantity+cbtr.quantity<0)) then
+    perform core.error(400, 'Not enought resources');
+  end if;
+
+  update core.colony_building_orders set building_type = building_type_, started_time=time_ where colony=colony_;
   insert into core.colony_building_orders(colony, building_type, started_time) select colony_, building_type_, time_ where not exists(select 1 from core.colony_building_orders where colony=colony_);
   
 

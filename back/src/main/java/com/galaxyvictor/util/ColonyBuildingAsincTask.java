@@ -23,7 +23,7 @@ public class ColonyBuildingAsincTask extends FutureEvent {
 
     @Override
     public double getEndTime() {
-        return order.getStartedTime() + 100000;
+        return order.getStartedTime() + 10000;
     }
 
     @Override
