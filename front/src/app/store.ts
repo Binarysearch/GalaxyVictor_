@@ -1,3 +1,4 @@
+import { ShipModel } from './game-objects/ship-model';
 import { ResourceType } from './game-objects/resource-type';
 import { ColonyBuildingType } from './game-objects/colony-building-type';
 import { GalaxyDTO } from './dtos/galaxy';
@@ -19,11 +20,13 @@ export class Store {
 
   private objects: Map<number, GameObject> = new Map();
   private colonyBuildingTypesMap: Map<string, ColonyBuildingType> = new Map();
+  private shipModelsMap: Map<number, ShipModel> = new Map();
   private resourceTypes: Map<string, ResourceType> = new Map();
   private colonyBuildingCapabilityTypes: Map<string, ColonyBuildingCapabilityType> = new Map();
 
   private _starSystems: StarSystem[] = [];
   private _colonyBuildingTypes: ColonyBuildingType[] = [];
+  private _shipModels: ShipModel[] = [];
   private _planets: Planet[] = [];
   private _civilizations: Civilization[] = [];
   private _colonies: Colony[] = [];
@@ -174,6 +177,15 @@ export class Store {
     return this.colonyBuildingTypesMap.get(typeId);
   }
 
+  public addShipModel(model: ShipModel) {
+    this.shipModelsMap.set(model.id, model);
+    this._shipModels.push(model);
+  }
+
+  public getShipModel(modelId: number): ShipModel {
+    return this.shipModelsMap.get(modelId);
+  }
+
   public addResourceType(type: ResourceType) {
     this.resourceTypes.set(type.id, type);
   }
@@ -193,4 +205,9 @@ export class Store {
   public get colonyBuildingTypes(): ColonyBuildingType[] {
     return this._colonyBuildingTypes;
   }
+
+  public get shipModels(): ShipModel[] {
+    return this._shipModels;
+  }
+
 }

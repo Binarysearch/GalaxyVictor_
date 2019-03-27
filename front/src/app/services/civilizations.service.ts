@@ -16,6 +16,7 @@ import { ResourceTypeDTO } from '../dtos/resource-type';
 import { ResourceType } from '../game-objects/resource-type';
 import { ColonyBuildingCapabilityTypeDTO } from '../dtos/colony-building-capability-type';
 import { ColonyBuildingCapabilityType } from '../game-objects/colony-building-capability-type';
+import { ShipModelsService } from './ship-models.service';
 
 interface ConstantDataDTO {
   resourceTypes: ResourceTypeDTO[];
@@ -40,7 +41,9 @@ export class CivilizationsService {
   private currentGalaxyId: number;
 
   constructor(private http: HttpClient, private store: Store, private galaxiesService: GalaxiesService,
-     private coloniesService: ColoniesService, private fleetsService: FleetsService) {
+     private coloniesService: ColoniesService,
+     private shipModelsService: ShipModelsService,
+      private fleetsService: FleetsService) {
     this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
       if (currentGalaxy) {
         this.loadConstantData();
@@ -119,6 +122,7 @@ export class CivilizationsService {
           this.store.serverTime = data.serverTime;
           this.store.userCivilization = data;
           this._currentCivilization = data;
+          this.shipModelsService.loadModels();
         }, (error: any) => {
           this._currentCivilization = null;
           console.log(error);
