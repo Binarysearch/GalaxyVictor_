@@ -27,7 +27,7 @@ begin
     perform core.error(400, 'Building type not buildable');
   end if;
 
-  update core.colony_building_orders set building_type = building_type_, started_time=time_ where colony=colony_;
+  update core.colony_building_orders set building_type = building_type_, ship_model = null, started_time=time_ where colony=colony_;
   insert into core.colony_building_orders(colony, building_type, started_time) select colony_, building_type_, time_ where not exists(select 1 from core.colony_building_orders where colony=colony_);
   
 

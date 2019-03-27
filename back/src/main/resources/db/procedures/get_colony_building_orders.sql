@@ -14,7 +14,7 @@ begin
      from core.colony_building_orders cbo 
      join core.colonies c on c.id=cbo.colony 
      join core.colony_building_types cbt on cbt.id=cbo.building_type
-
+      where cbo.building_type is not null
   ) select array_to_json(array_agg(x)) from x);
 
   return format('{"orders":%s}', coalesce(result_, '[]'))::json;

@@ -34,6 +34,12 @@ interface ColonyBuildingOrderDTO {
   name: string;
 }
 
+interface ShipBuildingOrderDTO {
+  colony: number;
+  shipModelId: number;
+  name: string;
+}
+
 interface FinishColonyBuildingDTO {
   colony: number;
 }
@@ -113,8 +119,20 @@ export class MessagingService {
         const payload = m.payload as ColonyBuildingOrderDTO;
         const colony = this.store.getObjectById(payload.colony) as Colony;
         if (colony) {
+          colony.shipOrder = null;
+          colony.shipOrderName = null;
           colony.buildingOrder = payload.buildingTypeId;
           colony.buildingOrderName = payload.name;
+        }
+      }
+      if (m.type === 'ShipBuildingOrder') {
+        const payload = m.payload as ShipBuildingOrderDTO;
+        const colony = this.store.getObjectById(payload.colony) as Colony;
+        if (colony) {
+          colony.buildingOrder = null;
+          colony.buildingOrderName = null;
+          colony.shipOrder = payload.shipModelId;
+          colony.shipOrderName = payload.name;
         }
       }
       if (m.type === 'FinishColonyBuilding') {
@@ -123,6 +141,8 @@ export class MessagingService {
         if (colony) {
           colony.buildingOrder = null;
           colony.buildingOrderName = null;
+          colony.shipOrder = null;
+          colony.shipOrderName = null;
           colony.buildings = null;
           colony.resources = null;
         }

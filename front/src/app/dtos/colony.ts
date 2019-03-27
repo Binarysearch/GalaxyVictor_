@@ -5,5 +5,6 @@ export interface ColonyDTO {
   civilization: number;
   buildingOrder: string;
   buildingOrderName: string;
-
+  shipOrder: number;
+  shipOrderName: string;
 }

@@ -11,9 +11,7 @@ begin
 
   result_ = (with x as (
     
-    select id, name, can_colonize as "canColonize", can_fight as "canFight" from core.civilization_ship_models where civilization=civilization_id_
-    union
-    select id, name, can_colonize as "canColonize", can_fight as "canFight" from core.ship_models
+    select id, name, can_colonize as "canColonize", can_fight as "canFight" from core.civilization_ship_models where civilization=civilization_id_    
 
   ) select array_to_json(array_agg(x)) from x);
 

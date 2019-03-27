@@ -8,6 +8,7 @@ import { Store } from './../../store';
 import { ColonyBuilding } from './../../game-objects/colony-building';
 import { ColonyBuildingDTO } from './../../dtos/colony-building';
 import { CoreService } from '../../services/core.service';
+import { ShipModel } from 'src/app/game-objects/ship-model';
 
 @Component({
   selector: 'app-colony-window',
@@ -50,10 +51,20 @@ export class ColonyWindowComponent implements OnInit {
   loadBuildings() {
     this.core.getColonyBuildings(this.colony.id).subscribe((buildings: ColonyBuildingDTO[]) => {
       this.colony.buildings = [];
+      this.colony.canBuildShips = false;
+
       buildings.forEach(b => {
         const building = new ColonyBuilding(b);
         building.type = this.store.getColonyBuildingType(b.type);
         this.colony.buildings.push(building);
+
+        if (!this.colony.canBuildShips) {
+          building.type.capabilities.forEach(e => {
+            if (e.type.id === 'build ships') {
+              this.colony.canBuildShips = true;
+            }
+          });
+        }
       });
     });
   }
@@ -87,13 +98,13 @@ export class ColonyWindowComponent implements OnInit {
 
       this._availableBuildingTypes = [];
 
-      //maps resource -> quantity
+      // maps resource -> quantity
       const resourceMap = new Map<string, number>();
       this.colony.resources.forEach(r => {
         resourceMap.set(r.type.id, r.quantity);
       });
 
-      //check for every building type that there are enought of every resource
+      // check for every building type that there are enought of every resource
       this.store.colonyBuildingTypes.forEach(bt => {
         if (bt.buildable) {
           let available = true;
@@ -110,9 +121,18 @@ export class ColonyWindowComponent implements OnInit {
     return this._availableBuildingTypes;
   }
 
-  changeBuildingOrder(buildingTypeId: number) {
+  get availableShipModels(): ShipModel[] {
+    return this.store.shipModels;
+  }
+
+  changeBuildingOrder(buildingTypeId: string) {
     this.selectingBuildingOrder = false;
     this.core.changeColonyBuildingOrder(this.colony.id, buildingTypeId);
+  }
+
+  changeShipOrder(shipModelId: number) {
+    this.selectingBuildingOrder = false;
+    this.core.changeShipOrder(this.colony.id, shipModelId);
   }
 
 }

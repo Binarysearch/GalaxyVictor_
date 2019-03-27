@@ -119,6 +119,8 @@ begin
 
   insert into core.fleets(civilization, destination, origin, travel_start_time) values(civilization_id_, star_system_, star_system_, 0) returning id into fleet_id_;
 
+  insert into core.civilization_ship_models(civilization, name, can_colonize, can_fight) values (civilization_id_, 'Colonizador', true, false),(civilization_id_, 'Explorador', false, false);
+  
   insert into core.ships(fleet, model_name, can_colonize, can_fight) values (fleet_id_, 'Colonizador', true, false),(fleet_id_, 'Explorador', false, false);
 
   return core.get_current_civilization(token_);
@@ -177,38 +179,6 @@ begin
   return coalesce(result_, '[]')::json;
 end;$function$;
 
-
-
-CREATE OR REPLACE FUNCTION core.get_colonies(token_ text)
- RETURNS json
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$declare
-  result_ json;
-  user_id_ bigint;
-  civilization_id_ bigint;
-begin
-
-  user_id_ = usr from core.sessions where id=token_;
-  
-  if (user_id_ is null) then
-    perform core.error(401, 'Invalid token');
-  end if;
-
-  civilization_id_ = (select c.id from core.civilizations c join core.users u on u.galaxy=c.galaxy and u.id=c.usr where u.id=user_id_);
-
-  if (civilization_id_ is null) then
-    perform core.error(400, 'User does not have civilization or galaxy selected');
-  end if;
-
-  result_ = (with cs as (
-
-    select c.id, c.planet, c.civilization, bo.building_type as "buildingOrder", bt.name as "buildingOrderName" from core.colonies c join core.planets p on p.id=c.planet join core.visible_star_systems v on v.star_system=p.star_system left join core.colony_building_orders bo on bo.colony=c.id left join core.colony_building_types bt on bt.id=bo.building_type where v.civilization=civilization_id_
-
-  ) select array_to_json(array_agg(cs)) from cs);
-
-  return coalesce(result_, '[]')::json;
-end;$function$;
 
 
 

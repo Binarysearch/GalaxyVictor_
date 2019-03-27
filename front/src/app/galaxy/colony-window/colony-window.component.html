@@ -10,13 +10,16 @@
         {{ buildingType.name }}:
         <div class='building-type-resource' *ngFor="let res of buildingType.resources">{{ res.resourceType.name + ' ' + res.quantity }} </div>
       </div>
+      <div *ngFor="let shipModel of availableShipModels" (click)="changeShipOrder(shipModel.id)" class='select-building-btn' [class.selected]="colony.shipOrder === shipModel.id">
+        {{ shipModel.name }}:
+      </div>
       <button class='btn'(click)="cancelChangeBuildingOrderClicked()" [title]="ts.strings.cancel">{{ ts.strings.cancel }}</button>
     </div>
 
     <div *ngIf="!selectingBuildingOrder">
       <div>
         <h4>{{ ts.strings.buildingOrder }}</h4>
-        <button class='btn'(click)="changeBuildingOrderClicked()" [title]="ts.strings.changeBuildingOrder">{{ (colony.buildingOrder)?colony.buildingOrderName:ts.strings.noBuildingOrder }}</button>
+        <button class='btn'(click)="changeBuildingOrderClicked()" [title]="ts.strings.changeBuildingOrder">{{ (colony.buildingOrder)?colony.buildingOrderName:(colony.shipOrder)?colony.shipOrderName:ts.strings.noBuildingOrder }}</button>
       </div>
       <div>
         <h4>{{ ts.strings.buildings }}</h4>

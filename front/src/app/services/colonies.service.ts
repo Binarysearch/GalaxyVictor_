@@ -18,6 +18,7 @@ export class ColoniesService  {
   private coloniesUrl = this.host + '/api/colonies';
   private buildingsUrl = this.host + '/api/colony-buildings';
   private resourcesUrl = this.host + '/api/colony-resources';
+  private createShipUrl = this.host + '/api/ship-orders';
 
 
   constructor(private http: HttpClient, private store: Store) {
@@ -43,10 +44,17 @@ export class ColoniesService  {
     return this.http.get<ColonyResourceDTO[]>(this.resourcesUrl + `?colony=${colonyId}`);
   }
 
-  changeColonyBuildingOrder(colonyId: number, buildingTypeId: number): void {
+  changeColonyBuildingOrder(colonyId: number, buildingTypeId: string): void {
     this.http.post<ColonyBuildingTypeDTO>(this.buildingsUrl, {colony: colonyId, buildingType: buildingTypeId})
       .subscribe((type: ColonyBuildingTypeDTO) => {
 
       });
   }
+
+  changeShipOrder(colonyId: number, shipModelId: number): void {
+    this.http.post<any>(this.createShipUrl, {colony: colonyId, shipModel: shipModelId})
+      .subscribe();
+  }
+
+
 }

@@ -148,12 +148,6 @@ CREATE TABLE colony_buildings(
     building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE colony_building_orders(
-    colony bigint PRIMARY KEY REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    started_time bigint NOT NULL
-);
-
 CREATE TABLE colony_resources(
     colony bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -162,8 +156,7 @@ CREATE TABLE colony_resources(
 );
 
 CREATE TABLE ship_models(
-    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
-    name text NOT NULL,
+    name text PRIMARY KEY,
     can_colonize boolean NOT NULL,
     can_fight boolean NOT NULL
 );
@@ -176,3 +169,9 @@ CREATE TABLE civilization_ship_models(
     can_fight boolean NOT NULL
 );
 
+CREATE TABLE colony_building_orders(
+    colony bigint PRIMARY KEY REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    building_type text REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ship_model bigint REFERENCES civilization_ship_models(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    started_time bigint NOT NULL
+);

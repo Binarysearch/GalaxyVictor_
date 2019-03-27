@@ -6,6 +6,8 @@ import java.util.List;
 import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrder;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrderList;
+import com.galaxyvictor.servlet.civilization.ShipBuildingOrder;
+import com.galaxyvictor.servlet.civilization.ShipOrderList;
 import com.galaxyvictor.servlet.fleets.Travel;
 import com.galaxyvictor.servlet.fleets.TravelList;
 import com.galaxyvictor.websocket.MessagingService;
@@ -38,6 +40,14 @@ public class GvFutureEventService implements FutureEventService {
 				}
 			}
 
+			// Add ship orders to queue
+			ShipOrderList shipOrderList = databaseService.executeQueryForObject("select core.get_colony_ship_orders();", ShipOrderList.class);
+			if (shipOrderList != null && shipOrderList.getOrders() != null) {
+				for (ShipBuildingOrder order : shipOrderList.getOrders()) {
+					addColonyShipBuildingEvent(order);
+				}
+			}
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -62,6 +72,11 @@ public class GvFutureEventService implements FutureEventService {
 	@Override
 	public void addColonyBuildingEvent(ColonyBuildingOrder order) {
 		eventManager.addFutureEvent(new ColonyBuildingAsincTask(order, databaseService, messagingService));
+	}
+
+	@Override
+	public void addColonyShipBuildingEvent(ShipBuildingOrder order) {
+		eventManager.addFutureEvent(new ColonyShipBuildingAsincTask(order, databaseService, messagingService));
 	}
 
 }

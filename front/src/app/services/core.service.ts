@@ -94,7 +94,12 @@ export class CoreService {
     return this.coloniesService.getColonyResources(colonyId);
   }
 
-  public changeColonyBuildingOrder(colonyId: number, buildingTypeId: number): void {
+  public changeColonyBuildingOrder(colonyId: number, buildingTypeId: string): void {
     return this.coloniesService.changeColonyBuildingOrder(colonyId, buildingTypeId);
   }
+
+  public changeShipOrder(colonyId: number, shipModelId: number): void {
+    return this.coloniesService.changeShipOrder(colonyId, shipModelId);
+  }
+
 }

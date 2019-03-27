@@ -15,9 +15,13 @@
     "get_colony_buildings.sql",
     "get_colony_resources.sql",
     "set_colony_building_order.sql",
+    "set_colony_ship_order.sql",
     "finish_colony_building_order.sql",
     "get_colony_building_orders.sql",
+    "get_colony_ship_orders.sql",
     "get_constant_data.sql",
     "get_ship_models.sql",
+    "get_colonies.sql",
+    "finish_colony_ship_order.sql",
     "procedures.sql"
 ]

@@ -3,6 +3,7 @@ package com.galaxyvictor.util;
 import java.util.List;
 
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrder;
+import com.galaxyvictor.servlet.civilization.ShipBuildingOrder;
 import com.galaxyvictor.servlet.fleets.Travel;
 
 public interface FutureEventService {
@@ -14,5 +15,7 @@ public interface FutureEventService {
     public void addColonyBuildingEvent(ColonyBuildingOrder order);
 
 	public List<FutureEvent> getEvents();
+
+	public void addColonyShipBuildingEvent(ShipBuildingOrder order);
 
 }
