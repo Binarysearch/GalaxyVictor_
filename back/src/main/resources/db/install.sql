@@ -37,6 +37,10 @@ insert into core.colony_building_capability_types(id, name) values
 insert into core.colony_building_types_capabilities(building_type, capability_type) values
 ('shipyard', 'build ships');
 
+insert into core.ship_models(name, can_colonize, can_fight) values
+('Colonizador', true, false),
+('Explorador', false, false);
+
 -----------------------------------------------------------------
 ------------                               ----------------------
 ------------           TEST DATA           ----------------------

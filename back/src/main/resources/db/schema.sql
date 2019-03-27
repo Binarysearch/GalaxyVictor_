@@ -161,3 +161,18 @@ CREATE TABLE colony_resources(
     PRIMARY KEY(colony, resource_type)
 );
 
+CREATE TABLE ship_models(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    name text NOT NULL,
+    can_colonize boolean NOT NULL,
+    can_fight boolean NOT NULL
+);
+
+CREATE TABLE civilization_ship_models(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    name text NOT NULL,
+    can_colonize boolean NOT NULL,
+    can_fight boolean NOT NULL
+);
+

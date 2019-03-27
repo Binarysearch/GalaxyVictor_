@@ -18,5 +18,6 @@
     "finish_colony_building_order.sql",
     "get_colony_building_orders.sql",
     "get_constant_data.sql",
+    "get_ship_models.sql",
     "procedures.sql"
 ]

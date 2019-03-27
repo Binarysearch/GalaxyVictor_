@@ -18,6 +18,7 @@ import com.galaxyvictor.servlet.civilization.ColoniesController;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingsController;
 import com.galaxyvictor.servlet.civilization.ColonyResourcesController;
 import com.galaxyvictor.servlet.civilization.ConstantDataController;
+import com.galaxyvictor.servlet.fleets.ShipModelsController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ColonyDetailsTest extends BaseTest {
+public class IntegrationTest extends BaseTest {
 
     private static int civilizationId;
 
@@ -136,6 +137,22 @@ public class ColonyDetailsTest extends BaseTest {
         assertEquals((int) read(response, "$.colony"), colonyId);
         assertEquals(read(response, "$.costs[0].resourceType"), "iron");
         assertEquals((int) read(response, "$.costs[0].quantity"), 50);
+        
+    }
+
+    @Test
+    @Order(5)
+    public void testGetShipModels() throws SQLException {
+        ApiRequest request = mock(ApiRequest.class);
+
+        given(request.getToken()).willReturn(token);
+
+        String response = new ShipModelsController().getRequest(request);
+        
+        assertNotNull(read(response, "[0].id"));
+        assertNotNull(read(response, "[0].name"));
+        assertNotNull(read(response, "[0].canColonize"));
+        assertNotNull(read(response, "[0].canFight"));
         
     }
 
