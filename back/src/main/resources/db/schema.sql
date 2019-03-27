@@ -113,7 +113,19 @@ CREATE TABLE resource_types(
 CREATE TABLE colony_building_types(
     id text PRIMARY KEY,
     name text NOT NULL,
-    buildable boolean NOT NULL
+    buildable boolean NOT NULL,
+    repeatable boolean NOT NULL
+);
+
+CREATE TABLE colony_building_capability_types(
+    id text PRIMARY KEY,
+    name text NOT NULL
+);
+
+CREATE TABLE colony_building_types_capabilities(
+    building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    capability_type text NOT NULL REFERENCES colony_building_capability_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(building_type, capability_type)
 );
 
 CREATE TABLE colony_building_types_resources(

@@ -4,12 +4,13 @@ insert into core.resource_types(id, name) values
 ('iron', 'Hierro');
 
 
-insert into core.colony_building_types(id, name, buildable) values
-('imperial capital', 'Capital imperial', false),
-('colony base', 'Base colonial', false),
-('sawmill', 'Serreria', true),
-('wind power plant', 'Planta de enrgia eolica', true),
-('iron mine', 'Mina de hierro', true);
+insert into core.colony_building_types(id, name, buildable, repeatable) values
+('imperial capital', 'Capital imperial', false, false),
+('colony base', 'Base colonial', false, false),
+('sawmill', 'Serreria', true, true),
+('wind power plant', 'Planta de enrgia eolica', true, true),
+('shipyard', 'Astillero espacial', true, false),
+('iron mine', 'Mina de hierro', true, true);
 
 
 insert into CORE.colony_building_types_resources(building_type, resource_type, quantity) values
@@ -20,13 +21,21 @@ insert into CORE.colony_building_types_resources(building_type, resource_type, q
 ('wind power plant', 'energy', 5),
 ('sawmill', 'energy', -2),
 ('sawmill', 'wood', 2),
+('shipyard', 'energy', 5),
 ('iron mine', 'energy', -2),
 ('iron mine', 'iron', 2);
 
 insert into CORE.colony_building_types_costs(building_type, resource_type, quantity) values
 ('wind power plant', 'iron', 50),
 ('sawmill', 'wood', 10),
+('shipyard', 'iron', 100),
 ('iron mine', 'wood', 50);
+
+insert into core.colony_building_capability_types(id, name) values
+('build ships', 'Construir naves');
+
+insert into core.colony_building_types_capabilities(building_type, capability_type) values
+('shipyard', 'build ships');
 
 -----------------------------------------------------------------
 ------------                               ----------------------
