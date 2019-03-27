@@ -10,6 +10,7 @@ import { Civilization } from './game-objects/civilization';
 import { Fleet } from './game-objects/fleet';
 import { SessionDTO } from './dtos/session';
 import { UserCivilizationDTO } from './dtos/user-civilization';
+import { ColonyBuildingCapabilityType } from './game-objects/colony-building-capability-type';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class Store {
   private objects: Map<number, GameObject> = new Map();
   private colonyBuildingTypesMap: Map<string, ColonyBuildingType> = new Map();
   private resourceTypes: Map<string, ResourceType> = new Map();
+  private colonyBuildingCapabilityTypes: Map<string, ColonyBuildingCapabilityType> = new Map();
 
   private _starSystems: StarSystem[] = [];
   private _colonyBuildingTypes: ColonyBuildingType[] = [];
@@ -178,6 +180,14 @@ export class Store {
 
   public getResourceType(typeId: string): ResourceType {
     return this.resourceTypes.get(typeId);
+  }
+
+  public addColonyBuildingCapabilityType(type: ColonyBuildingCapabilityType) {
+    this.colonyBuildingCapabilityTypes.set(type.id, type);
+  }
+
+  public getColonyBuildingCapabilityType(typeId: string): ColonyBuildingCapabilityType {
+    return this.colonyBuildingCapabilityTypes.get(typeId);
   }
 
   public get colonyBuildingTypes(): ColonyBuildingType[] {

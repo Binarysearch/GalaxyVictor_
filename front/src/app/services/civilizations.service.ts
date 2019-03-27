@@ -14,6 +14,14 @@ import { ColonyBuildingType } from '../game-objects/colony-building-type';
 import { ColonyBuildingTypeDTO } from '../dtos/colony-building-type';
 import { ResourceTypeDTO } from '../dtos/resource-type';
 import { ResourceType } from '../game-objects/resource-type';
+import { ColonyBuildingCapabilityTypeDTO } from '../dtos/colony-building-capability-type';
+import { ColonyBuildingCapabilityType } from '../game-objects/colony-building-capability-type';
+
+interface ConstantDataDTO {
+  resourceTypes: ResourceTypeDTO[];
+  colonyBuildingCapabilityTypes: ColonyBuildingCapabilityTypeDTO[];
+  colonyBuildingTypes: ColonyBuildingTypeDTO[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +33,7 @@ export class CivilizationsService {
   private civilizationUrl = this.host + '/api/civilization';
   private civilizationsUrl = this.host + '/api/civilizations';
 
-  private buildingTypesUrl = this.host + '/api/colony-building-types';
-  private resourceTypesUrl = this.host + '/api/resource-types';
+  private constantDataUrl = this.host + '/api/constant-data';
 
   private _currentCivilization: UserCivilizationDTO;
   private currentCivilizationSubject: Subject<UserCivilizationDTO> = new Subject<UserCivilizationDTO>();
@@ -36,7 +43,7 @@ export class CivilizationsService {
      private coloniesService: ColoniesService, private fleetsService: FleetsService) {
     this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
       if (currentGalaxy) {
-        this.loadTypes();
+        this.loadConstantData();
         this.currentGalaxyId = currentGalaxy.id;
       } else {
         this.currentGalaxyId = null;
@@ -44,31 +51,44 @@ export class CivilizationsService {
     });
   }
 
+  private loadConstantData() {
+    this.http.get<ConstantDataDTO>(this.constantDataUrl)
+    .subscribe((data: ConstantDataDTO) => {
 
-
-  private loadBuildingTypes() {
-    this.http.get<ColonyBuildingTypeDTO[]>(this.buildingTypesUrl)
-    .subscribe((data: ColonyBuildingTypeDTO[]) => {
-      data.forEach(c => {
-        const buildingType = new ColonyBuildingType(c);
-        c.resources.forEach(r => {
-          buildingType.resources.push({resourceType: this.store.getResourceType(r.type), quantity: r.quantity});
-        });
-        this.store.addColonyBuildingType(buildingType);
-      });
-    }, (error: any) => {
-      console.log(error);
-    });
-  }
-
-  private loadTypes() {
-    this.http.get<ResourceTypeDTO[]>(this.resourceTypesUrl)
-    .subscribe((data: ResourceTypeDTO[]) => {
-      data.forEach(c => {
+      // resource types
+      data.resourceTypes.forEach(c => {
         const resourceType = new ResourceType(c);
         this.store.addResourceType(resourceType);
       });
-      this.loadBuildingTypes();
+
+      // colony building capability types
+      data.colonyBuildingCapabilityTypes.forEach(c => {
+        const capabilityType = new ColonyBuildingCapabilityType(c);
+        this.store.addColonyBuildingCapabilityType(capabilityType);
+      });
+
+      // colony building types
+      data.colonyBuildingTypes.forEach(c => {
+        const buildingType = new ColonyBuildingType(c);
+        if (c.resources) {
+          c.resources.forEach(r => {
+            buildingType.resources.push({resourceType: this.store.getResourceType(r.type), quantity: r.quantity});
+          });
+        }
+        if (c.costs) {
+          c.costs.forEach(r => {
+            buildingType.costs.push({resourceType: this.store.getResourceType(r.type), quantity: r.quantity});
+          });
+        }
+        if (c.capabilities) {
+          c.capabilities.forEach(r => {
+            buildingType.capabilities.push({type: this.store.getColonyBuildingCapabilityType(r.type)});
+          });
+        }
+        this.store.addColonyBuildingType(buildingType);
+      });
+
+
     }, (error: any) => {
       console.log(error);
     });

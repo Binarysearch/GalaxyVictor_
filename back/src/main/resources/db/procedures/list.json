@@ -14,10 +14,9 @@
     "split_fleet.sql",
     "get_colony_buildings.sql",
     "get_colony_resources.sql",
-    "get_resource_types.sql",
-    "get_colony_building_types.sql",
     "set_colony_building_order.sql",
     "finish_colony_building_order.sql",
     "get_colony_building_orders.sql",
+    "get_constant_data.sql",
     "procedures.sql"
 ]

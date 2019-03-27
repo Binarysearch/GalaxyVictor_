@@ -7,16 +7,17 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import com.galaxyvictor.BaseTest;
 import com.galaxyvictor.servlet.ApiRequest;
 import com.galaxyvictor.servlet.civilization.CivilizationController;
 import com.galaxyvictor.servlet.civilization.CivilizationsController;
 import com.galaxyvictor.servlet.civilization.ColoniesController;
-import com.galaxyvictor.servlet.civilization.ColonyBuildingTypesController;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingsController;
 import com.galaxyvictor.servlet.civilization.ColonyResourcesController;
-import com.galaxyvictor.servlet.civilization.ResourceTypesController;
+import com.galaxyvictor.servlet.civilization.ConstantDataController;
 import com.galaxyvictor.servlet.galaxies.CurrentGalaxyController;
 import com.galaxyvictor.servlet.galaxies.GalaxiesController;
 
@@ -120,21 +121,6 @@ public class ColonyDetailsTest extends BaseTest {
     }
 
     @Test
-    public void testGetColonyBuildingTypes() throws SQLException {
-        ApiRequest request = mock(ApiRequest.class);
-
-        given(request.getToken()).willReturn(token);
-
-        String response = new ColonyBuildingTypesController().getRequest(request);
-
-        assertNotNull(read(response, "[0].id"));
-        assertNotNull(read(response, "[0].name"));
-        assertNotNull(read(response, "[0].resources[0].type"));
-        assertNotNull(read(response, "[0].resources[0].quantity"));
-        
-    }
-
-    @Test
     @Order(4)
     public void testSetColonyBuildingOrder() throws SQLException {
         ApiRequest request = mock(ApiRequest.class);
@@ -154,17 +140,46 @@ public class ColonyDetailsTest extends BaseTest {
     }
 
     @Test
-    public void testGetResourceTypes() throws SQLException {
+    public void testGetConstantData() throws SQLException {
         ApiRequest request = mock(ApiRequest.class);
 
         given(request.getToken()).willReturn(token);
 
-        String response = new ResourceTypesController().getRequest(request);
+        String response = new ConstantDataController().getRequest(request);
 
-        assertNotNull(read(response, "[0].id"));
-        assertNotNull(read(response, "[0].name"));
+        // resource types
+        assertNotNull(read(response, "$.resourceTypes[0].id"));
+        assertNotNull(read(response, "$.resourceTypes[0].name"));
         
-    }
+        // building capabilities
+        assertNotNull(read(response, "$.colonyBuildingCapabilityTypes[0].id"));
+        assertNotNull(read(response, "$.colonyBuildingCapabilityTypes[0].name"));
+        
 
+        // building types
+        List<Map<String, Object>> buildings = read(response, "$.colonyBuildingTypes");
+
+        // get shipyard position
+        int i = 0;
+        int s = 0;
+        for (Map<String, Object> building : buildings) {
+            if(building.get("id").equals("shipyard")){
+                s = i;
+            }
+            i++;
+        }
+        
+        assertEquals(read(response, "$.colonyBuildingTypes["+s+"].id"), "shipyard");
+        assertEquals(read(response, "$.colonyBuildingTypes["+s+"].name"), "Astillero espacial");
+        assertEquals(read(response, "$.colonyBuildingTypes["+s+"].buildable"), true);
+        assertEquals(read(response, "$.colonyBuildingTypes["+s+"].repeatable"), false);
+        assertNotNull(read(response, "$.colonyBuildingTypes["+s+"].resources[0].type"));
+        assertNotNull(read(response, "$.colonyBuildingTypes["+s+"].resources[0].quantity"));
+        assertNotNull(read(response, "$.colonyBuildingTypes["+s+"].costs[0].type"));
+        assertNotNull(read(response, "$.colonyBuildingTypes["+s+"].costs[0].quantity"));
+        assertEquals(read(response, "$.colonyBuildingTypes["+s+"].capabilities[0].type"), "build ships");
+        
+
+    }
 
 }
