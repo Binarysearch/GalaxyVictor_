@@ -104,9 +104,22 @@ export class ColonyWindowComponent implements OnInit {
         resourceMap.set(r.type.id, r.quantity);
       });
 
-      // check for every building type that there are enought of every resource
+      // maps built colony buildings -> quantity
+      const builtMap = new Map<string, number>();
+      if (this.colony.buildings) {
+        this.colony.buildings.forEach(b => {
+          if (builtMap.has(b.type.id)) {
+            builtMap.set(b.type.id, 1 + builtMap.get(b.type.id));
+          } else {
+            builtMap.set(b.type.id, 1);
+          }
+        });
+      }
+
+      // check for every building type that there are enought of every resource, is buildable and
+      // if it is not repeatable and it is built then it is not available
       this.store.colonyBuildingTypes.forEach(bt => {
-        if (bt.buildable) {
+        if (bt.buildable && (!builtMap.has(bt.id) || bt.repeatable)) {
           let available = true;
           bt.resources.forEach(r => {
             const availableQuantity = resourceMap.get(r.resourceType.id);
@@ -122,6 +135,9 @@ export class ColonyWindowComponent implements OnInit {
   }
 
   get availableShipModels(): ShipModel[] {
+    if (!this.colony.canBuildShips) {
+      return [];
+    }
     return this.store.shipModels;
   }
 

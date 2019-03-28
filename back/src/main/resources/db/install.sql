@@ -21,7 +21,7 @@ insert into CORE.colony_building_types_resources(building_type, resource_type, q
 ('wind power plant', 'energy', 5),
 ('sawmill', 'energy', -2),
 ('sawmill', 'wood', 2),
-('shipyard', 'energy', 5),
+('shipyard', 'energy', -5),
 ('iron mine', 'energy', -2),
 ('iron mine', 'iron', 2);
 

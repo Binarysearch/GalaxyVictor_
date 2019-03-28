@@ -6,6 +6,7 @@ export class ColonyBuildingType {
   id: string;
   name: string;
   buildable: boolean;
+  repeatable: boolean;
   resources: {resourceType: ResourceType, quantity: number}[] = [];
   costs: {resourceType: ResourceType, quantity: number}[] = [];
   capabilities: {type: ColonyBuildingCapabilityType}[] = [];
@@ -14,5 +15,6 @@ export class ColonyBuildingType {
     this.id = data.id;
     this.name = data.name;
     this.buildable = data.buildable;
+    this.repeatable = data.repeatable;
   }
 }
