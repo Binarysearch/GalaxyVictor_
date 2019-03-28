@@ -1,7 +1,2 @@
-Nombres de galaxias unicos(Unique en columna name de tabla galaxies)
-Una unica flota por civilizacion y sistema, al llegar una segunda flota se mezcla con la existente(Unique(civilization, destination, origin) en tabla fleets).
-Implementar naves, las naves siempre pertenecen a una flota, en una flota debe haber al menos una nave y no hay limite maximo de naves.
-En un sistema solo puede haber un planeta por orbita dada(Unique(star_system, orbit) en tabla planets).
-Solo puede haber una colonia por planeta (Unique en columna planet de tabla colonies).
-Nombres de sistemas unicos por galaxia(Unique(name, galaxy) en tabla star_systems).
 Columna explorer(fk de civilization(id)) en tabla star_systems. La primera civilizacion que explora el sistema tiene derecho a ponerle el nombre
+Crear generador de nombres para estrellas

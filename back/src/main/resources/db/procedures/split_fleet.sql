@@ -11,6 +11,10 @@ begin
 
   civilization_id_ = core.require_civ(token_);
 
+  if (ships_ = '{}') then
+    perform core.error(400, 'No ships selected');
+  end if;
+
   --check if fleet exists
   if (not exists(select 1 from core.fleets where id=fleet_)) then
     perform core.error(404, 'Fleet not found');

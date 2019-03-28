@@ -14,18 +14,19 @@ SET search_path TO core;
 
 CREATE TABLE galaxies(
     id BIGSERIAL PRIMARY KEY,
-    name text NOT NULL
+    name text NOT NULL UNIQUE
 );
 
 CREATE TABLE star_systems(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     name text,
-    galaxy bigint REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    galaxy bigint NOT NULL REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     x double precision NOT NULL,
     y double precision NOT NULL,
     type integer NOT NULL,
     size integer NOT NULL,
-    explored boolean NOT NULL DEFAULT false
+    explored boolean NOT NULL DEFAULT false,
+    UNIQUE(name, galaxy)
 );
 
 CREATE TABLE users(
@@ -45,7 +46,9 @@ CREATE TABLE planets(
     star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
     orbit integer NOT NULL,
     type integer NOT NULL,
-    size integer NOT NULL
+    size integer NOT NULL,
+    UNIQUE(star_system, orbit),
+    CHECK (orbit > 0)
 );
 
 CREATE TABLE civilizations(
@@ -78,7 +81,7 @@ CREATE TABLE known_civilizations(
 CREATE TABLE colonies(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    planet bigint NOT NULL REFERENCES planets(id) ON UPDATE CASCADE ON DELETE CASCADE
+    planet bigint NOT NULL UNIQUE REFERENCES planets(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE fleets(
