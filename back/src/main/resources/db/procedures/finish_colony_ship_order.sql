@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION core.finish_colony_ship_order(colony_ bigint)
  SECURITY DEFINER
 AS $function$declare
   result_ json;
+  message_orders json;
   fleet_ bigint;
   star_system_ bigint;
   civilization_ bigint;
@@ -34,5 +35,11 @@ begin
     ) select row_to_json(x) from x
   );
 
-  return result_;
+  message_orders = format('[
+    {"type": "FinishColonyBuilding", "payload": {"colony": %s}, "civilizations": [%s]},
+    {"type": "Fleet", "payload": %s, "civilizations": %s}
+  ]', colony_, civilization_, result_->'fleet', result_->'civilizations');
+
+  return format('{"messageOrders": %s}', message_orders);
+
 end;$function$;

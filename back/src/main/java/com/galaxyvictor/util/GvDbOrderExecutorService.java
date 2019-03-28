@@ -2,7 +2,6 @@ package com.galaxyvictor.util;
 
 import java.util.List;
 
-import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.servlet.AsincTaskOrder;
 import com.galaxyvictor.servlet.DbResponse;
 import com.galaxyvictor.servlet.MessageOrder;
@@ -13,12 +12,10 @@ public class GvDbOrderExecutorService implements DbOrderExecutorService {
 
     private MessagingService messagingService;
     private FutureEventService futureEventService;
-    private DatabaseService databaseService;
 
-    public GvDbOrderExecutorService(MessagingService mgs, FutureEventService fes, DatabaseService dbs) {
+    public GvDbOrderExecutorService(MessagingService mgs, FutureEventService fes) {
         this.messagingService = mgs;
         this.futureEventService = fes;
-        this.databaseService = dbs;
     }
 
     @Override
@@ -46,7 +43,14 @@ public class GvDbOrderExecutorService implements DbOrderExecutorService {
                 futureEventService.executeAsincTaskOrder(asincTaskOrder);
             }
         }
-        
+
+        List<DbCreatedAsincTask> asincTasks = dbResponse.getAsincTasks();
+        if (asincTasks != null) {
+            for (DbCreatedAsincTask asincTask : asincTasks) {
+                futureEventService.addAsincTask(asincTask);
+            }
+        }
+
     }
 
 }

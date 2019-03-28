@@ -54,7 +54,7 @@ public class ContextListener implements ServletContextListener {
         ServiceManager.addService(AuthService.class, new GvAuthService(dbs));
         ServiceManager.addService(FutureEventService.class, fes);
         ServiceManager.addService(TravelsService.class, new TravelsService(mgs, fes, dbs));
-        ServiceManager.addService(DbOrderExecutorService.class, new GvDbOrderExecutorService(mgs, fes, dbs));
+        ServiceManager.addService(DbOrderExecutorService.class, new GvDbOrderExecutorService(mgs, fes));
     }
 
     @Override

@@ -6,7 +6,7 @@ AS $function$declare
   result_ json;
   civilization_id_ bigint;
   message_orders json;
-  asinc_task_orders json;
+  asinc_tasks json;
 begin
 
   civilization_id_ = core.require_civ(token_);
@@ -28,7 +28,7 @@ begin
   ) select row_to_json(x) from x);
 
   message_orders = format('[{"type": "ShipBuildingOrder", "payload": %s, "civilizations": [%s]}]', result_, civilization_id_);
-  asinc_task_orders = format('[{"type":"BUILD_SHIP", "asincTaskData": %s}]', result_);
+  asinc_tasks = format('[{"id": %s, "endTime": %s, "procedureName": "core.finish_colony_ship_order"}]', colony_, time_ + 15000);
 
-  return format('{"messageOrders": %s, "asincTaskCancelOrders": [%s], "asincTaskOrders": %s}', message_orders, colony_, asinc_task_orders);
+  return format('{"messageOrders": %s, "asincTaskCancelOrders": [%s], "asincTasks": %s}', message_orders, colony_, asinc_tasks);
 end;$function$;

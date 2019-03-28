@@ -2,11 +2,14 @@ package com.galaxyvictor.servlet;
 
 import java.util.List;
 
+import com.galaxyvictor.util.DbCreatedAsincTask;
+
 public class DbResponse {
 
     private Object apiResponse;
     private List<MessageOrder> messageOrders;
     private List<AsincTaskOrder> asincTaskOrders;
+    private List<DbCreatedAsincTask> asincTasks;
     private List<Long> asincTaskCancelOrders;
 
     /**
@@ -14,6 +17,20 @@ public class DbResponse {
      */
     public Object getApiResponse() {
         return apiResponse;
+    }
+
+    /**
+     * @return the asincTasks
+     */
+    public List<DbCreatedAsincTask> getAsincTasks() {
+        return asincTasks;
+    }
+
+    /**
+     * @param asincTasks the asincTasks to set
+     */
+    public void setAsincTasks(List<DbCreatedAsincTask> asincTasks) {
+        this.asincTasks = asincTasks;
     }
 
     /**

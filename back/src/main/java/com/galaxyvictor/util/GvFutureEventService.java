@@ -105,4 +105,9 @@ public class GvFutureEventService implements FutureEventService {
 		asincTaskBuilders.put(builder.getAsincTaskType(), builder);
 	}
 
+	@Override
+	public void addAsincTask(DbCreatedAsincTask asincTask) {
+		eventManager.addFutureEvent(asincTask);
+	}
+
 }

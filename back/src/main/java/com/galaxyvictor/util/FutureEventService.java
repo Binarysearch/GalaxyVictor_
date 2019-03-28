@@ -25,4 +25,6 @@ public interface FutureEventService {
     
     public void registerAsincTaskBuilder(AsincTaskBuilder builder);
 
+	public void addAsincTask(DbCreatedAsincTask asincTask);
+
 }
