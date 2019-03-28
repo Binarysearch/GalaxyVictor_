@@ -16,6 +16,7 @@
     "get_colony_resources.sql",
     "set_colony_building_order.sql",
     "set_colony_ship_order.sql",
+    "set_colony_ship_order2.sql",
     "finish_colony_building_order.sql",
     "get_colony_building_orders.sql",
     "get_colony_ship_orders.sql",

@@ -18,7 +18,7 @@ export class ColoniesService  {
   private coloniesUrl = this.host + '/api/colonies';
   private buildingsUrl = this.host + '/api/colony-buildings';
   private resourcesUrl = this.host + '/api/colony-resources';
-  private createShipUrl = this.host + '/api/ship-orders';
+  private createShipUrl = this.host + '/api/ship-orders2';
 
 
   constructor(private http: HttpClient, private store: Store) {
