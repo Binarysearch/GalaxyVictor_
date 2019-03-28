@@ -17,7 +17,9 @@ import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.db.DbData;
 import com.galaxyvictor.db.GvDatabaseService;
 import com.galaxyvictor.servlet.fleets.TravelsService;
+import com.galaxyvictor.util.DbOrderExecutorService;
 import com.galaxyvictor.util.FutureEventService;
+import com.galaxyvictor.util.GvDbOrderExecutorService;
 import com.galaxyvictor.util.GvFutureEventService;
 import com.galaxyvictor.websocket.GvMessagingService;
 import com.galaxyvictor.websocket.MessagingService;
@@ -52,6 +54,7 @@ public class ContextListener implements ServletContextListener {
         ServiceManager.addService(AuthService.class, new GvAuthService(dbs));
         ServiceManager.addService(FutureEventService.class, fes);
         ServiceManager.addService(TravelsService.class, new TravelsService(mgs, fes, dbs));
+        ServiceManager.addService(DbOrderExecutorService.class, new GvDbOrderExecutorService(mgs, fes, dbs));
     }
 
     @Override

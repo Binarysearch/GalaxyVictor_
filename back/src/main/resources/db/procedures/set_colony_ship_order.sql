@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.set_colony_ship_order2(colony_ bigint, ship_model_ bigint, time_ bigint, token_ text)
+CREATE OR REPLACE FUNCTION core.set_colony_ship_order(colony_ bigint, ship_model_ bigint, time_ bigint, token_ text)
  RETURNS json
  LANGUAGE plpgsql
  SECURITY DEFINER

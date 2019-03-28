@@ -1,23 +1,18 @@
 package com.galaxyvictor.servlet;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import com.galaxyvictor.ServiceManager;
-import com.galaxyvictor.util.FutureEventService;
-import com.galaxyvictor.websocket.Message;
-import com.galaxyvictor.websocket.MessagingService;
+import com.galaxyvictor.util.DbOrderExecutorService;
 import com.google.gson.Gson;
 
 public abstract class GvApiServlet extends ApiServlet {
 
     private static final long serialVersionUID = 2633133399452838448L;
-    private MessagingService messagingService;
-    private FutureEventService futureEventService;
+    private DbOrderExecutorService dbOrderExecutor;
 
     public GvApiServlet() {
-        this.messagingService = ServiceManager.get(MessagingService.class);
-        this.futureEventService = ServiceManager.get(FutureEventService.class);
+        this.dbOrderExecutor = ServiceManager.get(DbOrderExecutorService.class);
     }
 
     @Override
@@ -27,35 +22,11 @@ public abstract class GvApiServlet extends ApiServlet {
             return super.postRequest(request);
         }
 
-        DbResponse dbResponse = executeQueryForObject(buildSql(gv), DbResponse.class, gv.getDbParams());
+        DbResponse dbOrder = executeQueryForObject(buildSql(gv), DbResponse.class, gv.getDbParams());
 
-        List<MessageOrder> messageOrders = dbResponse.getMessageOrders();
-        if (messageOrders != null) {
-            for (MessageOrder messageOrder : messageOrders) {
-                Message message = new Message(messageOrder.getType(), messageOrder.getPayload());
-                for (long civilization : messageOrder.getCivilizations()) {
-                    messagingService.sendMessageToCivilization(civilization, message);
-                }
-            }
-        }
+        dbOrderExecutor.executeDbOrder(dbOrder);
 
-        List<Long> asincTaskCancelOrders = dbResponse.getAsincTaskCancelOrders();
-        if (asincTaskCancelOrders != null) {
-            for (long id : asincTaskCancelOrders) {
-                futureEventService.cancelAsincTask(id);
-            }
-        }
-
-        List<AsincTaskOrder> asincTaskOrders = dbResponse.getAsincTaskOrders();
-        if (asincTaskOrders != null) {
-            for (AsincTaskOrder asincTaskOrder : asincTaskOrders) {
-                futureEventService.executeAsincTaskOrder(asincTaskOrder);
-            }
-        }
-
-
-
-        Object apiResponse = dbResponse.getApiResponse();
+        Object apiResponse = dbOrder.getApiResponse();
         if (apiResponse != null) {
             return new Gson().toJson(apiResponse);
         } else {
