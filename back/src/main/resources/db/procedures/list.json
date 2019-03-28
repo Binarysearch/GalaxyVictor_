@@ -23,5 +23,6 @@
     "get_ship_models.sql",
     "get_colonies.sql",
     "finish_colony_ship_order.sql",
+    "random_star_name.sql",
     "procedures.sql"
 ]
