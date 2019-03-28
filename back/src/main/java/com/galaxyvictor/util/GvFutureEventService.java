@@ -2,10 +2,8 @@ package com.galaxyvictor.util;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.galaxyvictor.db.DatabaseService;
-import com.galaxyvictor.servlet.AsincTaskOrder;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrder;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrderList;
 import com.galaxyvictor.servlet.civilization.ShipBuildingOrder;
@@ -19,7 +17,6 @@ public class GvFutureEventService implements FutureEventService {
 	private DatabaseService databaseService;
 	private FutureEventManager eventManager = new FutureEventManager();
 	private MessagingService messagingService;
-	private ConcurrentHashMap<String, AsincTaskBuilder> asincTaskBuilders = new ConcurrentHashMap<>();
 
 	public GvFutureEventService(DatabaseService databaseService, MessagingService messagingService) {
 		this.databaseService = databaseService;
@@ -85,24 +82,8 @@ public class GvFutureEventService implements FutureEventService {
 	}
 
 	@Override
-	public void executeAsincTaskOrder(AsincTaskOrder asincTaskOrder) {
-		AsincTaskBuilder builder = asincTaskBuilders.get(asincTaskOrder.getType());
-		if (builder == null) {
-			throw new RuntimeException("AsincTaskBuilder '" + asincTaskOrder.getType() + "' not registered.");
-		}
-
-		FutureEvent event = builder.build(asincTaskOrder.getAsincTaskData(), databaseService, messagingService);
-		eventManager.addFutureEvent(event);
-	}
-
-	@Override
 	public void cancelAsincTask(long id) {
 		eventManager.removeEvent(id);
-	}
-
-	@Override
-	public void registerAsincTaskBuilder(AsincTaskBuilder builder) {
-		asincTaskBuilders.put(builder.getAsincTaskType(), builder);
 	}
 
 	@Override

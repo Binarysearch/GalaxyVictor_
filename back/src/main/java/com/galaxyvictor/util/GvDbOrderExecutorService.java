@@ -2,7 +2,6 @@ package com.galaxyvictor.util;
 
 import java.util.List;
 
-import com.galaxyvictor.servlet.AsincTaskOrder;
 import com.galaxyvictor.servlet.DbResponse;
 import com.galaxyvictor.servlet.MessageOrder;
 import com.galaxyvictor.websocket.Message;
@@ -34,13 +33,6 @@ public class GvDbOrderExecutorService implements DbOrderExecutorService {
         if (asincTaskCancelOrders != null) {
             for (long id : asincTaskCancelOrders) {
                 futureEventService.cancelAsincTask(id);
-            }
-        }
-
-        List<AsincTaskOrder> asincTaskOrders = dbResponse.getAsincTaskOrders();
-        if (asincTaskOrders != null) {
-            for (AsincTaskOrder asincTaskOrder : asincTaskOrders) {
-                futureEventService.executeAsincTaskOrder(asincTaskOrder);
             }
         }
 

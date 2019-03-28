@@ -8,7 +8,6 @@ public class DbResponse {
 
     private Object apiResponse;
     private List<MessageOrder> messageOrders;
-    private List<AsincTaskOrder> asincTaskOrders;
     private List<DbCreatedAsincTask> asincTasks;
     private List<Long> asincTaskCancelOrders;
 
@@ -52,20 +51,6 @@ public class DbResponse {
      */
     public void setMessageOrders(List<MessageOrder> messageOrders) {
         this.messageOrders = messageOrders;
-    }
-
-    /**
-     * @return the asincTaskOrders
-     */
-    public List<AsincTaskOrder> getAsincTaskOrders() {
-        return asincTaskOrders;
-    }
-
-    /**
-     * @param asincTaskOrders the asincTaskOrders to set
-     */
-    public void setAsincTaskOrders(List<AsincTaskOrder> asincTaskOrders) {
-        this.asincTaskOrders = asincTaskOrders;
     }
 
     /**

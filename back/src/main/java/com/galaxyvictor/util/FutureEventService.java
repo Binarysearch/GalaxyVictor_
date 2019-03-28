@@ -2,7 +2,6 @@ package com.galaxyvictor.util;
 
 import java.util.List;
 
-import com.galaxyvictor.servlet.AsincTaskOrder;
 import com.galaxyvictor.servlet.civilization.ColonyBuildingOrder;
 import com.galaxyvictor.servlet.civilization.ShipBuildingOrder;
 import com.galaxyvictor.servlet.fleets.Travel;
@@ -19,12 +18,8 @@ public interface FutureEventService {
 
 	public void addColonyShipBuildingEvent(ShipBuildingOrder order);
 
-	public void executeAsincTaskOrder(AsincTaskOrder asincTaskOrder);
-
     public void cancelAsincTask(long id);
     
-    public void registerAsincTaskBuilder(AsincTaskBuilder builder);
-
 	public void addAsincTask(DbCreatedAsincTask asincTask);
 
 }
