@@ -1,50 +1,52 @@
 package com.galaxyvictor.servlet.civilization;
 
-import java.sql.SQLException;
 
 import javax.servlet.annotation.WebServlet;
 
 import com.galaxyvictor.ServiceManager;
+import com.galaxyvictor.db.DatabaseService;
 import com.galaxyvictor.servlet.ApiRequest;
-import com.galaxyvictor.servlet.ApiServlet;
+import com.galaxyvictor.servlet.GvApiRequest;
+import com.galaxyvictor.servlet.GvApiServlet;
+import com.galaxyvictor.servlet.civilization.ShipBuildingOrder;
+import com.galaxyvictor.util.AsincTaskBuilder;
+import com.galaxyvictor.util.ColonyShipBuildingAsincTask;
+import com.galaxyvictor.util.FutureEvent;
 import com.galaxyvictor.util.FutureEventService;
-import com.galaxyvictor.websocket.Message;
 import com.galaxyvictor.websocket.MessagingService;
 import com.google.gson.Gson;
 
 @WebServlet(urlPatterns = "/api/ship-orders")
-public class ShipOrdersController extends ApiServlet {
+public class ShipOrdersController extends GvApiServlet {
 
 	private static final long serialVersionUID = -2952931963712964636L;
-	private MessagingService messagingService;
-	private FutureEventService futureEventsService;
 
-	public ShipOrdersController(){
-		this.messagingService = ServiceManager.get(MessagingService.class);
-		this.futureEventsService = ServiceManager.get(FutureEventService.class);
+	public ShipOrdersController() {
+		FutureEventService futureEventsService = ServiceManager.get(FutureEventService.class);
+		futureEventsService.registerAsincTaskBuilder(new AsincTaskBuilder(){
+		
+			@Override
+			public String getAsincTaskType() {
+				return "BUILD_SHIP";
+			}
+		
+			@Override
+			public FutureEvent build(Object asincTaskData, DatabaseService databaseService, MessagingService messagingService) {
+				String dataJson = new Gson().toJson(asincTaskData);
+				ShipBuildingOrder shipBuildingOrder = new Gson().fromJson(dataJson, ShipBuildingOrder.class);
+				return new ColonyShipBuildingAsincTask(shipBuildingOrder, databaseService, messagingService);
+			}
+		});
 	}
 
 	@Override
-	public String postRequest(ApiRequest request) throws SQLException {
+	protected GvApiRequest getPostApiRequest(ApiRequest request) {
 		String token = request.getToken();
 		int colony = request.jsonPath("$.colony");
 		int shipModel = request.jsonPath("$.shipModel");
 		long time = System.currentTimeMillis();
 
-		String response = executeQueryForJson("select core.set_colony_ship_order(?, ?, ?, ?);", colony, shipModel, time, token);
-		ShipBuildingOrder order = new Gson().fromJson(response, ShipBuildingOrder.class);
-
-		reportBuildingStarted(order);
-
-		return response;
-	}
-
-	private void reportBuildingStarted(ShipBuildingOrder order) {
-
-		messagingService.sendMessageToCivilization(order.getCivilization(), new Message("ShipBuildingOrder", order));
-		futureEventsService.cancelColonyBuildingEvent(order.getColony());
-		futureEventsService.addColonyShipBuildingEvent(order);
-
+		return new GvApiRequest("core.set_colony_ship_order", colony, shipModel, time, token);
 	}
 
 

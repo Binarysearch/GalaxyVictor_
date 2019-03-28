@@ -1,11 +1,12 @@
-CREATE OR REPLACE FUNCTION core.set_colony_ship_order(colony_ bigint, ship_model_ bigint, time_ bigint, token_ text)
+CREATE OR REPLACE FUNCTION core.set_colony_ship_order2(colony_ bigint, ship_model_ bigint, time_ bigint, token_ text)
  RETURNS json
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$declare
   result_ json;
   civilization_id_ bigint;
-  lacking_resource_ text;
+  message_orders json;
+  asinc_task_orders json;
 begin
 
   civilization_id_ = core.require_civ(token_);
@@ -26,5 +27,8 @@ begin
 
   ) select row_to_json(x) from x);
 
-  return coalesce(result_, '{}')::json;
+  message_orders = format('[{"type": "ShipBuildingOrder", "payload": %s, "civilizations": [%s]}]', result_, civilization_id_);
+  asinc_task_orders = format('[{"type":"BUILD_SHIP", "asincTaskData": %s}]', result_);
+
+  return format('{"messageOrders": %s, "asincTaskCancelOrders": [%s], "asincTaskOrders": %s}', message_orders, colony_, asinc_task_orders);
 end;$function$;
