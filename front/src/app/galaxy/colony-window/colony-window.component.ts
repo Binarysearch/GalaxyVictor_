@@ -122,7 +122,10 @@ export class ColonyWindowComponent implements OnInit {
         if (bt.buildable && (!builtMap.has(bt.id) || bt.repeatable)) {
           let available = true;
           bt.resources.forEach(r => {
-            const availableQuantity = resourceMap.get(r.resourceType.id);
+            let availableQuantity = resourceMap.get(r.resourceType.id);
+            if (!availableQuantity) {
+              availableQuantity = 0;
+            }
             available = available && (availableQuantity + r.quantity >= 0);
           });
           if (available) {
