@@ -96,6 +96,12 @@ CREATE TABLE colonies(
     planet bigint NOT NULL UNIQUE REFERENCES planets(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE colonies_technologies(
+    colony bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    technology text NOT NULL REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(colony, technology)
+);
+
 CREATE TABLE fleets(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -197,3 +203,10 @@ CREATE TABLE colony_building_orders(
     ship_model bigint REFERENCES civilization_ship_models(id) ON UPDATE CASCADE ON DELETE CASCADE,
     started_time bigint NOT NULL
 );
+
+CREATE TABLE colony_research_orders(
+    colony bigint PRIMARY KEY REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    technology text REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    started_time bigint NOT NULL
+);
+
