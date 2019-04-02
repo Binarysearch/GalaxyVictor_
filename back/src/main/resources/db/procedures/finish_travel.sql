@@ -42,11 +42,11 @@ begin
   result_ = (
     with x as (
       select 
-      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime" from core.fleets where id=existing_fleet_) as f) as "resultingFleet",
+      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets where id=existing_fleet_) as f) as "resultingFleet",
       fleet_ as "incomingFleetId",
       (select array_to_json(array_agg(p)) from (select id, star_system as "starSystem", orbit, type, size from core.planets where star_system=destination_ and not ss_was_known_) as p) as planets,
       (select array_to_json(array_agg(flee)) from (
-        select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f where civilization <> civilization_ and destination=destination_ and not ss_was_visible_
+        select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets f where civilization <> civilization_ and destination=destination_ and not ss_was_visible_
       ) as flee) as fleets,
       (select array_to_json(array_agg(cols)) from (
         select c.id, c.planet, c.civilization from core.colonies c join core.planets p on p.id=c.planet where c.civilization <> civilization_ and p.star_system=destination_ and not ss_was_visible_

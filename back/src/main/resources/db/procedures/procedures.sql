@@ -206,9 +206,9 @@ begin
 
   result_ = (with fs as (
 
-    select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f join core.visible_star_systems v on v.star_system=f.destination where v.civilization=civilization_id_ and f.civilization <> civilization_id_
+    select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets f join core.visible_star_systems v on v.star_system=f.destination where v.civilization=civilization_id_ and f.civilization <> civilization_id_
     union
-    select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime" from core.fleets f where f.civilization = civilization_id_
+    select f.id, f.civilization, f.destination, f.origin, f.travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets f where f.civilization = civilization_id_
 
   ) select array_to_json(array_agg(fs)) from fs);
 

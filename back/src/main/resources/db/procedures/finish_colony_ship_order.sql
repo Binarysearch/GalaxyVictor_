@@ -29,7 +29,7 @@ begin
   result_ = (
     with x as (select colony_ as colony,
 
-      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime" from core.fleets where id=fleet_) as f) as fleet,
+      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets where id=fleet_) as f) as fleet,
       (select array_to_json(array_agg(civilization)) from core.visible_star_systems where star_system=star_system_) as civilizations
 
     ) select row_to_json(x) from x

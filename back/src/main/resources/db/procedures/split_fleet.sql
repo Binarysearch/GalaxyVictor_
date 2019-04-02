@@ -51,7 +51,7 @@ begin
 
   start_travel_result_ = core.start_travel(new_fleet_, destination_, time_, token_);
 
-  staying_fleet_ = (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime" from core.fleets where id=fleet_) as f);
+  staying_fleet_ = (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets where id=fleet_) as f);
 
   return format('{"stayingFleet": %s, "startTravelDbResponse": %s}', staying_fleet_, start_travel_result_)::json;
 end;$function$;

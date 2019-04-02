@@ -5,5 +5,8 @@
     "colony_buildings_d_b.sql",
     "colony_resources_i_b.sql",
     "star_systems_i_b.sql",
+    "ships_i_b.sql",
+    "ships_u_b.sql",
+    "ships_d_b.sql",
     "triggers.sql"
 ]

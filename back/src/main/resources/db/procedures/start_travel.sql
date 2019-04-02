@@ -60,7 +60,7 @@ begin
     with ws_data as (select
       (select array_to_json(array_agg(civilization)) from core.visible_star_systems where star_system=destination_) as "destinationCivilizations",
       (select array_to_json(array_agg(civilization)) from core.visible_star_systems where star_system=origin_) as "originCivilizations",
-      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime" from core.fleets where id=fleet_) as f) as fleet,
+      (select row_to_json(f) from (select id, civilization, destination, origin, travel_start_time as "travelStartTime", colony_ships>0 as "canColonize" from core.fleets where id=fleet_) as f) as fleet,
       (select row_to_json(civ) from (select id, name from core.civilizations where id=civilization_id_) as civ) as civilization,
       (select row_to_json(tr) from (select t.fleet, civilization_id_ as civilization, ss0.x as x0, ss1.x as x1, ss0.y as y0, ss1.y as y1, 1 as speed, t.start_time as "startTime" from core.travels t join core.star_systems ss0 on ss0.id=t.origin join core.star_systems ss1 on ss1.id=t.destination where t.fleet=fleet_) as tr) as travel
     ) select row_to_json(ws_data) from ws_data

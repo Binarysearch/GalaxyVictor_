@@ -89,7 +89,8 @@ CREATE TABLE fleets(
     civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
     destination bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     origin bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    travel_start_time bigint NOT NULL DEFAULT 0
+    travel_start_time bigint NOT NULL DEFAULT 0,
+    colony_ships integer NOT NULL DEFAULT 0
 );
 
 CREATE TABLE travels(
