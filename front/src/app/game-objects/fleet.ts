@@ -22,6 +22,7 @@ export class Fleet implements GameObject {
   orbit = 7;
   speed = 1;
   store: Store;
+  canColonize: boolean;
 
   constructor(data: FleetDTO) {
     this.id = data.id;
@@ -29,6 +30,7 @@ export class Fleet implements GameObject {
     this.originId = data.origin;
     this.civilizationId = data.civilization;
     this.travelStartTime = data.travelStartTime;
+    this.canColonize = data.canColonize;
   }
 
   get objectType() { return 'Fleet'; }

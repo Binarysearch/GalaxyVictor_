@@ -1,7 +1,9 @@
-li {
+.planet {
   cursor: pointer;
+  padding:5px;
+  border:1px solid rgba(0,0,0,0.1);
 }
 
-li:hover {
+.planet:hover {
   filter: brightness(200%);
 }

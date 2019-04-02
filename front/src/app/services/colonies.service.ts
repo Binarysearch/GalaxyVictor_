@@ -56,5 +56,8 @@ export class ColoniesService  {
       .subscribe();
   }
 
-
+  createColony(planetId: number) {
+    this.http.post<any>(this.coloniesUrl, {planet: planetId})
+      .subscribe();
+  }
 }

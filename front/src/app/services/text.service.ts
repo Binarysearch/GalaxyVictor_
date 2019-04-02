@@ -78,6 +78,7 @@ export class TextService {
     cancel: 'Cancelar',
     viewColony: 'Ver colonia',
     resources: 'Recursos',
+    colonize: 'Colonizar',
     na: 'N/A'
   };
 

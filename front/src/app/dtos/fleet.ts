@@ -4,4 +4,5 @@ export interface FleetDTO {
   destination: number;
   origin: number;
   travelStartTime: number;
+  canColonize: boolean;
 }

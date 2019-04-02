@@ -102,4 +102,8 @@ export class CoreService {
     return this.coloniesService.changeShipOrder(colonyId, shipModelId);
   }
 
+  public createColony(planetId: number): void {
+    return this.coloniesService.createColony(planetId);
+  }
+
 }
