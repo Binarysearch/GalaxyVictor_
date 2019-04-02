@@ -1,3 +1,25 @@
+-----------------------------------------------------------------
+------------                               ----------------------
+------------           TECHNOLOGY          ----------------------
+------------                               ----------------------
+-----------------------------------------------------------------
+
+
+insert into core.technologies(id, level, name) values
+('fusion', 1, 'Fusión nuclear'),
+('hypermagnetism', 1, 'Hipermagnetismo'),
+('cold fusion', 2, 'Fusión fria');
+
+insert into core.technologies_prerequisites(technology, prerequisite) values
+('cold fusion', 'hypermagnetism'),
+('cold fusion', 'fusion');
+
+-----------------------------------------------------------------
+------------                               ----------------------
+------------     BUILDINGS AND RESOURCES   ----------------------
+------------                               ----------------------
+-----------------------------------------------------------------
+
 insert into core.resource_types(id, name) values
 ('goods', 'Bienes de consumo'),
 ('food', 'Alimentos'),
@@ -20,6 +42,8 @@ insert into core.colony_building_types(id, name, buildable, repeatable) values
 ('wind power plant', 'Planta de enrgia eolica', true, true),
 ('iron mine', 'Mina de hierro', true, true);
 
+insert into core.colony_building_types_prerequisites(building_type, prerequisite) values
+('shipyard', 'cold fusion');
 
 insert into CORE.colony_building_types_resources(building_type, resource_type, quantity) values
 ('imperial capital', 'energy', 20),
@@ -86,6 +110,7 @@ insert into core.colony_building_types_capabilities(building_type, capability_ty
 insert into core.ship_models(name, can_colonize, can_fight) values
 ('Colonizador', true, false),
 ('Explorador', false, false);
+
 
 -----------------------------------------------------------------
 ------------                               ----------------------

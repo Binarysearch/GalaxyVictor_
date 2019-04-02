@@ -9,5 +9,6 @@
     "ships_i_b.sql",
     "ships_u_b.sql",
     "ships_d_b.sql",
+    "technologies_prerequisites_i_b.sql",
     "triggers.sql"
 ]

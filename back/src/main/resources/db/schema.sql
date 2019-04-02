@@ -41,6 +41,18 @@ CREATE TABLE sessions(
     usr integer NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE technologies(
+    id text PRIMARY KEY,
+    level integer NOT NULL CHECK(level > 0),
+    name text NOT NULL
+);
+
+CREATE TABLE technologies_prerequisites(
+    technology text NOT NULL REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    prerequisite text NOT NULL REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(technology, prerequisite)
+);
+
 CREATE TABLE planets(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     star_system bigint NOT NULL REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -119,6 +131,12 @@ CREATE TABLE colony_building_types(
     name text NOT NULL,
     buildable boolean NOT NULL,
     repeatable boolean NOT NULL
+);
+
+CREATE TABLE colony_building_types_prerequisites(
+    building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    prerequisite text NOT NULL REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(building_type, prerequisite)
 );
 
 CREATE TABLE colony_building_capability_types(
