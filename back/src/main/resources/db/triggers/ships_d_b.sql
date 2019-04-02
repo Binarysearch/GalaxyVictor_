@@ -8,7 +8,7 @@ AS $function$begin
     update core.fleets set colony_ships = colony_ships - 1 where id=old.fleet;
   end if;
 
-  return new;
+  return old;
 end;$function$;
 
 CREATE TRIGGER ships_d_b BEFORE DELETE ON core.ships FOR EACH ROW EXECUTE PROCEDURE tg.ships_d_b();

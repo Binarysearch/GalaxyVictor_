@@ -23,11 +23,13 @@ begin
   ss_was_visible_ = (exists(select 1 from core.visible_star_systems where star_system=destination_ and civilization=civilization_));
 
   insert into core.visible_star_systems(star_system, civilization) values(destination_, civilization_);
+  
+  insert into core.known_civilizations(knows, known) select civilization_, civilization from core.visible_star_systems where star_system=destination_  
+  and not exists(select 1 from core.known_civilizations where knows=civilization_ and known=civilization);
 
   if (existing_fleet_ is not null) then
     update core.ships set fleet=existing_fleet_ where fleet=fleet_;
     delete from core.fleets where id=fleet_;
-    delete from core.visible_star_systems where star_system=destination_ and civilization=civilization_;
   end if;
   
   if (not ss_was_known_) then

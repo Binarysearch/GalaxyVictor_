@@ -156,6 +156,15 @@ export class MessagingService {
         }
         this.store.addFleet(newFleet);
       }
+      if (m.type === 'Colony') {
+        const payload = m.payload as ColonyDTO;
+        const colony = this.store.getObjectById(payload.id) as Colony;
+        const newColony = new Colony(payload);
+        if (colony) {
+          this.store.removeColony(colony);
+        }
+        this.store.addColony(newColony);
+      }
       if (m.type === 'Civilization') {
         const payload = m.payload as CivilizationDTO;
         const civilization = this.store.getObjectById(payload.id) as Civilization;

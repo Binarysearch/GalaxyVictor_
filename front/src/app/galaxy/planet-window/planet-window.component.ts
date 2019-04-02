@@ -1,3 +1,6 @@
+import { Store } from './../../store';
+import { Fleet } from './../../game-objects/fleet';
+import { CoreService } from './../../services/core.service';
 import { Planet } from './../../game-objects/planet';
 import { TextService } from './../../services/text.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
@@ -14,7 +17,7 @@ export class PlanetWindowComponent implements OnInit {
   @Output() closeButton = new EventEmitter();
   maximized = false;
 
-  constructor(private map: GalaxyMap, public ts: TextService) { }
+  constructor(private core: CoreService, private map: GalaxyMap, public ts: TextService, private store: Store) { }
 
   ngOnInit() {
     const statusString = localStorage.getItem('planet-window-status');
@@ -69,4 +72,19 @@ export class PlanetWindowComponent implements OnInit {
     this.map.select(prev.id);
   }
 
+  isColonizable(): boolean {
+    if (!this.planet.colony) {
+      const fleet = this.planet.starSystem.fleets.find((f: Fleet, i) => {
+        return f.canColonize && f.civilization.id === this.store.userCivilization.id;
+      });
+      if (fleet) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  colonize() {
+    this.core.createColony(this.planet.id);
+  }
 }

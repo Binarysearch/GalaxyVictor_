@@ -8,8 +8,23 @@ public class FleetDTO {
     private long destination;
     private long origin;
     private long travelStartTime;
+    private boolean canColonize;
 
     public FleetDTO() {
+    }
+
+    /**
+     * @return the canColonize
+     */
+    public boolean isCanColonize() {
+        return canColonize;
+    }
+
+    /**
+     * @param canColonize the canColonize to set
+     */
+    public void setCanColonize(boolean canColonize) {
+        this.canColonize = canColonize;
     }
 
     public FleetDTO(long id, long civilization, long destination, long origin, long travelStartTime) {
