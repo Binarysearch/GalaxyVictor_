@@ -1,3 +1,4 @@
+import { TechnologyDTO } from './../dtos/technology';
 import { Injectable, isDevMode } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { UserCivilizationDTO } from '../dtos/user-civilization';
@@ -17,8 +18,10 @@ import { ResourceType } from '../game-objects/resource-type';
 import { ColonyBuildingCapabilityTypeDTO } from '../dtos/colony-building-capability-type';
 import { ColonyBuildingCapabilityType } from '../game-objects/colony-building-capability-type';
 import { ShipModelsService } from './ship-models.service';
+import { Technology } from '../game-objects/technology';
 
 interface ConstantDataDTO {
+  technologies: TechnologyDTO[];
   resourceTypes: ResourceTypeDTO[];
   colonyBuildingCapabilityTypes: ColonyBuildingCapabilityTypeDTO[];
   colonyBuildingTypes: ColonyBuildingTypeDTO[];
@@ -58,6 +61,18 @@ export class CivilizationsService {
     this.http.get<ConstantDataDTO>(this.constantDataUrl)
     .subscribe((data: ConstantDataDTO) => {
 
+      // technologies
+      data.technologies.forEach(t => {
+        const technology = new Technology(t);
+        if (t.prerequisites) {
+          t.prerequisites.forEach(id => {
+            const prerequisite = this.store.getTechnology(id);
+            technology.prerequisites.push(prerequisite);
+          });
+        }
+        this.store.addTechnology(technology);
+      });
+
       // resource types
       data.resourceTypes.forEach(c => {
         const resourceType = new ResourceType(c);
@@ -88,10 +103,16 @@ export class CivilizationsService {
             buildingType.capabilities.push({type: this.store.getColonyBuildingCapabilityType(r.type)});
           });
         }
+        if (c.prerequisites) {
+          c.prerequisites.forEach(id => {
+            const prerequisite = this.store.getTechnology(id);
+            buildingType.prerequisites.push(prerequisite);
+          });
+        }
         this.store.addColonyBuildingType(buildingType);
       });
 
-
+      console.log(this.store);
     }, (error: any) => {
       console.log(error);
     });

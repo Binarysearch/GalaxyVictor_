@@ -1,6 +1,7 @@
 import { ColonyBuildingTypeDTO } from './../dtos/colony-building-type';
 import { ResourceType } from './resource-type';
 import { ColonyBuildingCapabilityType } from './colony-building-capability-type';
+import { Technology } from './technology';
 
 export class ColonyBuildingType {
   id: string;
@@ -10,6 +11,7 @@ export class ColonyBuildingType {
   resources: {resourceType: ResourceType, quantity: number}[] = [];
   costs: {resourceType: ResourceType, quantity: number}[] = [];
   capabilities: {type: ColonyBuildingCapabilityType}[] = [];
+  prerequisites: Technology[] = [];
 
   constructor(data: ColonyBuildingTypeDTO) {
     this.id = data.id;

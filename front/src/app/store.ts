@@ -1,3 +1,4 @@
+import { Technology } from './game-objects/technology';
 import { ShipModel } from './game-objects/ship-model';
 import { ResourceType } from './game-objects/resource-type';
 import { ColonyBuildingType } from './game-objects/colony-building-type';
@@ -22,6 +23,7 @@ export class Store {
   private colonyBuildingTypesMap: Map<string, ColonyBuildingType> = new Map();
   private shipModelsMap: Map<number, ShipModel> = new Map();
   private resourceTypes: Map<string, ResourceType> = new Map();
+  private technologies: Map<string, Technology> = new Map();
   private colonyBuildingCapabilityTypes: Map<string, ColonyBuildingCapabilityType> = new Map();
 
   private _starSystems: StarSystem[] = [];
@@ -192,6 +194,14 @@ export class Store {
 
   public getResourceType(typeId: string): ResourceType {
     return this.resourceTypes.get(typeId);
+  }
+
+  public addTechnology(technology: Technology) {
+    this.technologies.set(technology.id, technology);
+  }
+
+  public getTechnology(id: string): Technology {
+    return this.technologies.get(id);
   }
 
   public addColonyBuildingCapabilityType(type: ColonyBuildingCapabilityType) {

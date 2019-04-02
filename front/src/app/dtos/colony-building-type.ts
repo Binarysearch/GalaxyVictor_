@@ -7,4 +7,5 @@ export interface ColonyBuildingTypeDTO {
   resources: {type: string, quantity: number}[];
   costs: {type: string, quantity: number}[];
   capabilities: {type: string}[];
+  prerequisites: string[];
 }
