@@ -1,5 +1,7 @@
 [
     "colonies_i_b.sql",
+    "colonies_u_b.sql",
+    "colonies_d_b.sql",
     "fleets_i_b.sql",
     "fleets_d_b.sql",
     "colony_buildings_i_b.sql",
@@ -10,5 +12,8 @@
     "ships_u_b.sql",
     "ships_d_b.sql",
     "technologies_prerequisites_i_b.sql",
-    "triggers.sql"
+    "visible_star_systems_d_b.sql",
+    "visible_star_systems_i_b.sql",
+    "stellar_governments_d_b.sql",
+    "stellar_governments_i_b.sql"
 ]

@@ -204,8 +204,16 @@ CREATE TABLE colony_building_orders(
     started_time bigint NOT NULL
 );
 
-CREATE TABLE colony_research_orders(
-    colony bigint PRIMARY KEY REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+CREATE TABLE stellar_governments(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    star_system bigint REFERENCES star_systems(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    civilization bigint NOT NULL REFERENCES civilizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL DEFAULT 1,
+    UNIQUE(star_system, civilization)
+);
+
+CREATE TABLE research_orders(
+    stellar_government bigint PRIMARY KEY REFERENCES stellar_governments(id) ON UPDATE CASCADE ON DELETE CASCADE,
     technology text REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     started_time bigint NOT NULL
 );
