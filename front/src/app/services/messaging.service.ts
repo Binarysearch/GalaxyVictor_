@@ -1,3 +1,4 @@
+import { ResearchOrderDTO } from './../dtos/research-order';
 import { StarSystem } from './../game-objects/star-system';
 import { PlanetDTO } from './../dtos/planet';
 import { Store } from './../store';
@@ -12,6 +13,7 @@ import { ColonyDTO } from '../dtos/colony';
 import { Colony } from '../game-objects/colony';
 import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
+import { ResearchOrder } from '../game-objects/research-order';
 
 const DEV_SOCKET_URL = `ws://localhost:8080/socket`;
 const PROD_SOCKET_URL = `wss://galaxyvictor.com/socket/`;
@@ -38,6 +40,11 @@ interface ShipBuildingOrderDTO {
   colony: number;
   shipModelId: number;
   name: string;
+}
+
+interface FinishResearchOrderDTO {
+  starSystem: number;
+  technology: string;
 }
 
 interface FinishColonyBuildingDTO {
@@ -114,6 +121,19 @@ export class MessagingService {
         if (fleet) {
           this.store.removeFleet(fleet);
         }
+      }
+      if (m.type === 'ResearchOrder') {
+        const payload = m.payload as ResearchOrderDTO;
+        const starSystem = this.store.getObjectById(payload.starSystem) as StarSystem;
+        const researchOrder = new ResearchOrder(payload);
+        researchOrder.technology = this.store.getTechnology(payload.technology);
+        starSystem.researchOrder = researchOrder;
+      }
+      if (m.type === 'FinishResearchOrder') {
+        const payload = m.payload as FinishResearchOrderDTO;
+        const starSystem = this.store.getObjectById(payload.starSystem) as StarSystem;
+        starSystem.researchOrder = null;
+        starSystem.technologies.push(this.store.getTechnology(payload.technology));
       }
       if (m.type === 'ColonyBuildingOrder') {
         const payload = m.payload as ColonyBuildingOrderDTO;

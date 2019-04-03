@@ -106,4 +106,7 @@ export class CoreService {
     return this.coloniesService.createColony(planetId);
   }
 
+  loadStarSystemTechnologies(id: number): void {
+    this.starSystemsService.loadStarSystemTechnologies(id);
+  }
 }

@@ -8,6 +8,7 @@ import { GalaxiesService } from './galaxies.service';
 import { StarSystem } from '../game-objects/star-system';
 import { PlanetsService } from './planets.service';
 import { CivilizationsService } from './civilizations.service';
+import { Technology } from '../game-objects/technology';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class StarSystemsService {
   private host = (isDevMode()) ? 'http://localhost:8080' : 'https://galaxyvictor.com';
 
   private starSystemsUrl = this.host + '/api/star-systems';
+  private starSystemsTechnologiesUrl = this.host + '/api/star-system-technologies';
 
   private currentGalaxyId: number;
 
@@ -36,6 +38,39 @@ export class StarSystemsService {
 
   getStarSystem(id: number): Observable<StarSystemDTO> {
     return this.http.get<StarSystemDTO>(this.starSystemsUrl + `/${id}`);
+  }
+
+  getStarSystemTechnologies(id: number): Observable<string[]> {
+    return this.http.get<string[]>(this.starSystemsTechnologiesUrl + `?starSystem=${id}`);
+  }
+
+  loadStarSystemTechnologies(id: number): void {
+    const starSystem = this.store.getObjectById(id) as StarSystem;
+    if (starSystem) {
+      starSystem.technologies = [];
+      starSystem.availableTechnologies = [];
+
+      this.getStarSystemTechnologies(id).subscribe(technologies => {
+        const techIds = new Set<string>();
+
+        technologies.forEach(technologyId => {
+          techIds.add(technologyId);
+          const technology = this.store.getTechnology(technologyId);
+          starSystem.technologies.push(technology);
+        });
+
+        // add available technologies
+        this.store.technologies.forEach(technology => {
+          const allPrerequisitesMet = technology.prerequisites.every((tech) => {
+            return techIds.has(tech.id);
+          });
+
+          if (allPrerequisitesMet) {
+            starSystem.availableTechnologies.push(technology);
+          }
+        });
+      });
+    }
   }
 
   private reloadStarSystems() {

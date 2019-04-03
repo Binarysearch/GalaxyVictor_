@@ -5,6 +5,8 @@
   </div>
   <div class="body">
 
+    <app-colony-research [colony]="colony"></app-colony-research>
+
     <div *ngIf="selectingBuildingOrder">
       <div *ngFor="let buildingType of availableBuildingTypes" (click)="changeBuildingOrder(buildingType.id)" class='select-building-btn' [class.selected]="colony.buildingOrder === buildingType.id">
         {{ buildingType.name }}:

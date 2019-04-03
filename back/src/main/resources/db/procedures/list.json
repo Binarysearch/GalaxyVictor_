@@ -22,6 +22,7 @@
     "get_colony_ship_orders.sql",
     "get_constant_data.sql",
     "get_civilization_research_orders.sql",
+    "get_star_system_technologies.sql",
     "get_ship_models.sql",
     "get_colonies.sql",
     "finish_colony_ship_order.sql",

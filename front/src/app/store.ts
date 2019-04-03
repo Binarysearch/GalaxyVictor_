@@ -23,7 +23,7 @@ export class Store {
   private colonyBuildingTypesMap: Map<string, ColonyBuildingType> = new Map();
   private shipModelsMap: Map<number, ShipModel> = new Map();
   private resourceTypes: Map<string, ResourceType> = new Map();
-  private technologies: Map<string, Technology> = new Map();
+  private technologyMap: Map<string, Technology> = new Map();
   private colonyBuildingCapabilityTypes: Map<string, ColonyBuildingCapabilityType> = new Map();
 
   private _starSystems: StarSystem[] = [];
@@ -32,6 +32,7 @@ export class Store {
   private _planets: Planet[] = [];
   private _civilizations: Civilization[] = [];
   private _colonies: Colony[] = [];
+  private _technologies: Technology[] = [];
   private _fleets: Fleet[] = [];
   private _session: SessionDTO;
   private _galaxy: GalaxyDTO;
@@ -52,6 +53,10 @@ export class Store {
 
   public get colonies(): Colony[] {
     return this._colonies;
+  }
+
+  public get technologies(): Technology[] {
+    return this._technologies;
   }
 
   public get fleets(): Fleet[] {
@@ -197,11 +202,12 @@ export class Store {
   }
 
   public addTechnology(technology: Technology) {
-    this.technologies.set(technology.id, technology);
+    this.technologyMap.set(technology.id, technology);
+    this._technologies.push(technology);
   }
 
   public getTechnology(id: string): Technology {
-    return this.technologies.get(id);
+    return this.technologyMap.get(id);
   }
 
   public addColonyBuildingCapabilityType(type: ColonyBuildingCapabilityType) {
