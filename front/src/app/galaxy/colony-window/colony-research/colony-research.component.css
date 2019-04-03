@@ -1,0 +1,13 @@
+.acquired {
+  background-color: rgba(0,255,0,0.1);
+}
+.available {
+  background-color: rgba(255,255,0,0.1);
+  cursor: pointer;
+}
+.available:hover {
+  background-color: rgba(255,255,0,0.2);
+}
+.researching {
+  background-color: rgba(255,255,0,0.3);
+}

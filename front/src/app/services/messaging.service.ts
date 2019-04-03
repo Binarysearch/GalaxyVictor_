@@ -128,12 +128,14 @@ export class MessagingService {
         const researchOrder = new ResearchOrder(payload);
         researchOrder.technology = this.store.getTechnology(payload.technology);
         starSystem.researchOrder = researchOrder;
+        this.store.addResearchOrder(researchOrder);
       }
       if (m.type === 'FinishResearchOrder') {
         const payload = m.payload as FinishResearchOrderDTO;
         const starSystem = this.store.getObjectById(payload.starSystem) as StarSystem;
+        this.store.removeResearchOrder(payload.starSystem);
         starSystem.researchOrder = null;
-        starSystem.technologies.push(this.store.getTechnology(payload.technology));
+        starSystem.technologies = null;
       }
       if (m.type === 'ColonyBuildingOrder') {
         const payload = m.payload as ColonyBuildingOrderDTO;

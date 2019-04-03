@@ -37,6 +37,7 @@ public abstract class ApiServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setCharacterEncoding("Utf-8");
         try {
             ApiRequest request = new ApiRequest(req);
             response.getWriter().print(postRequest(request));
@@ -48,6 +49,7 @@ public abstract class ApiServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setCharacterEncoding("Utf-8");
         try {
             ApiRequest request = new ApiRequest(req);
             response.getWriter().print(getRequest(request));

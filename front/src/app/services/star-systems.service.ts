@@ -61,6 +61,9 @@ export class StarSystemsService {
 
         // add available technologies
         this.store.technologies.forEach(technology => {
+          if (techIds.has(technology.id)) {
+            return;
+          }
           const allPrerequisitesMet = technology.prerequisites.every((tech) => {
             return techIds.has(tech.id);
           });

@@ -17,7 +17,7 @@ public class ResearchOrdersController extends GvApiServlet {
 	protected GvApiRequest getPostApiRequest(ApiRequest request) {
 		String token = request.getToken();
 		int starSystem = request.jsonPath("$.starSystem");
-		int technology = request.jsonPath("$.technology");
+		String technology = request.jsonPath("$.technology");
 		long time = System.currentTimeMillis();
 
 		return new GvApiRequest("core.set_research_order", starSystem, technology, time, token);

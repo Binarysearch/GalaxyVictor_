@@ -27,7 +27,7 @@ begin
   delete from core.research_orders where stellar_government=stellar_government_;
 
   message_orders = format('[
-    {"type": "FinishResearchOrder", "payload": {"starSystem": %s, "technology": %s}, "civilizations": [%s]}
+    {"type": "FinishResearchOrder", "payload": {"starSystem": %s, "technology": "%s"}, "civilizations": [%s]}
   ]', star_system_, technology_, civilization_);
 
   return format('{"messageOrders": %s}', message_orders);

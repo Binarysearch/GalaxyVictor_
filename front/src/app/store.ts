@@ -13,6 +13,7 @@ import { Fleet } from './game-objects/fleet';
 import { SessionDTO } from './dtos/session';
 import { UserCivilizationDTO } from './dtos/user-civilization';
 import { ColonyBuildingCapabilityType } from './game-objects/colony-building-capability-type';
+import { ResearchOrder } from './game-objects/research-order';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class Store {
   private _colonyBuildingTypes: ColonyBuildingType[] = [];
   private _shipModels: ShipModel[] = [];
   private _planets: Planet[] = [];
+  private _researchOrders: ResearchOrder[] = [];
   private _civilizations: Civilization[] = [];
   private _colonies: Colony[] = [];
   private _technologies: Technology[] = [];
@@ -226,4 +228,18 @@ export class Store {
     return this._shipModels;
   }
 
+  public get researchOrders(): ResearchOrder[] {
+    return this._researchOrders;
+  }
+
+  addResearchOrder(order: ResearchOrder) {
+    this._researchOrders.push(order);
+  }
+
+  removeResearchOrder(starSystemId: number) {
+    const starSystem = this.getObjectById(starSystemId) as StarSystem;
+    if (this._researchOrders.indexOf(starSystem.researchOrder) > -1) {
+      this._researchOrders.splice(this._researchOrders.indexOf(starSystem.researchOrder), 1);
+    }
+  }
 }

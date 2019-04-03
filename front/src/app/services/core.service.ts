@@ -1,3 +1,4 @@
+import { ResearchService } from './research.service';
 import { ColonyResourceDTO } from './../dtos/colony-resource';
 import { ShipsService } from './ships.service';
 import { CivilizationsService } from './civilizations.service';
@@ -31,6 +32,7 @@ export class CoreService {
     private store: Store,
     private civilizationsService: CivilizationsService,
     private coloniesService: ColoniesService,
+    private researchService: ResearchService,
     private galaxiesService: GalaxiesService
   ) { }
 
@@ -109,4 +111,10 @@ export class CoreService {
   loadStarSystemTechnologies(id: number): void {
     this.starSystemsService.loadStarSystemTechnologies(id);
   }
+
+  startResearching(starSystemId: number, technologyId: string): void {
+    this.researchService.startResearching(starSystemId, technologyId);
+  }
+
+
 }

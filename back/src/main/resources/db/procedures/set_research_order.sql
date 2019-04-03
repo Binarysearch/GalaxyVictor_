@@ -19,7 +19,7 @@ begin
   end if;
 
   --check prerequisites
-  if (exists(select 1 from core.technologies_prerequisites where prerequisite not in(select technology from core.stellar_governments_technologies where stellar_government=stellar_government_))) then
+  if (exists(select 1 from core.technologies_prerequisites where technology=technology_ and prerequisite not in(select technology from core.stellar_governments_technologies where stellar_government=stellar_government_))) then
     perform core.error(400, 'Technological prerequisites not met');
   end if;
 

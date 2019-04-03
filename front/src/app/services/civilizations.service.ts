@@ -1,3 +1,4 @@
+import { ResearchService } from './research.service';
 import { TechnologyDTO } from './../dtos/technology';
 import { Injectable, isDevMode } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
@@ -46,6 +47,7 @@ export class CivilizationsService {
   constructor(private http: HttpClient, private store: Store, private galaxiesService: GalaxiesService,
      private coloniesService: ColoniesService,
      private shipModelsService: ShipModelsService,
+     private researchService: ResearchService,
       private fleetsService: FleetsService) {
     this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
       if (currentGalaxy) {
@@ -161,6 +163,7 @@ export class CivilizationsService {
       });
       this.coloniesService.loadColonies();
       this.fleetsService.loadFleets();
+      this.researchService.loadResearchOrders();
     }, (error: any) => {
       console.log(error);
     });

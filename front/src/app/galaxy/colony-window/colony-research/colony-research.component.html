@@ -1,4 +1,4 @@
-<h1>Research</h1>
-<div *ngFor="let technology of acquiredTechnologies">{{ technology.name }}</div>
-<div *ngFor="let technology of availableTechnologies">{{ technology.name }}</div>
+<h1>{{ ts.strings.research }}</h1>
+<div *ngFor="let technology of acquiredTechnologies" class="acquired">{{ technology.name }}</div>
+<div *ngFor="let technology of availableTechnologies" (click)="startResearching(technology)" class="available" [class.researching]="colony.planet.starSystem.researchOrder && technology.id===colony.planet.starSystem.researchOrder.technologyId">{{ technology.name }}</div>
 <hr>

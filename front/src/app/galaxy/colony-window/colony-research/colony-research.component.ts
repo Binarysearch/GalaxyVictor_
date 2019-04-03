@@ -2,6 +2,7 @@ import { CoreService } from './../../../services/core.service';
 import { Colony } from './../../../game-objects/colony';
 import { Component, OnInit, Input } from '@angular/core';
 import { Technology } from 'src/app/game-objects/technology';
+import { TextService } from 'src/app/services/text.service';
 
 @Component({
   selector: 'app-colony-research',
@@ -12,7 +13,7 @@ export class ColonyResearchComponent implements OnInit {
 
   @Input() colony: Colony;
 
-  constructor(private core: CoreService) { }
+  constructor(private core: CoreService, public ts: TextService) { }
 
   ngOnInit() {
   }
@@ -28,5 +29,7 @@ export class ColonyResearchComponent implements OnInit {
     return this.colony.planet.starSystem.availableTechnologies;
   }
 
-
+  startResearching(tech: Technology) {
+    this.core.startResearching(this.colony.planet.starSystem.id, tech.id);
+  }
 }
