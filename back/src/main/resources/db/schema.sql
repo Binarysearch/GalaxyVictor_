@@ -218,3 +218,9 @@ CREATE TABLE research_orders(
     started_time bigint NOT NULL
 );
 
+CREATE TABLE stellar_governments_technologies(
+    stellar_government bigint NOT NULL REFERENCES stellar_governments(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    technology text NOT NULL REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(stellar_government, technology)
+);
+
