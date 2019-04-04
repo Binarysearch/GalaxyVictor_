@@ -139,8 +139,7 @@ export class MessagingService {
         starSystem.planets.forEach(p => {
           if (p.colony) {
             // reload buildings
-            p.colony.buildings = null;
-            p.colony.resources = null;
+            p.colony.availableBuildingTypes = null;
           }
         });
       }
@@ -174,6 +173,7 @@ export class MessagingService {
           colony.shipOrderName = null;
           colony.buildings = null;
           colony.resources = null;
+          colony.availableBuildingTypes = null;
         }
       }
       if (m.type === 'Fleet') {

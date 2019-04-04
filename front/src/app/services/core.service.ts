@@ -92,10 +92,6 @@ export class CoreService {
     return this.coloniesService.getColonyBuildings(colonyId);
   }
 
-  public getColonyResources(colonyId: number): Observable<ColonyResourceDTO[]> {
-    return this.coloniesService.getColonyResources(colonyId);
-  }
-
   public changeColonyBuildingOrder(colonyId: number, buildingTypeId: string): void {
     return this.coloniesService.changeColonyBuildingOrder(colonyId, buildingTypeId);
   }
@@ -114,6 +110,18 @@ export class CoreService {
 
   startResearching(starSystemId: number, technologyId: string): void {
     this.researchService.startResearching(starSystemId, technologyId);
+  }
+
+  loadColonyResources(id: number) {
+    this.coloniesService.loadColonyResources(id);
+  }
+
+  loadColonyBuildings(id: number) {
+    this.coloniesService.loadColonyBuildings(id);
+  }
+
+  loadColonyAvailableBuildingTypes(id: number) {
+    this.coloniesService.loadColonyAvailableBuildingTypes(id);
   }
 
 

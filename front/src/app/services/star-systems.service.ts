@@ -72,6 +72,12 @@ export class StarSystemsService {
             starSystem.availableTechnologies.push(technology);
           }
         });
+
+        starSystem.planets.forEach(p => {
+          if (p.colony) {
+            p.colony.availableBuildingTypes = null;
+          }
+        });
       });
     }
   }
