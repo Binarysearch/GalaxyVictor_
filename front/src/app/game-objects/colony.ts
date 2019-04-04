@@ -1,3 +1,4 @@
+import { ColonyBuildingType } from './colony-building-type';
 import { ColonyDTO } from './../dtos/colony';
 import { GameObject } from './game-object';
 import { Planet } from './planet';
@@ -11,6 +12,7 @@ export class Colony implements GameObject {
   planet: Planet;
   civilization: Civilization;
   buildings: ColonyBuilding[];
+  availableBuildingTypes: ColonyBuildingType[];
   resources: ColonyResource[];
   buildingOrder: string;
   buildingOrderName: string;

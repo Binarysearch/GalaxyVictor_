@@ -136,6 +136,13 @@ export class MessagingService {
         this.store.removeResearchOrder(payload.starSystem);
         starSystem.researchOrder = null;
         starSystem.technologies = null;
+        starSystem.planets.forEach(p => {
+          if (p.colony) {
+            // reload buildings
+            p.colony.buildings = null;
+            p.colony.resources = null;
+          }
+        });
       }
       if (m.type === 'ColonyBuildingOrder') {
         const payload = m.payload as ColonyBuildingOrderDTO;

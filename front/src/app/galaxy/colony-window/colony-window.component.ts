@@ -26,6 +26,9 @@ export class ColonyWindowComponent implements OnInit {
   constructor(public ts: TextService, private core: CoreService, private store: Store) { }
 
   ngOnInit() {
+    if (!this.colony.planet.starSystem.technologies) {
+      this.core.loadStarSystemTechnologies(this.colony.planet.starSystem.id);
+    }
   }
 
   get title(): string {
@@ -94,9 +97,16 @@ export class ColonyWindowComponent implements OnInit {
   }
 
   get availableBuildingTypes(): ColonyBuildingType[] {
-    if (this.colony.resources && !this._availableBuildingTypes) {
+    if (this.colony.planet.starSystem.technologies && this.colony.resources && !this._availableBuildingTypes) {
 
       this._availableBuildingTypes = [];
+
+      // acquired tech set
+      const techIds = new Set<string>();
+
+      this.colony.planet.starSystem.technologies.forEach(technology => {
+        techIds.add(technology.id);
+      });
 
       // maps resource -> quantity
       const resourceMap = new Map<string, number>();
@@ -128,6 +138,13 @@ export class ColonyWindowComponent implements OnInit {
             }
             available = available && (availableQuantity + r.quantity >= 0);
           });
+
+          const allPrerequisitesMet = bt.prerequisites.every((tech) => {
+            return techIds.has(tech.id);
+          });
+
+          available = available && allPrerequisitesMet;
+
           if (available) {
             this._availableBuildingTypes.push(bt);
           }
