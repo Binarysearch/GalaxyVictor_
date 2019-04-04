@@ -1,3 +1,4 @@
+import { ColoniesService } from './colonies.service';
 import { ResearchOrderDTO } from './../dtos/research-order';
 import { StarSystem } from './../game-objects/star-system';
 import { PlanetDTO } from './../dtos/planet';
@@ -14,6 +15,7 @@ import { Colony } from '../game-objects/colony';
 import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
 import { ResearchOrder } from '../game-objects/research-order';
+import { ColonyBuilding } from '../game-objects/colony-building';
 
 const DEV_SOCKET_URL = `ws://localhost:8080/socket`;
 const PROD_SOCKET_URL = `wss://galaxyvictor.com/socket/`;
@@ -65,7 +67,7 @@ interface VisibilityLostDTO {
 export class MessagingService {
   private subject: Subject<Message>;
 
-  constructor(wsService: WebsocketService, private store: Store) {
+  constructor(wsService: WebsocketService, private store: Store, private coloniesService: ColoniesService) {
     this.subject = <Subject<Message>>wsService
       .connect((isDevMode()) ? DEV_SOCKET_URL : PROD_SOCKET_URL)
       .pipe(
@@ -111,7 +113,7 @@ export class MessagingService {
         }
         if (payload.colonies) {
           payload.colonies.forEach((c: ColonyDTO) => {
-            this.store.addColony(new Colony(c));
+            this.store.addColony(new Colony(c, this.coloniesService));
           });
         }
       }
@@ -134,12 +136,13 @@ export class MessagingService {
         const payload = m.payload as FinishResearchOrderDTO;
         const starSystem = this.store.getObjectById(payload.starSystem) as StarSystem;
         this.store.removeResearchOrder(payload.starSystem);
+        starSystem.technologies.push(starSystem.researchOrder.technology);
+        starSystem.invalidateAvailableTechnologies();
         starSystem.researchOrder = null;
-        starSystem.technologies = null;
         starSystem.planets.forEach(p => {
           if (p.colony) {
             // reload buildings
-            p.colony.availableBuildingTypes = null;
+            p.colony.invalidateAvailableBuildings();
           }
         });
       }
@@ -171,9 +174,9 @@ export class MessagingService {
           colony.buildingOrderName = null;
           colony.shipOrder = null;
           colony.shipOrderName = null;
-          colony.buildings = null;
-          colony.resources = null;
-          colony.availableBuildingTypes = null;
+          colony.invalidateBuildings();
+          colony.invalidateResources();
+          colony.invalidateAvailableBuildings();
         }
       }
       if (m.type === 'Fleet') {
@@ -188,7 +191,7 @@ export class MessagingService {
       if (m.type === 'Colony') {
         const payload = m.payload as ColonyDTO;
         const colony = this.store.getObjectById(payload.id) as Colony;
-        const newColony = new Colony(payload);
+        const newColony = new Colony(payload, this.coloniesService);
         if (colony) {
           this.store.removeColony(colony);
         }

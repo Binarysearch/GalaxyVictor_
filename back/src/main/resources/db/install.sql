@@ -48,19 +48,15 @@ insert into core.colony_building_types_prerequisites(building_type, prerequisite
 insert into CORE.colony_building_types_resources(building_type, resource_type, quantity) values
 ('imperial capital', 'energy', 20),
 ('imperial capital', 'work', 20),
-('imperial capital', 'tools', 10),
 
 ('colony base', 'energy', 10),
-('colony base', 'work', 10),
-('colony base', 'tools', 5),
+('colony base', 'work', 20),
 
 ('wind power plant', 'energy', 5),
 ('wind power plant', 'work', -1),
-('wind power plant', 'tools', -1),
 
 ('sawmill', 'energy', -2),
 ('sawmill', 'work', -1),
-('sawmill', 'tools', -1),
 ('sawmill', 'wood', 4),
 
 ('houses', 'work', 20),
@@ -92,7 +88,6 @@ insert into CORE.colony_building_types_resources(building_type, resource_type, q
 
 ('iron mine', 'energy', -2),
 ('iron mine', 'work', -2),
-('iron mine', 'tools', -1),
 ('iron mine', 'iron', 4);
 
 insert into CORE.colony_building_types_costs(building_type, resource_type, quantity) values

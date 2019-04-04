@@ -31,7 +31,7 @@ export class ColoniesService  {
     this.http.get<ColonyDTO[]>(this.coloniesUrl)
     .subscribe((data: ColonyDTO[]) => {
       data.forEach(c => {
-        this.store.addColony(new Colony(c));
+        this.store.addColony(new Colony(c, this));
       });
     }, (error: any) => {
       console.log(error);
@@ -63,30 +63,29 @@ export class ColoniesService  {
       .subscribe();
   }
 
-  loadColonyResources(id: number) {
-    const colony = this.store.getObjectById(id) as Colony;
-    colony.resources = [];
-    this.getColonyResources(id).subscribe((resources: ColonyResourceDTO[]) => {
-      resources.forEach(r => {
+  loadColonyResources(colony: Colony) {
+    const resources = [];
+    this.getColonyResources(colony.id).subscribe((result: ColonyResourceDTO[]) => {
+      result.forEach(r => {
         const resource = new ColonyResource(r);
         resource.type = this.store.getResourceType(r.type);
-        colony.resources.push(resource);
+        resources.push(resource);
       });
 
-      colony.availableBuildingTypes = null;
+      colony.resources = resources;
+      colony.invalidateAvailableBuildings();
     });
   }
 
-  loadColonyBuildings(id: number) {
-    const colony = this.store.getObjectById(id) as Colony;
-    colony.buildings = [];
-    this.getColonyBuildings(id).subscribe((buildings: ColonyBuildingDTO[]) => {
+  loadColonyBuildings(colony: Colony) {
+    const buildings = [];
+    this.getColonyBuildings(colony.id).subscribe((result: ColonyBuildingDTO[]) => {
       colony.canBuildShips = false;
 
-      buildings.forEach(b => {
+      result.forEach(b => {
         const building = new ColonyBuilding(b);
         building.type = this.store.getColonyBuildingType(b.type);
-        colony.buildings.push(building);
+        buildings.push(building);
 
         if (!colony.canBuildShips) {
           building.type.capabilities.forEach(e => {
@@ -96,19 +95,16 @@ export class ColoniesService  {
           });
         }
       });
+
+      colony.buildings = buildings;
     });
   }
 
-  loadColonyAvailableBuildingTypes(id: number) {
-    const colony = this.store.getObjectById(id) as Colony;
+  loadColonyAvailableBuildingTypes(colony: Colony) {
 
-    if (!colony.resources) {
-      this.loadColonyResources(id);
-    }
+    if (colony.planet.starSystem.technologies) {
 
-    if (colony.planet.starSystem.technologies && !colony.availableBuildingTypes) {
-
-      colony.availableBuildingTypes = [];
+      const availableBuildingTypes = [];
 
       // acquired tech set
       const techIds = new Set<string>();
@@ -125,15 +121,13 @@ export class ColoniesService  {
 
       // maps built colony buildings -> quantity
       const builtMap = new Map<string, number>();
-      if (colony.buildings) {
-        colony.buildings.forEach(b => {
-          if (builtMap.has(b.type.id)) {
-            builtMap.set(b.type.id, 1 + builtMap.get(b.type.id));
-          } else {
-            builtMap.set(b.type.id, 1);
-          }
-        });
-      }
+      colony.buildings.forEach(b => {
+        if (builtMap.has(b.type.id)) {
+          builtMap.set(b.type.id, 1 + builtMap.get(b.type.id));
+        } else {
+          builtMap.set(b.type.id, 1);
+        }
+      });
 
       // check for every building type that there are enought of every resource, is buildable and
       // if it is not repeatable and it is built then it is not available
@@ -155,12 +149,12 @@ export class ColoniesService  {
           available = available && allPrerequisitesMet;
 
           if (available) {
-            colony.availableBuildingTypes.push(bt);
+            availableBuildingTypes.push(bt);
           }
         }
       });
-    } else {
-      colony.availableBuildingTypes = [];
+
+      colony.availableBuildings = availableBuildingTypes;
     }
   }
 }

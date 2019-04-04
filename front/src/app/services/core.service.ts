@@ -104,25 +104,8 @@ export class CoreService {
     return this.coloniesService.createColony(planetId);
   }
 
-  loadStarSystemTechnologies(id: number): void {
-    this.starSystemsService.loadStarSystemTechnologies(id);
-  }
-
   startResearching(starSystemId: number, technologyId: string): void {
     this.researchService.startResearching(starSystemId, technologyId);
   }
-
-  loadColonyResources(id: number) {
-    this.coloniesService.loadColonyResources(id);
-  }
-
-  loadColonyBuildings(id: number) {
-    this.coloniesService.loadColonyBuildings(id);
-  }
-
-  loadColonyAvailableBuildingTypes(id: number) {
-    this.coloniesService.loadColonyAvailableBuildingTypes(id);
-  }
-
 
 }

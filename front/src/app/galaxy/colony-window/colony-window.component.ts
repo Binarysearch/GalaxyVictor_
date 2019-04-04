@@ -23,28 +23,10 @@ export class ColonyWindowComponent implements OnInit {
 
   constructor(public ts: TextService, private core: CoreService, private store: Store) { }
 
-  ngOnInit() {
-    if (!this.colony.planet.starSystem.technologies) {
-      this.core.loadStarSystemTechnologies(this.colony.planet.starSystem.id);
-    }
-  }
+  ngOnInit() {  }
 
   get title(): string {
     return this.ts.strings.colony + ' ' + this.colony.id;
-  }
-
-  get buildings(): ColonyBuilding[] {
-    if (!this.colony.buildings) {
-      this.core.loadColonyBuildings(this.colony.id);
-    }
-    return this.colony.buildings;
-  }
-
-  get resources(): ColonyResource[] {
-    if (!this.colony.resources) {
-      this.core.loadColonyResources(this.colony.id);
-    }
-    return this.colony.resources;
   }
 
   closeButtonClick() {
@@ -57,13 +39,6 @@ export class ColonyWindowComponent implements OnInit {
 
   cancelChangeBuildingOrderClicked() {
     this.selectingBuildingOrder = false;
-  }
-
-  get availableBuildingTypes(): ColonyBuildingType[] {
-    if (!this.colony.availableBuildingTypes) {
-      this.core.loadColonyAvailableBuildingTypes(this.colony.id);
-    }
-    return this.colony.availableBuildingTypes;
   }
 
   get availableShipModels(): ShipModel[] {

@@ -44,42 +44,52 @@ export class StarSystemsService {
     return this.http.get<string[]>(this.starSystemsTechnologiesUrl + `?starSystem=${id}`);
   }
 
-  loadStarSystemTechnologies(id: number): void {
-    const starSystem = this.store.getObjectById(id) as StarSystem;
-    if (starSystem) {
-      starSystem.technologies = [];
-      starSystem.availableTechnologies = [];
+  loadStarSystemTechnologies(starSystem: StarSystem): void {
+    const technologies = [];
+    starSystem.availableTechnologies = [];
 
-      this.getStarSystemTechnologies(id).subscribe(technologies => {
-        const techIds = new Set<string>();
+    this.getStarSystemTechnologies(starSystem.id).subscribe(result => {
 
-        technologies.forEach(technologyId => {
-          techIds.add(technologyId);
-          const technology = this.store.getTechnology(technologyId);
-          starSystem.technologies.push(technology);
-        });
-
-        // add available technologies
-        this.store.technologies.forEach(technology => {
-          if (techIds.has(technology.id)) {
-            return;
-          }
-          const allPrerequisitesMet = technology.prerequisites.every((tech) => {
-            return techIds.has(tech.id);
-          });
-
-          if (allPrerequisitesMet) {
-            starSystem.availableTechnologies.push(technology);
-          }
-        });
-
-        starSystem.planets.forEach(p => {
-          if (p.colony) {
-            p.colony.availableBuildingTypes = null;
-          }
-        });
+      result.forEach(technologyId => {
+        const technology = this.store.getTechnology(technologyId);
+        technologies.push(technology);
       });
-    }
+
+      // add available technologies
+      starSystem.invalidateAvailableTechnologies();
+
+      starSystem.planets.forEach(p => {
+        if (p.colony) {
+          p.colony.invalidateAvailableBuildings();
+        }
+      });
+
+      starSystem.technologies = technologies;
+    });
+  }
+
+  loadAvailableTechnologies(starSystem: StarSystem) {
+    const availableTechnologies = [];
+
+    const techIds = new Set<string>();
+    starSystem.technologies.forEach(technology => {
+      techIds.add(technology.id);
+    });
+
+    this.store.technologies.forEach(technology => {
+      if (techIds.has(technology.id)) {
+        return;
+      }
+      const allPrerequisitesMet = technology.prerequisites.every((tech) => {
+        return techIds.has(tech.id);
+      });
+
+      if (allPrerequisitesMet) {
+        availableTechnologies.push(technology);
+      }
+    });
+
+    starSystem.availableTechnologies = availableTechnologies;
   }
 
   private reloadStarSystems() {
@@ -88,7 +98,7 @@ export class StarSystemsService {
       this.http.get<StarSystemDTO[]>(this.starSystemsUrl + `?galaxy=${this.currentGalaxyId}`)
       .subscribe((data: StarSystemDTO[]) => {
         data.forEach(ss => {
-          this.store.addStarSystem(new StarSystem(ss));
+          this.store.addStarSystem(new StarSystem(ss, this));
         });
         this.planetsService.loadPlanets(this.currentGalaxyId);
       }, (error: any) => {

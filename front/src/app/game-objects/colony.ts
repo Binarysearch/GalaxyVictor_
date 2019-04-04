@@ -5,15 +5,23 @@ import { Planet } from './planet';
 import { Civilization } from './civilization';
 import { ColonyBuilding } from './colony-building';
 import { ColonyResource } from './colony-resource';
+import { ColoniesService } from '../services/colonies.service';
 
 export class Colony implements GameObject {
 
   id: number;
   planet: Planet;
   civilization: Civilization;
-  buildings: ColonyBuilding[];
-  availableBuildingTypes: ColonyBuildingType[];
-  resources: ColonyResource[];
+
+  private _buildings: ColonyBuilding[] = [];
+  private invalidatedBuildings = true;
+
+  private _availableBuildingTypes: ColonyBuildingType[] = [];
+  private invalidatedAvailableBuildings = true;
+
+  private _resources: ColonyResource[] = [];
+  private invaliadatedResources = true;
+
   buildingOrder: string;
   buildingOrderName: string;
   shipOrder: number;
@@ -22,7 +30,7 @@ export class Colony implements GameObject {
   civilizationId: number;
   canBuildShips: boolean;
 
-  constructor(data: ColonyDTO) {
+  constructor(data: ColonyDTO, private coloniesService: ColoniesService) {
     this.id = data.id;
     this.planetId = data.planet;
     this.civilizationId = data.civilization;
@@ -42,4 +50,53 @@ export class Colony implements GameObject {
   get y(): number {
     return this.planet.y;
   }
+
+  get buildings(): ColonyBuilding[] {
+    if (this.invalidatedBuildings) {
+      this.coloniesService.loadColonyBuildings(this);
+      this.invalidatedBuildings = false;
+    }
+    return this._buildings;
+  }
+
+  set buildings(buildings: ColonyBuilding[]) {
+    this._buildings = buildings;
+  }
+
+  get resources(): ColonyResource[] {
+    if (this.invaliadatedResources) {
+      this.coloniesService.loadColonyResources(this);
+      this.invaliadatedResources = false;
+    }
+    return this._resources;
+  }
+
+  set resources(resources: ColonyResource[]) {
+    this._resources = resources;
+  }
+
+  get availableBuildings(): ColonyBuildingType[] {
+    if (this.invalidatedAvailableBuildings) {
+      this.coloniesService.loadColonyAvailableBuildingTypes(this);
+      this.invalidatedAvailableBuildings = false;
+    }
+    return this._availableBuildingTypes;
+  }
+
+  set availableBuildings(availableBuildings: ColonyBuildingType[]) {
+    this._availableBuildingTypes = availableBuildings;
+  }
+
+  invalidateBuildings() {
+    this.invalidatedBuildings = true;
+  }
+
+  invalidateResources() {
+    this.invaliadatedResources = true;
+  }
+
+  invalidateAvailableBuildings() {
+    this.invalidatedAvailableBuildings = true;
+  }
+
 }

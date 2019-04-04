@@ -19,9 +19,6 @@ export class ColonyResearchComponent implements OnInit {
   }
 
   public get acquiredTechnologies(): Technology[] {
-    if (!this.colony.planet.starSystem.technologies) {
-      this.core.loadStarSystemTechnologies(this.colony.planet.starSystem.id);
-    }
     return this.colony.planet.starSystem.technologies;
   }
 
