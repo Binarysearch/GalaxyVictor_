@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION core.set_colony_building_order(colony_ bigint, buildi
 AS $function$declare
   result_ json;
   civilization_id_ bigint;
-  lacking_resource_ text;
+  stellar_government_ bigint;
 begin
 
   civilization_id_ = core.require_civ(token_);
@@ -25,6 +25,13 @@ begin
   -- Check that the building type is buildable
   if (not exists(select 1 from core.colony_building_types where id=building_type_ and buildable)) then
     perform core.error(400, 'Building type not buildable');
+  end if;
+
+  stellar_government_ = id from core.stellar_governments where civilization=civilization_id_ and star_system=(select star_system from core.planets where id=(select planet from core.colonies where id=colony_));
+
+  --check prerequisites
+  if (exists(select 1 from core.colony_building_types_prerequisites where building_type=building_type_ and prerequisite not in(select technology from core.stellar_governments_technologies where stellar_government=stellar_government_))) then
+    perform core.error(400, 'Technological prerequisites not met');
   end if;
 
   update core.colony_building_orders set building_type = building_type_, ship_model = null, started_time=time_ where colony=colony_;
