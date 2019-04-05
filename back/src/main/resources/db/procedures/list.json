@@ -29,5 +29,7 @@
     "finish_research_order.sql",
     "colonize_planet.sql",
     "random_star_name.sql",
+    "create_civilization.sql",
+    "get_current_civilization.sql",
     "procedures.sql"
 ]
