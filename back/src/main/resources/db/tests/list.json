@@ -10,8 +10,10 @@
     "proc/get_star_systems.sql",
     "proc/create_civilization.sql",
     "proc/get_current_civilization.sql",
+    "proc/get_civilization_research_orders.sql",
 
     "dto/session_dto.sql",
+    "dto/research_order_dto.sql",
     "dto/star_system_dto.sql",
     "dto/user_civilization_dto.sql",
     "dto/planet_dto.sql",
