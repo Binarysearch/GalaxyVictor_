@@ -12,7 +12,7 @@ begin
   result_ = (with cs as (
 
     select
-      sg.star_system as "starSystem", ro.technology, ro.started_time as "startedTime"
+      sg.star_system as "starSystem", ro.technology, ro.started_time as "startedTime", ro.finish_time as "finishTime"
     from
     core.stellar_governments sg join
     core.research_orders ro on ro.stellar_government=sg.id

@@ -22,4 +22,7 @@ begin
   result_ = core.create_civilization('civ_name', 'home_star_name', token_);
   perform test.user_civilization_dto(result_);
 
+  update core.civilizations set id=1;
+  update core.star_systems set id=2 where explored;
+
 end;$function$;

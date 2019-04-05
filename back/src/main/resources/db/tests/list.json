@@ -11,6 +11,7 @@
     "proc/create_civilization.sql",
     "proc/get_current_civilization.sql",
     "proc/get_civilization_research_orders.sql",
+    "proc/set_research_order.sql",
 
     "dto/session_dto.sql",
     "dto/research_order_dto.sql",
