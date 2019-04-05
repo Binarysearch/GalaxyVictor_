@@ -81,9 +81,6 @@ public class ContextListener implements ServletContextListener {
         System.out.println("\nCREATING INSTALL DATA\n");
         dbs.executeSql(installScript);
 
-        System.out.println("\nCREATING TEST DATA\n");
-        dbs.executeSql(initialData);
-
         System.out.println();
         System.out.println("DATABASE SCHEMA CREATED");
         System.out.println();
@@ -93,6 +90,10 @@ public class ContextListener implements ServletContextListener {
         System.out.println("\n**** RUN TESTS ****\n");
         runDbTests(dbs);
         System.out.println("\n**** TESTS FINISHED ****\n");
+
+        
+        System.out.println("\nCREATING TEST DATA\n");
+        dbs.executeSql(initialData);
     }
 
     private void runDbTests(DatabaseService dbs) {

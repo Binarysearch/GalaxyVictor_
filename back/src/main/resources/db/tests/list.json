@@ -1,6 +1,11 @@
 [
-    "clear_data.sql",
+    "clear.sql",
+
     "proc/register.sql",
+    "proc/login.sql",
+    "proc/auth.sql",
+    "proc/set_current_galaxy.sql",
+
     "dto/session_dto.sql",
     "dto/galaxy_dto.sql"
 ]

@@ -8,6 +8,8 @@ AS $function$declare
   password_ text := '12345';
 begin
   
+  perform test.clear();
+
   result_ = core.register(email_, password_);
   perform test.session_dto(result_);
   assert json_typeof((result_->'user')->'currentGalaxy') = 'null', 'CURRENT GALAXY MUST BE NULL AFTER REGISTER';
