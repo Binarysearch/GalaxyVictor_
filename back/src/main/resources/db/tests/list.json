@@ -13,6 +13,8 @@
     "proc/get_civilization_research_orders.sql",
     "proc/set_research_order.sql",
 
+    "dto/message_order_dto.sql",
+    "dto/asinc_task_order_dto.sql",
     "dto/session_dto.sql",
     "dto/research_order_dto.sql",
     "dto/star_system_dto.sql",

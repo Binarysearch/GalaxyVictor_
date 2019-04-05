@@ -14,6 +14,8 @@ begin
 
   result_ = core.set_research_order(2, 'fusion', 12345, 'token');
   perform test.research_order_dto(result_ #> '{messageOrders, 0, payload}');
+  perform test.message_order_dto(result_ #> '{messageOrders, 0}');
+  perform test.asinc_task_order_dto(result_ #> '{asincTasks, 0}');
 
   assert (result_ #>> '{messageOrders, 0, civilizations, 0}')::numeric = 1, 'Message sent to other civilization';
   assert (result_ #>> '{messageOrders, 0, civilizations, 1}') is null, 'Message sent to other civilization';
