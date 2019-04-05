@@ -1,0 +1,6 @@
+[
+    "clear_data.sql",
+    "proc/register.sql",
+    "dto/session_dto.sql",
+    "dto/galaxy_dto.sql"
+]

@@ -70,18 +70,45 @@ public class ContextListener implements ServletContextListener {
 
         String schema = getResourceAsString("/db/schema.sql");
         String installScript = getResourceAsString("/db/install.sql");
+        String initialData = getResourceAsString("/db/initial_data.sql");
         
         dbs.executeSql(schema);
         
         createDbProcedures(dbs);
         createDbTriggers(dbs);
+        createDbTests(dbs);
         
-        System.out.println("\nCREATING INITIAL DATA\n");
+        System.out.println("\nCREATING INSTALL DATA\n");
         dbs.executeSql(installScript);
+
+        System.out.println("\nCREATING TEST DATA\n");
+        dbs.executeSql(initialData);
 
         System.out.println();
         System.out.println("DATABASE SCHEMA CREATED");
         System.out.println();
+
+        
+
+        System.out.println("\n**** RUN TESTS ****\n");
+        runDbTests(dbs);
+        System.out.println("\n**** TESTS FINISHED ****\n");
+    }
+
+    private void runDbTests(DatabaseService dbs) {
+        String testPlan = getResourceAsString("/db/tests/test_plan.sql");
+        dbs.executeSql(testPlan);
+    }
+
+    private void createDbTests(DatabaseService dbs) {
+        System.out.println("\nCREATING TESTS\n");
+        String testsList = getResourceAsString("/db/tests/list.json");
+        List<String> list = new Gson().fromJson(testsList, new TypeToken<ArrayList<String>>(){}.getType());
+        for (String fileName : list) {
+            String test = getResourceAsString("/db/tests/" + fileName);
+            System.out.println("CREATING TEST: '" + fileName + "' ...");
+            dbs.executeSql(test);
+        }
     }
 
     private void createDbProcedures(DatabaseService dbs) {
