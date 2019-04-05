@@ -12,6 +12,7 @@
     "proc/get_current_civilization.sql",
     "proc/get_civilization_research_orders.sql",
     "proc/set_research_order.sql",
+    "proc/colonize_planet.sql",
 
     "dto/message_order_dto.sql",
     "dto/asinc_task_order_dto.sql",
@@ -20,5 +21,7 @@
     "dto/star_system_dto.sql",
     "dto/user_civilization_dto.sql",
     "dto/planet_dto.sql",
+    "dto/fleet_dto.sql",
+    "dto/colony_dto.sql",
     "dto/galaxy_dto.sql"
 ]

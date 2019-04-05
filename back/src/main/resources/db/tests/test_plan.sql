@@ -13,6 +13,7 @@ select test.create_civilization();
 select test.get_current_civilization();
 select test.get_civilization_research_orders();
 select test.set_research_order();
+select test.colonize_planet();
 
 
 
