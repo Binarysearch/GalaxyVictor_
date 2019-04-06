@@ -1,0 +1,28 @@
+BACKEND
+	-Api para destruir/vender edificios de colonias
+	-Api para destruir/vender naves de flotas
+	
+	-Sistema para compartir tecnologias entre sistemas estelares
+	-Sistema para crear rutas comerciales entre colonias
+	-Sistema de componentes en naves
+	
+	-Sistema de batallas estelares
+	
+	-Bases orbitales
+	-Construcciones o proyectos a nivel de sistema
+	
+FRONTEND
+	-Icono en sistemas que tengan colonias.
+	-Nombres de estrellas cuando el zoom este a una distancia minima.
+	-Nombres de planetas cuando el zoom este a una distancia minima.
+	
+	-Distancia minima de flotas a las estrellas cuando esten orbitando
+		es independiente del zoom y evita que se solape el icono de la
+		flota con la estrella.
+		
+	-Sistema de fronteras o mapa politico, se marcarán las zonas de la galaxia
+		con un codigo de colores.
+		
+	-Sistema de colores para identificar elementos(flotas, territorios, colonias, etc) de distintas civilizaciones,
+		se usaran distintos colores segun la relaccion diplomatica que tengas con la civilizacion en cuestión
+		por ejemplo: azul para la civilizacion propia, rojo para los enemigos, verde aliados, gris para neutrales etc
