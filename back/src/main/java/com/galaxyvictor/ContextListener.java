@@ -1,11 +1,13 @@
 package com.galaxyvictor;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletContextEvent;
@@ -24,8 +26,6 @@ import com.galaxyvictor.util.GvDbOrderExecutorService;
 import com.galaxyvictor.util.GvFutureEventService;
 import com.galaxyvictor.websocket.GvMessagingService;
 import com.galaxyvictor.websocket.MessagingService;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 
 @WebListener
@@ -101,36 +101,41 @@ public class ContextListener implements ServletContextListener {
         dbs.executeSql(testPlan);
     }
 
-    private void createDbTests(DatabaseService dbs) {
+    private void createDbTests(DatabaseService dbs) {        
         System.out.println("\nCREATING TESTS\n");
-        String testsList = getResourceAsString("/db/tests/list.json");
-        List<String> list = new Gson().fromJson(testsList, new TypeToken<ArrayList<String>>(){}.getType());
-        for (String fileName : list) {
-            String test = getResourceAsString("/db/tests/" + fileName);
-            System.out.println("CREATING TEST: '" + fileName + "' ...");
-            dbs.executeSql(test);
-        }
+
+        executeSqlFromDir(dbs, "/db/tests/dto", "DTO TEST");
+        executeSqlFromDir(dbs, "/db/tests/proc", "TEST");
+        
+        System.out.println("\nFINISH CREATING TESTS\n");
     }
 
     private void createDbProcedures(DatabaseService dbs) {
         System.out.println("\nCREATING PROCEDURES\n");
-        String procedureList = getResourceAsString("/db/procedures/list.json");
-        List<String> list = new Gson().fromJson(procedureList, new TypeToken<ArrayList<String>>(){}.getType());
-        for (String fileName : list) {
-            String procedure = getResourceAsString("/db/procedures/" + fileName);
-            System.out.println("CREATING PROCEDURE: '" + fileName + "' ...");
-            dbs.executeSql(procedure);
-        }
+        executeSqlFromDir(dbs, "/db/procedures", "PROCEDURE");
+        System.out.println("\nFINISH CREATING PROCEDURES\n");
     }
 
     private void createDbTriggers(DatabaseService dbs) {
         System.out.println("\nCREATING TRIGGERS\n");
-        String triggerList = getResourceAsString("/db/triggers/list.json");
-        List<String> list = new Gson().fromJson(triggerList, new TypeToken<ArrayList<String>>(){}.getType());
-        for (String fileName : list) {
-            String trigger = getResourceAsString("/db/triggers/" + fileName);
-            System.out.println("CREATING TRIGGER: '" + fileName + "' ...");
-            dbs.executeSql(trigger);
+        executeSqlFromDir(dbs, "/db/triggers", "TRIGGER");
+        System.out.println("\nFINISH CREATING TRIGGERS\n");
+    }
+
+    private void executeSqlFromDir(DatabaseService dbs, String path, String logTypeWord){
+        try {
+            URL url = getClass().getResource("../.." + path);
+            File dir = new File(url.toURI());
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    continue;
+                }
+                String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())), StandardCharsets.UTF_8);
+                System.out.println("CREATING " + logTypeWord + ": '" + file.getName() + "' ...");
+                dbs.executeSql(content);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
