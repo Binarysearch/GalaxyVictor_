@@ -7,11 +7,11 @@ AS $function$declare
   planet_ bigint;
 begin
   
-  perform test.civ_test_bed('token');
+  perform test.civ_test_bed();
 
-  planet_ = id from core.planets where star_system=2 and orbit<>3 limit 1;
+  planet_ = id from core.planets where star_system=1 and orbit<>3 limit 1;
 
-  result_ = core.colonize_planet(planet_, 'token');
+  result_ = core.colonize_planet(planet_, 'token_1');
 
   -- Test response format
   perform test.message_order_dto(result_ #> '{messageOrders, 0}');

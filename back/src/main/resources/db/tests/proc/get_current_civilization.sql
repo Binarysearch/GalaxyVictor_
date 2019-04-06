@@ -7,9 +7,9 @@ AS $function$declare
   token_ text;
 begin
   
-  token_ = test.civ_test_bed('token');
+  token_ = test.civ_test_bed();
   
-  result_ = core.get_current_civilization('token');
+  result_ = core.get_current_civilization('token_1');
   perform test.user_civilization_dto(result_);
 
 end;$function$;

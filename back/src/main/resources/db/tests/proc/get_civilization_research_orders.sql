@@ -7,12 +7,12 @@ AS $function$declare
   token_ text;
 begin
   
-  token_ = test.civ_test_bed('token');
+  token_ = test.civ_test_bed();
   
   insert into core.stellar_governments(star_system,civilization) select ss.id,c.id from core.civilizations c cross join core.star_systems ss;
   insert into core.research_orders(stellar_government, technology, started_time, finish_time) select id,'fusion',123456,133456 from core.stellar_governments;
 
-  result_ = core.get_civilization_research_orders('token');
+  result_ = core.get_civilization_research_orders('token_1');
   perform test.research_order_dto(result_->0);
   perform test.research_order_dto(result_->1);
 
