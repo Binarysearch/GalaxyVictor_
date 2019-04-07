@@ -53,6 +53,10 @@ interface FinishColonyBuildingDTO {
   colony: number;
 }
 
+interface FinishBuildingShipDTO {
+  colony: number;
+}
+
 interface RemoveFleetDTO {
   id: number;
 }
@@ -128,6 +132,7 @@ export class MessagingService {
         const payload = m.payload as ResearchOrderDTO;
         const starSystem = this.store.getObjectById(payload.starSystem) as StarSystem;
         const researchOrder = new ResearchOrder(payload);
+        this.store.removeResearchOrder(payload.starSystem);
         researchOrder.technology = this.store.getTechnology(payload.technology);
         starSystem.researchOrder = researchOrder;
         this.store.addResearchOrder(researchOrder);
@@ -168,6 +173,19 @@ export class MessagingService {
       }
       if (m.type === 'FinishColonyBuilding') {
         const payload = m.payload as FinishColonyBuildingDTO;
+        const colony = this.store.getObjectById(payload.colony) as Colony;
+        if (colony) {
+          colony.buildingOrder = null;
+          colony.buildingOrderName = null;
+          colony.shipOrder = null;
+          colony.shipOrderName = null;
+          colony.invalidateBuildings();
+          colony.invalidateResources();
+          colony.invalidateAvailableBuildings();
+        }
+      }
+      if (m.type === 'FinishBuildingShip') {
+        const payload = m.payload as FinishBuildingShipDTO;
         const colony = this.store.getObjectById(payload.colony) as Colony;
         if (colony) {
           colony.buildingOrder = null;

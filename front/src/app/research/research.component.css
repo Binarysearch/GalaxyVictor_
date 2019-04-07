@@ -1,0 +1,9 @@
+.progressbar {
+  background-color: rgba(255, 255, 0, 0.3);
+  height:100%;
+  position:absolute;
+  left:0;
+}
+.research-order{
+  position: relative;
+}

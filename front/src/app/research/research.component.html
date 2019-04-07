@@ -1,4 +1,8 @@
 <p>
   research works!
 </p>
-<div *ngFor="let order of store.researchOrders">{{ order.technology.name }}</div>
+<div *ngFor="let order of store.researchOrders" class='research-order'>
+  Investigando {{ order.technology.name }} en {{ getStarSystemName(order) }}:
+  <span> {{ getProgress(order) }} %</span>
+  <span class="progressbar" [style.width]="getProgress(order) + '%'"></span>
+</div>
