@@ -36,7 +36,7 @@ begin
   );
 
   message_orders = format('[
-    {"type": "FinishColonyBuilding", "payload": {"colony": %s}, "civilizations": [%s]},
+    {"type": "FinishBuildingShip", "payload": {"colony": %s}, "civilizations": [%s]},
     {"type": "Fleet", "payload": %s, "civilizations": %s}
   ]', colony_, civilization_, result_->'fleet', result_->'civilizations');
 

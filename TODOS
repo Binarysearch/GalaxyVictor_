@@ -3,6 +3,9 @@ BACKEND
 	-Api para destruir/vender naves de flotas
 	
 	-Sistema para compartir tecnologias entre sistemas estelares
+		-Tabla con envios de tecnologias(tecnology, civilization, origin, destination, started_time, end_time)
+		-Procedimiento inicio de envio(tecnology, origin, destination, started_time, token)
+		
 	-Sistema para crear rutas comerciales entre colonias
 	-Sistema de componentes en naves
 	

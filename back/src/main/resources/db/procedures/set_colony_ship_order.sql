@@ -16,6 +16,8 @@ begin
     perform core.error(401, format('Colony %L not yours', colony_));
   end if;
 
+  -- TODO: test if colony can build ships
+
   update core.colony_building_orders set ship_model = ship_model_, building_type = null, started_time=time_ where colony=colony_;
   insert into core.colony_building_orders(colony, ship_model, started_time) select colony_, ship_model_, time_ where not exists(select 1 from core.colony_building_orders where colony=colony_);
   
