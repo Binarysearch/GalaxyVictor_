@@ -17,6 +17,7 @@ begin
     perform core.create_civilization('civ_'||id_||'_name', 'civ_'||id_||'_home_star', 'token_'||id_);
     update core.civilizations set id=id_ where name='civ_'||id_||'_name';
     update core.star_systems set id=id_ where name='civ_'||id_||'_home_star';
+    update core.visible_star_systems set quantity=2 where star_system=id_ and civilization=id_;
   END LOOP;
 
 end;$function$;

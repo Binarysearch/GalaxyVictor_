@@ -24,7 +24,7 @@ public class RestController extends ApiServlet {
 	public String getRequest(ApiRequest request) throws SQLException {
 		String token = request.getToken();
 		String path = request.getPathInfo();
-		String method = "GET";
+		String method = "get";
 		String params = request.getRequestParamsAsJson();
 		
 
@@ -46,7 +46,7 @@ public class RestController extends ApiServlet {
 	public String postRequest(ApiRequest request) throws SQLException {
 		String token = request.getToken();
 		String path = request.getPathInfo();
-		String method = "POST";
+		String method = "post";
 		String params = request.getRequestBody();
 		
 
