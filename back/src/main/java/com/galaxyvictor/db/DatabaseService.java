@@ -7,7 +7,9 @@ public interface DatabaseService {
 
     public Connection getConnection();
 
-	public void executeSql(String sql);
+    public void executeSql(String sql);
+    
+	public void executeSql(String sql, Object... params) throws SQLException;
     
     public String executeQueryForJson(String sql, Object... params) throws SQLException;
     

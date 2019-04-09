@@ -17,6 +17,7 @@ export class ColoniesService  {
 
   private host = (isDevMode()) ? 'http://localhost:8080' : 'https://galaxyvictor.com';
 
+  private createColoniesUrl = this.host + '/rest/colonies';
   private coloniesUrl = this.host + '/api/colonies';
   private buildingsUrl = this.host + '/api/colony-buildings';
   private resourcesUrl = this.host + '/api/colony-resources';
@@ -59,7 +60,7 @@ export class ColoniesService  {
   }
 
   createColony(planetId: number) {
-    this.http.post<any>(this.coloniesUrl, {planet: planetId})
+    this.http.post<any>(this.createColoniesUrl, {planet: planetId})
       .subscribe();
   }
 

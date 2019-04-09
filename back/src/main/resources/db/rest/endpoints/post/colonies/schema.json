@@ -1,0 +1,6 @@
+{
+    "required": ["planet"],
+    "properties": {
+        "planet": { "type": "integer"}
+    }
+}

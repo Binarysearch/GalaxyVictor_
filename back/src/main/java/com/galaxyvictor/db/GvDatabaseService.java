@@ -45,6 +45,26 @@ public class GvDatabaseService implements DatabaseService {
     }
 
     @Override
+    public void executeSql(String sql, Object... params) throws SQLException {
+        Connection db = getConnection();
+
+        try {
+            PreparedStatement st = db.prepareStatement(sql);
+
+            for (int i = 0; i < params.length; i++) {
+                st.setObject(i + 1, params[i]);
+            }
+
+            st.execute();
+            st.close();
+        } finally {
+            try {
+                db.close();
+            } catch (SQLException e) {}
+        }
+    }
+
+    @Override
     public String executeQueryForJson(String sql, Object... params) throws SQLException {
         Connection db = getConnection();
         try {

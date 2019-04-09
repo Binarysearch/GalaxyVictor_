@@ -1,16 +1,20 @@
 package com.galaxyvictor.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 
 public class ApiRequest {
 
     private final HttpServletRequest originalRequest;
     private String body;
+    private String paramsAsJson;
 
     public ApiRequest(HttpServletRequest originalRequest) {
         this.originalRequest = originalRequest;
@@ -28,6 +32,27 @@ public class ApiRequest {
             }
         }
         return body;
+    }
+
+    /**
+     * @return the requestParams
+     */
+    public String getRequestParamsAsJson() {
+        if (paramsAsJson == null) {
+            Map<String, Object> params = new HashMap<>();
+            for (String key : originalRequest.getParameterMap().keySet()) {
+                String value = originalRequest.getParameter(key);
+                if (isNumeric(value)){
+                    params.put(key, Double.parseDouble(value));
+                } else if (isBoolean(value)){
+                    params.put(key, Boolean.parseBoolean(value));
+                } else{
+                    params.put(key, value);
+                }
+            }
+            paramsAsJson = new Gson().toJson(params);
+        }
+        return paramsAsJson;
     }
 
     /**
@@ -59,4 +84,17 @@ public class ApiRequest {
         }
 		return defaultValue;
 	}
+
+	public String getPathInfo() {
+		return originalRequest.getPathInfo();
+    }
+    
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
+
+    public static boolean isBoolean(String str) {
+        return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false");
+    }
+
 }
