@@ -183,7 +183,7 @@ CREATE TABLE colony_buildings(
 CREATE TABLE colony_resources(
     colony bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    quantity integer NOT NULL CHECK (quantity >= 0),
+    quantity integer NOT NULL,
     PRIMARY KEY(colony, resource_type)
 );
 
@@ -227,5 +227,31 @@ CREATE TABLE stellar_governments_technologies(
     stellar_government bigint NOT NULL REFERENCES stellar_governments(id) ON UPDATE CASCADE ON DELETE CASCADE,
     technology text NOT NULL REFERENCES technologies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY(stellar_government, technology)
+);
+
+CREATE TABLE trade_routes(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    origin bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL,
+    received_quantity integer NOT NULL,
+    UNIQUE(origin, destination, resource_type)
+);
+
+CREATE TABLE creation_trade_routes(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    origin bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity integer NOT NULL
+);
+
+CREATE TABLE destruction_trade_routes(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    origin bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    received_quantity integer NOT NULL
 );
 

@@ -115,7 +115,7 @@ Implementación backend
                 DTO ruta:
                 {
                     id: number;
-                    resourceType: number;
+                    resourceType: text;
                     quantity: number;
                     receivedQuantity: number;
                     origin: number; (planet)
