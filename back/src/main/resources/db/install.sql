@@ -20,14 +20,14 @@ insert into core.technologies_prerequisites(technology, prerequisite) values
 ------------                               ----------------------
 -----------------------------------------------------------------
 
-insert into core.resource_types(id, name) values
-('goods', 'Bienes de consumo'),
-('food', 'Alimentos'),
-('work', 'Fuerza de trabajo'),
-('wood', 'Madera'),
-('energy', 'Energia'),
-('tools', 'Herramientas'),
-('iron', 'Hierro');
+insert into core.resource_types(id, name, merchantable) values
+('goods', 'Bienes de consumo', true),
+('food', 'Alimentos', true),
+('work', 'Fuerza de trabajo', false),
+('wood', 'Madera', true),
+('energy', 'Energia', false),
+('tools', 'Herramientas', true),
+('iron', 'Hierro', true);
 
 
 insert into core.colony_building_types(id, name, buildable, repeatable) values

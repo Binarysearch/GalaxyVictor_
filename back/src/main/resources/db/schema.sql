@@ -133,7 +133,8 @@ CREATE TABLE ships(
 
 CREATE TABLE resource_types(
     id text PRIMARY KEY,
-    name text NOT NULL
+    name text NOT NULL,
+    merchantable boolean NOT NULL
 );
 
 CREATE TABLE colony_building_types(
@@ -232,26 +233,29 @@ CREATE TABLE stellar_governments_technologies(
 CREATE TABLE trade_routes(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     origin bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE CHECK(origin <> destination),
     resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    quantity integer NOT NULL,
-    received_quantity integer NOT NULL,
+    quantity integer NOT NULL CHECK(quantity > 0),
+    received_quantity integer NOT NULL CHECK(received_quantity > 0),
     UNIQUE(origin, destination, resource_type)
 );
 
-CREATE TABLE creation_trade_routes(
+CREATE TABLE trade_routes_creation(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     origin bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE CHECK(origin <> destination),
     resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    quantity integer NOT NULL
+    quantity integer NOT NULL CHECK(quantity > 0),
+    started_time bigint NOT NULL,
+    finish_time bigint NOT NULL
 );
 
-CREATE TABLE destruction_trade_routes(
+CREATE TABLE trade_routes_destruction(
     id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
     origin bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    destination bigint NOT NULL REFERENCES colonies(id) ON UPDATE CASCADE ON DELETE CASCADE  CHECK(origin <> destination),
     resource_type text NOT NULL REFERENCES resource_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    received_quantity integer NOT NULL
+    received_quantity integer NOT NULL CHECK(received_quantity > 0),
+    finish_time bigint NOT NULL
 );
 

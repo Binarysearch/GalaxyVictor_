@@ -85,8 +85,10 @@ Implementación backend
             -Comprobaciones:
                 -Origen debe ser una colonia de civilización ordenante.
                 -Destino debe ser una colonia visible por civilizacón ordenante.
+				-Origen y destino no pueden ser iguales.
                 -Origen debe tener recursos suficientes.
                 -Cantidad calculada en destino debe ser mayor que cero.
+				-El recurso debe ser comerciable, energia y trabajo no son comerciables
 
             -Procedimiento:
                 -si sistema origen distinto a sistema destino
