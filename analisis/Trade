@@ -1,0 +1,130 @@
+Requerimientos:
+    -Una colonia puede enviar recursos a otra colonia.
+    
+    -La colonia receptora recibe el 90% de los recursos enviados si el planeta de origen está en el mismo sistema.
+    
+    -La colonia receptora recibe el 80% de los recursos enviados si el planeta de origen no está en el mismo sistema.
+    
+    -Solo la civilización que controla la colonia de origen puede crear o destruir rutas comerciales
+    desde esa colonia.
+    
+    -Las rutas comerciales se pueden establecer con cualquier civilización de destino.
+    
+    -Al perder el control de una colonia no se destruyen las rutas comerciales salientes ni entrantes.
+    
+    -Al crear una ruta comercial se comenzará a restar recursos en la colonia origen inmediatamente, 
+    pero no se recibiran los recursos en la colonia destino hasta que transcurra el tiempo de establecimiento
+    de ruta que dependerá de la distancia entre las colonias y la velocidad de las naves
+    que a su vez dependerá de la tecnologia en el sistema de origen a la hora de creación de la ruta.
+    
+    -Al desabastecer un recurso en una colonia que tenga una ruta saliente de ese recurso, la ruta comercial
+     seguira abasteciendo al destino durante el tiempo de establecimiento de ruta.
+
+
+Implementación backend
+    -Eliminar resticcion de no negativo en recursos colonia
+
+    -Tabla rutas comerciales: Representa las rutas comerciales establecidas
+        -id
+        -origen(colony)
+        -destino(colony)
+        -tipo recurso
+        -cantidad recogida
+        -cantidad recibida(autocalculado)
+
+
+    -Tabla rutas en creación: Representa las rutas comerciales que han salido del origen con recursos
+     pero aún no han llegado a su destino.
+        -id
+        -origen(colony)
+        -destino(colony)
+        -tipo recurso
+        -cantidad recogida
+        -tiempo de inicio
+
+    -Tabla rutas en destrucción: Representa las rutas comerciales que fueron establecidas en su momento
+     pero han dejado de enviar recursos y cuando pase el tiempo de ruta seran suspendidas, 
+     ya que la ultima nave que recibio carga habria llegado a su destino.
+        -id
+        -origen(colony)
+        -destino(colony)
+        -tipo recurso
+        -cantidad recibida
+        -tiempo de finalización
+
+    -Triggers
+        -Al insertar ruta comercial:
+            -Autocalcular cantidad recibida segun los sistemas de las colonias
+            -En recursos de colonia origen restar cantidad origen para tipo recurso
+            -En recursos de colonia destino sumar cantidad recibida para tipo recurso
+        
+        -Al eliminar ruta comercial:
+            -En recursos de colonia origen sumar cantidad origen para tipo recurso
+            -En recursos de colonia destino restar cantidad recibida para tipo recurso
+
+        -Al insertar en rutas comerciales en creación:
+            -En recursos de colonia origen restar cantidad origen para tipo recurso
+
+        -Al eliminar en rutas comerciales en creación:
+            -En recursos de colonia origen sumar cantidad origen para tipo recurso
+
+        -Al insertar en rutas comerciales en destrucción:
+            -En recursos de colonia destino sumar cantidad recibida para tipo recurso
+
+        -Al eliminar en rutas comerciales en destrucción:
+            -En recursos de colonia destino restar cantidad recibida para tipo recurso
+
+
+
+    -Apis:
+        -Api Creación de ruta
+            -Url: '/rest/trade-routes'
+            -Metodo: post
+            -Body: {origen, destino, tipo recurso, cantidad}
+
+            -Comprobaciones:
+                -Origen debe ser una colonia de civilización ordenante.
+                -Destino debe ser una colonia visible por civilizacón ordenante.
+                -Origen debe tener recursos suficientes.
+                -Cantidad calculada en destino debe ser mayor que cero.
+
+            -Procedimiento:
+                -si sistema origen distinto a sistema destino
+                    -Insertar en tabla rutas comerciales en creación.
+                    -Enviar mensaje 'nueva ruta en creación' a civilización ordenante.
+                    -Creacion de tarea asincrona con llamada a procedimiento 'fin creación ruta' 
+                    con identificador: id ruta y tiempo finalización: tiempo inicio + tiempo establecimiento de ruta
+                -sino
+                    -Insertar en tabla rutas comerciales establecidas
+                    -Enviar mensaje 'nueva ruta' a civilizaciones origen y destino(distinct)
+
+            -Procedimiento 'fin creación ruta':
+                -Insertar en tabla rutas comerciales establecidas
+                -Borrar en tabla rutas comerciales en creación
+                -Enviar mensaje 'nueva ruta' a civilizaciones origen y destino(distinct)
+
+        -Api Obtención de rutas:
+            -Url: '/rest/trade-routes'
+            -Metodo: get
+            -Respuesta:
+                {
+                    rutas en creacion: [ruta_creacion_1, ruta_creacion_2...],
+                    rutas en destrucción: [ruta_destrucción_1, ruta_destrucción_2...]
+                    rutas: [ruta_1, ruta_2...]
+                }
+                DTO ruta:
+                {
+                    id: number;
+                    resourceType: number;
+                    quantity: number;
+                    receivedQuantity: number;
+                    origin: number; (planet)
+                    destination: number; (planet)
+                }
+
+
+            -Procedimiento:
+                -Rutas en creación en las que civilización origen sea la civilizacion que hace la peticion
+                -Rutas en destrucción en las que la civilizacion que hace la peticion este en origen o destino
+                -Rutas en las que la civilizacion que hace la peticion este en origen o destino
+
