@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.galaxyvictor.ServiceManager;
 import com.galaxyvictor.db.DatabaseService;
+import com.google.gson.Gson;
 
 public abstract class ApiServlet extends HttpServlet {
 
@@ -70,7 +71,11 @@ public abstract class ApiServlet extends HttpServlet {
     }
 
     private void handleException(Exception e, HttpServletResponse response) throws IOException {
-        if (e instanceof HttpException) {
+        if (e instanceof ApiException) {
+            ApiException ae = (ApiException) e;
+            response.setStatus(ae.getStatusCode());
+            response.getWriter().print(new Gson().toJson(ae.getErrorData()));
+        } else if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
             response.setStatus(httpException.getStatusCode());
             String message = e.getMessage();

@@ -26,6 +26,29 @@ CREATE TABLE tests(
 );
 
 
+CREATE OR REPLACE FUNCTION rest.check_error(data_ json, error_code_ integer, error_message_ text)
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$declare
+  result_ json;
+  query_ text;
+begin
+
+  if (data_->>'error' is null) then
+    RAISE exception using errcode="NOERR", message=format('No exception was thrown but api expects error code: %L, message: %L', error_code_, error_message_);
+  end if;
+
+  if ((data_->>'code')::numeric::integer <> error_code_) then
+    RAISE exception using errcode="NOERR", message=format('Incorrect exception code, api expects error code: %L', error_code_);
+  end if;
+
+  if ((data_->>'message') <> error_message_) then
+    RAISE exception using errcode="NOERR", message=format('Incorrect exception message, api expects error message: %L', error_message_);
+  end if;
+
+end;$function$;
+
 CREATE OR REPLACE FUNCTION rest.execute_api(path_ text, method_ text, token_ text, params_ jsonb)
  RETURNS json
  LANGUAGE plpgsql

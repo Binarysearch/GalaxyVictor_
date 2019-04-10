@@ -7,7 +7,7 @@
 select core.register('admin@galaxyvictor.com', '12345');
 select core.register('otro@galaxyvictor.com', '12345');
 
-select core.create_galaxy('Via Lactea', 10, 1);
+select core.create_galaxy('Via Lactea', 1000, 3);
 select core.create_galaxy('Andromeda', 1000, 3);
 
 update core.users set galaxy=(select id from core.galaxies where name='Via Lactea');

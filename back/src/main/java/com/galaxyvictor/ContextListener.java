@@ -230,12 +230,12 @@ public class ContextListener implements ServletContextListener {
             }
             if (codeFound) {
                 
-                String codePath = file.getAbsolutePath() + "\\code.sql";
+                String codePath = file.getAbsolutePath() + "/code.sql";
                 String code = new String(Files.readAllBytes(Paths.get(codePath)), StandardCharsets.UTF_8);
                 
                 String schema = "{}";
                 if(schemaFound){
-                    String schemaPath = file.getAbsolutePath() + "\\schema.json";
+                    String schemaPath = file.getAbsolutePath() + "/schema.json";
                     schema = new String(Files.readAllBytes(Paths.get(schemaPath)), StandardCharsets.UTF_8);;
                 } 
                 

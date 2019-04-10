@@ -54,14 +54,21 @@ public class RestController extends ApiServlet {
 		
 		if (dbOrder == null) {
 			return "{}";
+		} else {
+
+			if (dbOrder.hasError()) {
+				DbResponseError e = dbOrder.getError();
+				throw new ApiException(e);
+			}
+
+			dbOrderExecutor.executeDbOrder(dbOrder);
+			Object apiResponse = dbOrder.getApiResponse();
+			if (apiResponse != null) {
+				return new Gson().toJson(apiResponse);
+			} else {
+				return "{}";
+			}
 		}
-		dbOrderExecutor.executeDbOrder(dbOrder);
-        Object apiResponse = dbOrder.getApiResponse();
-        if (apiResponse != null) {
-            return new Gson().toJson(apiResponse);
-        } else {
-            return "{}";
-        }
 	}
 
 

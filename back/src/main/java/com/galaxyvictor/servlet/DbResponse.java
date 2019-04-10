@@ -10,6 +10,7 @@ public class DbResponse {
     private List<MessageOrder> messageOrders;
     private List<DbCreatedAsincTask> asincTasks;
     private List<Long> asincTaskCancelOrders;
+    private DbResponseError error;
 
     /**
      * @return the apiResponse
@@ -66,5 +67,23 @@ public class DbResponse {
     public void setAsincTaskCancelOrders(List<Long> asincTaskCancelOrders) {
         this.asincTaskCancelOrders = asincTaskCancelOrders;
     }
+
+    /**
+     * @return the error
+     */
+    public DbResponseError getError() {
+        return error;
+    }
+
+    /**
+     * @param error the error to set
+     */
+    public void setError(DbResponseError error) {
+        this.error = error;
+    }
+
+	public boolean hasError() {
+		return error != null;
+	}
 
 }

@@ -15,7 +15,7 @@ begin
 
   -- planet must be uninhabited
   if (exists(select 1 from core.colonies where planet=planet_)) then
-    perform core.error(400, 'Planet must be uninhabited');
+    return core.format_error(400, 'Planet must be uninhabited');
   end if;
 
   star_system_ = star_system from core.planets where id=planet_;
@@ -23,7 +23,7 @@ begin
   -- there must be a colonizing ship of civilization orbiting the system
   ship_ = id from core.ships where can_colonize and fleet=(select id from core.fleets where civilization=civilization_id_ and origin=star_system_ and destination=star_system_) limit 1;
   if (ship_ is null) then
-    perform core.error(400, 'There must be a colonizing ship of civilization orbiting the system');
+    return core.format_error(400, 'There must be a colonizing ship of civilization orbiting the system');
   end if;
 
   fleet_ = fleet from core.ships where id=ship_;
