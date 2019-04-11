@@ -33,7 +33,7 @@ begin
 
   -- Origin must be a colony of ordering civilization.
   if (not exists(select 1 from core.colonies where id=origin_ and civilization=civilization_id_)) then
-    return core.format_error(400, 'Origin must be a colony of ordering civilization');
+    return core.format_error(400, 'Origin must be a colony of ordering civilization.');
   end if;
 
   -- Destination must be a visible colony by ordering civilization.
