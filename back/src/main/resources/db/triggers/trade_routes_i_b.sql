@@ -7,8 +7,11 @@ AS $function$declare
   destination_ss_ bigint;
 begin
 
-  origin_ss_ = star_system from core.planets where id=(select planet from core.colonies where id=new.origin);
-  destination_ss_ = star_system from core.planets where id=(select planet from core.colonies where id=new.destination);
+  new.origin_planet = planet from core.colonies where id=new.origin;
+  new.destination_planet = planet from core.colonies where id=new.destination;
+
+  origin_ss_ = star_system from core.planets where id=new.origin_planet;
+  destination_ss_ = star_system from core.planets where id=new.destination_planet;
   
   --if destination star system = origin star system received quantity = 0.9 * quantity
   if (origin_ss_ = destination_ss_) then
