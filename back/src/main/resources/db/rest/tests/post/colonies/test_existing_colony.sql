@@ -8,7 +8,7 @@ begin
 
     planet_ = planet from core.colonies where civilization=1;
 
-    result_ = rest.execute_api('/colonies', 'post', 'token_1', format('{"planet":%s}', planet_)::jsonb);
+    result_ = rest.execute_api('/colonies', 'post', 'token_1', format('{"planet":%s}', planet_)::jsonb, 0);
 
     perform rest.check_error(result_, expected_error_code_, expected_error_message_);
 

@@ -19,7 +19,7 @@ begin
     (1,2,'energy',5,1),
     (2,1,'work',5,1);
 
-    result_ = rest.execute_api('/trade-routes', 'get', 'token_1', '{}'::jsonb);
+    result_ = rest.execute_api('/trade-routes', 'get', 'token_1', '{}'::jsonb, 0);
 
     -- Test response format
     perform test.trade_route_dto(result_ #> '{tradeRoutes, 0}');
@@ -34,7 +34,7 @@ begin
     
 
     --Test get by civilization 2
-    result_ = rest.execute_api('/trade-routes', 'get', 'token_2', '{}'::jsonb);
+    result_ = rest.execute_api('/trade-routes', 'get', 'token_2', '{}'::jsonb, 0);
     
     perform test.trade_route_dto(result_ #> '{tradeRoutes, 0}');
     perform test.trade_route_dto(result_ #> '{tradeRoutes, 1}');
@@ -47,7 +47,7 @@ begin
     assert (result_ #>> '{tradeRoutes, 3}') is null, 'Too many trade routes seen by civilization 2';
 
     --Test get by civilization 3
-    result_ = rest.execute_api('/trade-routes', 'get', 'token_3', '{}'::jsonb);
+    result_ = rest.execute_api('/trade-routes', 'get', 'token_3', '{}'::jsonb, 0);
     
     perform test.trade_route_dto(result_ #> '{tradeRoutes, 0}');
 

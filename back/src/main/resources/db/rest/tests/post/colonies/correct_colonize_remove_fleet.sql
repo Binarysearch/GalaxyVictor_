@@ -8,7 +8,7 @@ begin
 
     delete from core.ships where not can_colonize;
 
-    result_ = rest.execute_api('/colonies', 'post', 'token_1', format('{"planet":%s}', planet_)::jsonb);
+    result_ = rest.execute_api('/colonies', 'post', 'token_1', format('{"planet":%s}', planet_)::jsonb, 0);
 
     -- Test response format
     perform test.message_order_dto(result_ #> '{messageOrders, 0}');

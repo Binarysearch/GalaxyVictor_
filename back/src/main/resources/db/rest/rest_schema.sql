@@ -36,20 +36,20 @@ AS $function$declare
 begin
 
   if (data_->>'error' is null) then
-    RAISE exception using errcode="NOERR", message=format('No exception was thrown but api expects error code: %L, message: %L', error_code_, error_message_);
+    RAISE exception using errcode='NOERR', message=format('No exception was thrown but api expects error code: %L, message: %L', error_code_, error_message_);
   end if;
 
-  if ((data_->>'code')::numeric::integer <> error_code_) then
-    RAISE exception using errcode="NOERR", message=format('Incorrect exception code, api expects error code: %L', error_code_);
+  if (((data_->'error')->>'code')::numeric::integer is distinct from error_code_) then
+    RAISE exception using errcode='NOERR', message=format('Incorrect exception code, api expects error code: %L', error_code_);
   end if;
 
-  if ((data_->>'message') <> error_message_) then
-    RAISE exception using errcode="NOERR", message=format('Incorrect exception message, api expects error message: %L', error_message_);
+  if (((data_->'error')->>'message') is distinct from error_message_) then
+    RAISE exception using errcode='NOERR', message=format('Incorrect exception message, api expects error message: %L', error_message_);
   end if;
 
 end;$function$;
 
-CREATE OR REPLACE FUNCTION rest.execute_api(path_ text, method_ text, token_ text, params_ jsonb)
+CREATE OR REPLACE FUNCTION rest.execute_api(path_ text, method_ text, token_ text, params_ jsonb, time_ bigint)
  RETURNS json
  LANGUAGE plpgsql
  SECURITY DEFINER
@@ -66,11 +66,11 @@ begin
   query_ = (
 
     select 
-      format('CREATE OR REPLACE FUNCTION pg_temp."api_%s"(path_ text, method_ text, token_ text, params_ jsonb)
+      format('CREATE OR REPLACE FUNCTION pg_temp."api_%s"(path_ text, method_ text, token_ text, params_ jsonb, time_ bigint)
       RETURNS json
       LANGUAGE plpgsql
       VOLATILE SECURITY DEFINER
-      AS $bxbxb$%s$bxbxb$;select pg_temp."api_%s"(%L,%L,%L,%L::jsonb)', id, code, id, path_, method_, token_, params_) 
+      AS $bxbxb$%s$bxbxb$;select pg_temp."api_%s"(%L,%L,%L,%L::jsonb,%L)', id, code, id, path_, method_, token_, params_, time_) 
     from rest.endpoints 
     where path=path_ and method=method_ and rest.validate_json_schema(schema, params_)
 

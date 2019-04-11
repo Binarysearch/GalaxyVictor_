@@ -26,9 +26,9 @@ public class RestController extends ApiServlet {
 		String path = request.getPathInfo();
 		String method = "get";
 		String params = request.getRequestParamsAsJson();
-		
+		long time = System.currentTimeMillis();
 
-		DbResponse dbOrder = executeQueryForObject("select rest.execute_api(?, ?, ?, ?::jsonb)", DbResponse.class, path, method, token, params);
+		DbResponse dbOrder = executeQueryForObject("select rest.execute_api(?, ?, ?, ?::jsonb, ?)", DbResponse.class, path, method, token, params, time);
 		
 		if (dbOrder == null) {
 			return "{}";
@@ -48,9 +48,9 @@ public class RestController extends ApiServlet {
 		String path = request.getPathInfo();
 		String method = "post";
 		String params = request.getRequestBody();
-		
+		long time = System.currentTimeMillis();
 
-		DbResponse dbOrder = executeQueryForObject("select rest.execute_api(?, ?, ?, ?::jsonb)", DbResponse.class, path, method, token, params);
+		DbResponse dbOrder = executeQueryForObject("select rest.execute_api(?, ?, ?, ?::jsonb, ?)", DbResponse.class, path, method, token, params, time);
 		
 		if (dbOrder == null) {
 			return "{}";

@@ -1,0 +1,9 @@
+{
+    "required": ["origin", "destination", "resourceType", "quantity"],
+    "properties": {
+        "origin": { "type": "integer"},
+        "destination": { "type": "integer"},
+        "resourceType": { "type": "string"},
+        "quantity": { "type": "integer"}
+    }
+}
