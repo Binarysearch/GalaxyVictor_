@@ -1,3 +1,4 @@
+import { CreationTradeRoute } from './../game-objects/creation-trade-route';
 import { ColoniesService } from './colonies.service';
 import { ResearchOrderDTO } from './../dtos/research-order';
 import { StarSystem } from './../game-objects/star-system';
@@ -16,6 +17,9 @@ import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
 import { ResearchOrder } from '../game-objects/research-order';
 import { ColonyBuilding } from '../game-objects/colony-building';
+import { TradeRoute } from '../game-objects/trade-route';
+import { TradeRouteDTO } from '../dtos/trade-route';
+import { CreationTradeRouteDTO } from '../dtos/creation-trade-route';
 
 const DEV_SOCKET_URL = `ws://localhost:8080/socket`;
 const PROD_SOCKET_URL = `wss://galaxyvictor.com/socket/`;
@@ -30,6 +34,11 @@ interface FinishTravelDTO {
   fleets: FleetDTO[];
   colonies: ColonyDTO[];
   civilizations: CivilizationDTO[];
+}
+
+interface FinishTradeRouteCreationDTO {
+  id: number;
+  tradeRoute: TradeRouteDTO;
 }
 
 interface ColonyBuildingOrderDTO {
@@ -120,6 +129,45 @@ export class MessagingService {
             this.store.addColony(new Colony(c, this.coloniesService));
           });
         }
+      }
+      if (m.type === 'FinishTradeRouteCreation') {
+        const payload = m.payload as FinishTradeRouteCreationDTO;
+        const routeCreation = this.store.getObjectById(payload.id) as CreationTradeRoute;
+        this.store.removeCreationTradeRoute(routeCreation);
+        const existingRoute = this.store.getObjectById(payload.tradeRoute.id) as TradeRoute;
+        if (existingRoute) {
+          this.store.removeTradeRoute(existingRoute);
+        }
+        const newRoute = new TradeRoute(payload.tradeRoute);
+        newRoute.origin = this.store.getObjectById(payload.tradeRoute.origin) as Planet;
+        newRoute.destination = this.store.getObjectById(payload.tradeRoute.destination) as Planet;
+        newRoute.resourceType = this.store.getResourceType(payload.tradeRoute.resourceType);
+        this.store.addTradeRoute(newRoute);
+        if (newRoute.origin.colony) {
+          newRoute.origin.colony.invalidateResources();
+          newRoute.origin.colony.invalidateAvailableBuildings();
+        }
+        if (newRoute.destination.colony) {
+          newRoute.destination.colony.invalidateResources();
+          newRoute.destination.colony.invalidateAvailableBuildings();
+        }
+      }
+      if (m.type === 'TradeRouteCreation') {
+        const payload = m.payload as CreationTradeRouteDTO;
+        const newRoute = new CreationTradeRoute(payload);
+        newRoute.origin = this.store.getObjectById(payload.origin) as Planet;
+        newRoute.destination = this.store.getObjectById(payload.destination) as Planet;
+        newRoute.resourceType = this.store.getResourceType(payload.resourceType);
+        this.store.addCreationTradeRoute(newRoute);
+        if (newRoute.origin.colony) {
+          newRoute.origin.colony.invalidateResources();
+          newRoute.origin.colony.invalidateAvailableBuildings();
+        }
+        if (newRoute.destination.colony) {
+          newRoute.destination.colony.invalidateResources();
+          newRoute.destination.colony.invalidateAvailableBuildings();
+        }
+
       }
       if (m.type === 'RemoveFleet') {
         const payload = m.payload as RemoveFleetDTO;

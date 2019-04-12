@@ -1,3 +1,4 @@
+import { TradeService } from './trade.service';
 import { ColonyBuilding } from './../game-objects/colony-building';
 import { ColonyResource } from './../game-objects/colony-resource';
 import { ColonyResourceDTO } from './../dtos/colony-resource';
@@ -24,7 +25,7 @@ export class ColoniesService  {
   private createShipUrl = this.host + '/api/ship-orders';
 
 
-  constructor(private http: HttpClient, private store: Store) {
+  constructor(private http: HttpClient, private store: Store, private tradeService: TradeService) {
 
   }
 
@@ -34,6 +35,7 @@ export class ColoniesService  {
       data.forEach(c => {
         this.store.addColony(new Colony(c, this));
       });
+      this.tradeService.loadTradeRoutes();
     }, (error: any) => {
       console.log(error);
     });

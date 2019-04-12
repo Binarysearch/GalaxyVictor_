@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
     "/civilizations",
     "/fleets",
     "/planets",
-    "/commerce"
+    "/trade"
 })
 public class DefaultServlet extends HttpServlet {
 

@@ -12,7 +12,6 @@ import { GalaxyComponent } from './galaxy/galaxy.component';
 import { ColoniesComponent } from './colonies/colonies.component';
 import { FleetsComponent } from './fleets/fleets.component';
 import { PlanetsComponent } from './planets/planets.component';
-import { CommerceComponent } from './commerce/commerce.component';
 import { ResearchComponent } from './research/research.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -33,6 +32,7 @@ import { ShipComponent } from './galaxy/fleet-window/ship/ship.component';
 import { DebugComponent } from './debug/debug.component';
 import { ColonyWindowComponent } from './galaxy/colony-window/colony-window.component';
 import { ColonyResearchComponent } from './galaxy/colony-window/colony-research/colony-research.component';
+import { TradeComponent } from './trade/trade.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,6 @@ import { ColonyResearchComponent } from './galaxy/colony-window/colony-research/
     ColoniesComponent,
     FleetsComponent,
     PlanetsComponent,
-    CommerceComponent,
     ResearchComponent,
     LoginComponent,
     RegisterComponent,
@@ -63,7 +62,8 @@ import { ColonyResearchComponent } from './galaxy/colony-window/colony-research/
     ShipComponent,
     DebugComponent,
     ColonyWindowComponent,
-    ColonyResearchComponent
+    ColonyResearchComponent,
+    TradeComponent
   ],
   imports: [
     BrowserModule,

@@ -4,7 +4,7 @@ import { GalaxyComponent } from './galaxy/galaxy.component';
 import { ColoniesComponent } from './colonies/colonies.component';
 import { FleetsComponent } from './fleets/fleets.component';
 import { PlanetsComponent } from './planets/planets.component';
-import { CommerceComponent } from './commerce/commerce.component';
+import { TradeComponent } from './trade/trade.component';
 import { ResearchComponent } from './research/research.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'colonies', component: ColoniesComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
   { path: 'fleets', component: FleetsComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
   { path: 'planets', component: PlanetsComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
-  { path: 'commerce', component: CommerceComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
+  { path: 'trade', component: TradeComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
   { path: 'research', component: ResearchComponent, canActivate: [AuthGuard, SelectGalaxyGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

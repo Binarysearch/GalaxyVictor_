@@ -22,6 +22,8 @@ export class Colony implements GameObject {
   private _resources: ColonyResource[] = [];
   private invaliadatedResources = true;
 
+  private _resourceQuantityMap: Map<string, number> = new Map();
+
   buildingOrder: string;
   buildingOrderName: string;
   shipOrder: number;
@@ -73,6 +75,18 @@ export class Colony implements GameObject {
 
   set resources(resources: ColonyResource[]) {
     this._resources = resources;
+    this._resourceQuantityMap = new Map();
+    this._resources.forEach(r => {
+      this._resourceQuantityMap.set(r.type.id, r.quantity);
+    });
+  }
+
+  getResourceQuantity(resourceTypeId: string): number {
+    const quantity = this._resourceQuantityMap.get(resourceTypeId);
+    if (!quantity) {
+      return 0;
+    }
+    return quantity;
   }
 
   get availableBuildings(): ColonyBuildingType[] {

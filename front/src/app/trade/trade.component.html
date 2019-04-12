@@ -1,0 +1,56 @@
+<h1>{{ ts.strings.commerce }}</h1>
+<div class="container">
+  <!-- form create routes -->
+  <div *ngIf="creatingRoute" class="box">
+    <div class="form-control">
+      <span class='label'>{{ ts.strings.origin }}</span><br>
+      <select [(ngModel)]="newRouteOriginId">
+        <option *ngFor="let colony of store.colonies" [value]="colony.id">{{ getPlanetName(colony.planet) }}</option>
+      </select>
+    </div>
+    <div class="form-control">
+      <span class='label'>{{ ts.strings.destination }}</span><br>
+      <select [(ngModel)]="newRouteDestinationId">
+        <option *ngFor="let colony of store.colonies" [value]="colony.id">{{ getPlanetName(colony.planet) }}</option>
+      </select>
+    </div>
+
+    <div *ngIf="newRouteOrigin && newRouteDestination && (newRouteOriginId !== newRouteDestinationId)">
+      <div class="form-control">
+        <span class='label'>{{ ts.strings.resourceType }}</span><br>
+        <select [(ngModel)]="newRouteResourceTypeId">
+          <option *ngFor="let resource of newRouteOrigin.resources" [value]="resource.type.id">{{ resource.type.name + ' (' + resource.quantity + ')'}}</option>
+        </select>
+      </div>
+
+      <div class="form-control">
+        <span class='label'>{{ ts.strings.quantity }}</span>
+        <input type="number" min="2" [max]="newRouteOrigin.getResourceQuantity(newRouteResourceTypeId)" [(ngModel)]="newRouteQuantity" />
+      </div>
+    </div>
+
+    <button class="btn mr" (click)="createRoute()">{{ ts.strings.accept }}</button>
+    <button class="btn" (click)="toggleCreatingRoute()">{{ ts.strings.cancel }}</button>
+  </div>
+  <button class="btn" *ngIf="!creatingRoute" (click)="toggleCreatingRoute()">{{ ts.strings.newTradeRoute }}</button>
+  <!-- end form create routes -->
+
+  <h2>{{ ts.strings.inProgressTradeRoutes }}</h2>
+  <div>
+    <div *ngFor="let route of store.creationTradeRoutes" class="creation-trade-route">
+      Estableciendo {{ ts.strings.tradeRoute }} entre {{ getPlanetName(route.origin) }} y {{ getPlanetName(route.destination) }}:
+      <span> {{ getProgress(route) }} %</span>
+      <span class="progressbar" [style.width]="getProgress(route) + '%'"></span>
+    </div>
+  </div>
+
+  <h2>{{ ts.strings.tradeRoutes }}</h2>
+  <div>
+    <div *ngFor="let route of store.tradeRoutes" class="trade-route">
+      Enviando {{ route.quantity + ' unidades de ' + route.resourceType.name }} desde {{ getPlanetName(route.origin) }} hacia {{ getPlanetName(route.destination) }}
+    </div>
+  </div>
+
+
+</div>
+

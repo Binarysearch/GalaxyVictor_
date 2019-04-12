@@ -73,12 +73,19 @@ export class TextService {
     shipBuildingOrder: 'Nave en construcción',
     noBuildingOrder: 'Sin ordenes de contrucción',
     changeBuildingOrder: 'Cambiar orden de construcción',
+    inProgressTradeRoutes: 'Rutas comerciales en progreso',
+    tradeRoutes: 'Rutas comerciales',
     status: 'Estado',
     debug: 'Depuración',
+    accept: 'Aceptar',
     cancel: 'Cancelar',
     viewColony: 'Ver colonia',
     resources: 'Recursos',
     colonize: 'Colonizar',
+    quantity: 'Cantidad',
+    resourceType: 'Tipo de recurso',
+    tradeRoute: 'Ruta comercial',
+    newTradeRoute: 'Nueva ruta comercial',
     na: 'N/A'
   };
 

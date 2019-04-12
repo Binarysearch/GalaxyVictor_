@@ -14,6 +14,9 @@ import { SessionDTO } from './dtos/session';
 import { UserCivilizationDTO } from './dtos/user-civilization';
 import { ColonyBuildingCapabilityType } from './game-objects/colony-building-capability-type';
 import { ResearchOrder } from './game-objects/research-order';
+import { TradeRoute } from './game-objects/trade-route';
+import { CreationTradeRoute } from './game-objects/creation-trade-route';
+import { DestructionTradeRoute } from './game-objects/destruction-trade-route';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +26,7 @@ export class Store {
   private objects: Map<number, GameObject> = new Map();
   private colonyBuildingTypesMap: Map<string, ColonyBuildingType> = new Map();
   private shipModelsMap: Map<number, ShipModel> = new Map();
-  private resourceTypes: Map<string, ResourceType> = new Map();
+  private resourceTypeMap: Map<string, ResourceType> = new Map();
   private technologyMap: Map<string, Technology> = new Map();
   private colonyBuildingCapabilityTypes: Map<string, ColonyBuildingCapabilityType> = new Map();
 
@@ -32,6 +35,10 @@ export class Store {
   private _shipModels: ShipModel[] = [];
   private _planets: Planet[] = [];
   private _researchOrders: ResearchOrder[] = [];
+  private _resourceTypes: ResourceType[] = [];
+  private _tradeRoutes: TradeRoute[] = [];
+  private _creationTradeRoutes: CreationTradeRoute[] = [];
+  private _destructionTradeRoutes: DestructionTradeRoute[] = [];
   private _civilizations: Civilization[] = [];
   private _colonies: Colony[] = [];
   private _technologies: Technology[] = [];
@@ -196,11 +203,16 @@ export class Store {
   }
 
   public addResourceType(type: ResourceType) {
-    this.resourceTypes.set(type.id, type);
+    this.resourceTypeMap.set(type.id, type);
+    this._resourceTypes.push(type);
+  }
+
+  public get resourceTypes(): ResourceType[] {
+    return this._resourceTypes;
   }
 
   public getResourceType(typeId: string): ResourceType {
-    return this.resourceTypes.get(typeId);
+    return this.resourceTypeMap.get(typeId);
   }
 
   public addTechnology(technology: Technology) {
@@ -234,6 +246,54 @@ export class Store {
 
   addResearchOrder(order: ResearchOrder) {
     this._researchOrders.push(order);
+  }
+
+  public get creationTradeRoutes(): CreationTradeRoute[] {
+    return this._creationTradeRoutes;
+  }
+
+  addCreationTradeRoute(route: CreationTradeRoute) {
+    this._creationTradeRoutes.push(route);
+    this.objects.set(route.id, route);
+  }
+
+  removeCreationTradeRoute(route: CreationTradeRoute): any {
+    if (this._creationTradeRoutes.indexOf(route) > -1) {
+      this._creationTradeRoutes.splice(this._creationTradeRoutes.indexOf(route), 1);
+    }
+    this.objects.delete(route.id);
+  }
+
+  public get destructionTradeRoutes(): DestructionTradeRoute[] {
+    return this._destructionTradeRoutes;
+  }
+
+  addDestructionTradeRoute(route: DestructionTradeRoute) {
+    this._destructionTradeRoutes.push(route);
+    this.objects.set(route.id, route);
+  }
+
+  removeDestructionTradeRoute(route: DestructionTradeRoute): any {
+    if (this._destructionTradeRoutes.indexOf(route) > -1) {
+      this._destructionTradeRoutes.splice(this._destructionTradeRoutes.indexOf(route), 1);
+    }
+    this.objects.delete(route.id);
+  }
+
+  public get tradeRoutes(): TradeRoute[] {
+    return this._tradeRoutes;
+  }
+
+  addTradeRoute(route: TradeRoute) {
+    this._tradeRoutes.push(route);
+    this.objects.set(route.id, route);
+  }
+
+  removeTradeRoute(route: TradeRoute): any {
+    if (this._tradeRoutes.indexOf(route) > -1) {
+      this._tradeRoutes.splice(this._tradeRoutes.indexOf(route), 1);
+    }
+    this.objects.delete(route.id);
   }
 
   removeResearchOrder(starSystemId: number) {

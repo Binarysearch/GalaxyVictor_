@@ -1,6 +1,4 @@
-<p>
-  research works!
-</p>
+<h1>{{ ts.strings.research }}</h1>
 <div *ngFor="let order of store.researchOrders" class='research-order'>
   Investigando {{ order.technology.name }} en {{ getStarSystemName(order) }}:
   <span> {{ getProgress(order) }} %</span>

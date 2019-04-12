@@ -24,6 +24,11 @@ begin
     (new.origin, new.resource_type, -new.quantity),
     (new.destination, new.resource_type, new.received_quantity);
   
+  if (exists(select 1 from core.trade_routes where origin=new.origin and destination=new.destination and resource_type=new.resource_type)) then
+    update core.trade_routes set quantity = quantity + new.quantity, received_quantity=received_quantity + new.received_quantity where origin=new.origin and destination=new.destination and resource_type=new.resource_type;
+    return null;
+  end if;
+
   return new;
 end;$function$;
 

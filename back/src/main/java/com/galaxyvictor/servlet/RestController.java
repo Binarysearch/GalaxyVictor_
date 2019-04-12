@@ -28,18 +28,9 @@ public class RestController extends ApiServlet {
 		String params = request.getRequestParamsAsJson();
 		long time = System.currentTimeMillis();
 
-		DbResponse dbOrder = executeQueryForObject("select rest.execute_api(?, ?, ?, ?::jsonb, ?)", DbResponse.class, path, method, token, params, time);
+		String result = executeQueryForJson("select rest.execute_api(?, ?, ?, ?::jsonb, ?)", path, method, token, params, time);
 		
-		if (dbOrder == null) {
-			return "{}";
-		}
-		dbOrderExecutor.executeDbOrder(dbOrder);
-        Object apiResponse = dbOrder.getApiResponse();
-        if (apiResponse != null) {
-            return new Gson().toJson(apiResponse);
-        } else {
-            return "{}";
-        }
+		return result;
 	}
 
 	@Override

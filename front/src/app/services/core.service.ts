@@ -1,3 +1,4 @@
+import { TradeService } from './trade.service';
 import { ResearchService } from './research.service';
 import { ColonyResourceDTO } from './../dtos/colony-resource';
 import { ShipsService } from './ships.service';
@@ -33,6 +34,7 @@ export class CoreService {
     private civilizationsService: CivilizationsService,
     private coloniesService: ColoniesService,
     private researchService: ResearchService,
+    private tradeService: TradeService,
     private galaxiesService: GalaxiesService
   ) { }
 
@@ -106,6 +108,10 @@ export class CoreService {
 
   startResearching(starSystemId: number, technologyId: string): void {
     this.researchService.startResearching(starSystemId, technologyId);
+  }
+
+  createTradeRoute(origin: number, destination: number, resourceType: string, quantity: number): void {
+    this.tradeService.createTradeRoute(origin, destination, resourceType, quantity);
   }
 
 }
