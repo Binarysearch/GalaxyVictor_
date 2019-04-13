@@ -1,13 +1,20 @@
-<div class="container box">
+<form class="container box" [formGroup]="loginData">
   <h1>{{ ts.strings.login }}</h1>
   <div class="field">
     <label>{{ ts.strings.email }}</label>
-    <input #emailInput class="input" type="email" [(ngModel)]="email">
+    <input type="email" formControlName="email" required>
+    <div class="error" *ngIf="email.errors && (email.touched && email.dirty)">
+      <div *ngIf="!!email.errors.email">Introduzca un email valido</div>
+      <div *ngIf="!!email.errors.required">Introduzca email</div>
+    </div>
   </div>
   <div class="field">
     <label>{{ ts.strings.password }}</label>
-    <input #passwordInput type="password" [(ngModel)]="password" (keydown.enter)="passwordKeyEnterDown()">
+    <input #password type="password" formControlName="password" required>
+    <div class="error" *ngIf="password.errors && (password.touched && password.dirty)">
+      <div *ngIf="!!password.errors.required">Introduzca contraseña</div>
+    </div>
   </div>
   <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
-  <button class="btn" (click)="login()">{{ ts.strings.send }}</button>
-</div>
+  <button [disabled]="!loginData.valid" class="btn" (click)="login()">{{ ts.strings.send }}</button>
+</form>

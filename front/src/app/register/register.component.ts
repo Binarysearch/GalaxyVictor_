@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
   register() {
     this.core.register(this.registerData.value.email, this.registerData.value.password).subscribe(null, error => {
       if (error.status === 400) {
-        this.errorMessage = error.error.message;
+        this.errorMessage = error.error.error.message;
       }
       if (error.status === 409) {
         this.errorMessage = error.error.error.message;

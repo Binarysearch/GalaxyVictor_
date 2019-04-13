@@ -1,3 +1,10 @@
+.ng-valid[required]  {
+  border-left: 5px solid #42A948;
+}
+
+.ng-invalid.ng-dirty:not(form)  {
+  border-left: 5px solid #a94442;
+}
 input {
     width: 100%;
     padding: 12px 20px;
@@ -10,7 +17,7 @@ input {
 input:focus{
     box-shadow: 0 0 2px var(--box-shadow-color);
     outline: 2px solid rgba(0,0,255,0.3);
-    
+
 }
 .container{
     font-size: 18px;
@@ -32,4 +39,8 @@ input:focus{
 }
 h1{
     text-align: center;
+}
+.btn[disabled]{
+  background-color: rgba(20, 20, 20, 1);
+  color: rgba(40, 40, 40, 1);
 }

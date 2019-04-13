@@ -3,7 +3,7 @@
 
   <div class="field">
     <label>{{ ts.strings.email }}</label>
-    <input type="email" formControlName="email">
+    <input type="email" formControlName="email" required>
     <div class="error" *ngIf="email.errors && (email.touched && email.dirty)">
       <div *ngIf="!!email.errors.email">Introduzca un email valido</div>
       <div *ngIf="!!email.errors.required">El email es obligatorio</div>
@@ -24,6 +24,6 @@
       <div *ngIf="!!registerData.errors.notEquals">Las contraseñas no coinciden</div>
     </div>
   </div>
-  <div class="error" >{{ errorMessage }}</div>
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
   <button [disabled]="!registerData.valid" class="btn" (click)="register()">{{ ts.strings.send }}</button>
 </form>
