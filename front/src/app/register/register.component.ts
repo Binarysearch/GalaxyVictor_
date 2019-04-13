@@ -1,7 +1,7 @@
 import { CoreService } from './../services/core.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { TextService } from '../services/text.service';
+import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -10,52 +10,51 @@ import { TextService } from '../services/text.service';
 })
 export class RegisterComponent implements OnInit {
 
-  email: string;
-  password: string;
-  repeatPassword: string;
+  registerData = this.fb.group({
+    email: ['', [Validators.email, Validators.required]],
+    password: ['', [Validators.minLength(5), Validators.required]],
+    repeatPassword: ['']
+  }, {validator: this.checkEqualPassword } );
+
   errorMessage: string;
 
-  @ViewChild('emailInput') emailInput: ElementRef;
-  @ViewChild('passwordInput') passwordInput: ElementRef;
-  @ViewChild('repeatPasswordInput') repeatPasswordInput: ElementRef;
-
-  constructor(private core: CoreService, public ts: TextService) { }
+  constructor(private core: CoreService, public ts: TextService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.emailInput.nativeElement.focus();
+
   }
 
   register() {
-    if (this.password !== this.repeatPassword) {
-      this.repeatPasswordInput.nativeElement.focus();
-      return;
-    }
-    this.core.register(this.email, this.password).subscribe(null, error => {
+    this.core.register(this.registerData.value.email, this.registerData.value.password).subscribe(null, error => {
       if (error.status === 400) {
         this.errorMessage = error.error.message;
-        this.passwordInput.nativeElement.focus();
-        this.password = '';
-        this.repeatPassword = '';
       }
       if (error.status === 409) {
-        this.errorMessage = error.error.message;
-        this.emailInput.nativeElement.focus();
-        this.password = '';
-        this.repeatPassword = '';
+        this.errorMessage = error.error.error.message;
       }
 
     });
   }
 
-  passwordKeyEnterDown() {
-    this.register();
+  get email () {
+    return this.registerData.controls.email as FormControl;
   }
 
-  passwordChange() {
-    if (this.password !== this.repeatPassword) {
-      this.errorMessage = this.ts.strings.passwordsDontMatch;
-    } else {
-      this.errorMessage = '';
+  get password (): FormControl {
+    return this.registerData.controls.password as FormControl;
+  }
+
+  get repeatPassword (): FormControl {
+    return this.registerData.controls.repeatPassword as FormControl;
+  }
+
+  checkEqualPassword(fg: FormGroup) {
+    const p1 = fg.value.password;
+    const p2 = fg.value.repeatPassword;
+
+    if (p1 !== p2) {
+      return { notEquals: true };
     }
+    return null;
   }
 }
