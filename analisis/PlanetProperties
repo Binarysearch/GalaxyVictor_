@@ -1,0 +1,43 @@
+Requerimientos:
+    -Los planetas tienen propiedades que los diferencian por ejemplo:
+        -Atmosfera
+        -Agua
+        -Temperatura
+
+    -Las propiedades tienen cualificadores:
+        - 0 nada
+        - 1 muy bajo
+        - 2 bajo
+        - 3 normal
+        - 4 medio-alto
+        - 5 alto
+        - 6 muy alto
+
+    -Para un planeta y una propiedad dada solo puede haber un cualificador. Es decir que un planeta no puede tener por ejemplo mucha y poca agua a la vez.
+    
+    -Los edificios de colonias pueden tener requisitos de propiedades en los planetas.
+        -Cada requisito tiene un minimo y maximo en el qualificador
+        Por ejemplo una planta de energia eolica puede requerir como minimo 1 y como maximo 5 en atmosfera
+        Por debajo o encima de estos niveles no se podra construir el edificio
+    
+Implementación backend
+    -Crear tabla propiedades tipos
+    -Crear tabla propiedades cualificadores
+    -Crear tabla planetas propiedades
+    -Crear tabla edificios requisitos
+
+    -En api iniciar construccion de edificio:
+        -Comprobar si el planeta cumple los requisitos del edificio que se ha ordenado construir
+
+    -Al generar sistema estelar crear propiedades aleatorias para los planetas generados
+
+    -Crear api para obtener las propiedades de un planeta
+
+    -En api de constant data añadir cualificadores, propiedades y propiedades requeridas por los edificios
+
+Frontend:
+    -Añadir los datos de requerimientos de propiedades en edificios
+    -Añadir cualificadores y propiedades en store
+    -Añadir propiedades a los planetas
+    -En funcion para obtener edificios disponibles de colonias añadir el calculo para comprobar
+     que el planeta cumple con los requisitos
