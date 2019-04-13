@@ -265,3 +265,29 @@ CREATE TABLE trade_routes_destruction(
     finish_time bigint NOT NULL
 );
 
+CREATE TABLE planet_property_qualifiers(
+    id integer PRIMARY KEY,
+    name text NOT NULL
+);
+
+CREATE TABLE planet_property_types(
+    id text PRIMARY KEY,
+    name text NOT NULL
+);
+
+CREATE TABLE planet_properties(
+    id bigint PRIMARY KEY DEFAULT nextval('galaxies_id_seq'::regclass),
+    planet bigint NOT NULL REFERENCES planets(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    property text NOT NULL REFERENCES planet_property_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    qualifier integer NOT NULL REFERENCES planet_property_qualifiers(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    UNIQUE(planet, property)
+);
+
+CREATE TABLE colony_building_types_planet_properties(
+    building_type text NOT NULL REFERENCES colony_building_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    property text NOT NULL REFERENCES planet_property_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    min_value integer NOT NULL REFERENCES planet_property_qualifiers(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    max_value integer NOT NULL REFERENCES planet_property_qualifiers(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CHECK(min_value<=max_value),
+    PRIMARY KEY(building_type, property)
+);

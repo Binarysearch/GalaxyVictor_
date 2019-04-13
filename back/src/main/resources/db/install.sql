@@ -107,3 +107,26 @@ insert into core.ship_models(name, can_colonize, can_fight) values
 ('Explorador', false, false);
 
 
+-----------------------------------------------------------------
+------------                               ----------------------
+------------   BUILDING PLANET PROPERTIES  ----------------------
+------------                               ----------------------
+-----------------------------------------------------------------
+
+insert into core.planet_property_qualifiers(id, name) values
+(0, 'nothing'),
+(1, 'very low'),
+(2, 'low'),
+(3, 'normal'),
+(4, 'abundant'),
+(5, 'high'),
+(6, 'very high');
+
+insert into core.planet_property_types(id, name) values
+('water', 'Agua'),
+('iron', 'Hierro'),
+('atmosphere', 'Atmósfera');
+
+insert into core.colony_building_types_planet_properties(building_type, property, min_value, max_value) values
+('farm', 'water', 2, 6),
+('iron mine', 'iron', 2, 6);
