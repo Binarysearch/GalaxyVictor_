@@ -6,6 +6,7 @@ AS $function$declare
   result_ json;
   civilization_id_ bigint;
   stellar_government_ bigint;
+  planet_ bigint;
 begin
 
   civilization_id_ = core.require_civ(token_);
@@ -33,6 +34,15 @@ begin
   if (exists(select 1 from core.colony_building_types_prerequisites where building_type=building_type_ and prerequisite not in(select technology from core.stellar_governments_technologies where stellar_government=stellar_government_))) then
     perform core.error(400, 'Technological prerequisites not met');
   end if;
+
+  planet_ = planet from core.colonies where id=colony_;
+
+  --check planet prerequisites
+  if (exists(select 1 from core.colony_building_types_planet_properties bp where building_type=building_type_ and property not in (select property from core.planet_properties where qualifier >= min_value and qualifier <= max_value and planet=planet_))) then
+    perform core.error(400, 'Planet prerequisites not met');
+  end if;
+
+
 
   update core.colony_building_orders set building_type = building_type_, ship_model = null, started_time=time_ where colony=colony_;
   insert into core.colony_building_orders(colony, building_type, started_time) select colony_, building_type_, time_ where not exists(select 1 from core.colony_building_orders where colony=colony_);

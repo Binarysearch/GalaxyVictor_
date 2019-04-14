@@ -127,6 +127,6 @@ insert into core.planet_property_types(id, name) values
 ('iron', 'Hierro'),
 ('atmosphere', 'Atmósfera');
 
-insert into core.colony_building_types_planet_properties(building_type, property, min_value, max_value) values
-('farm', 'water', 2, 6),
-('iron mine', 'iron', 2, 6);
+--insert into core.colony_building_types_planet_properties(building_type, property, min_value, max_value) values
+--('farm', 'water', 2, 6),
+--('iron mine', 'iron', 2, 6);
