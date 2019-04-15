@@ -1,7 +1,6 @@
 <div *ngIf="starSystem">
   <h3 *ngIf="starSystem.planets.length === 0">{{ ts.strings.noPlanets }}</h3>
-  <div *ngFor="let planet of starSystem.planets" (click)="selectPlanet(planet)" class='planet'>
-    <span>{{ getPlanetDescription(planet) }}</span>
-    <button class='btn' *ngIf="isColonizable(planet)" (click)="colonize(planet)">{{ ts.strings.colonize }}</button>
+  <div class="planet-list">
+    <app-planet-item *ngFor="let planet of starSystem.planets" [planet]="planet"></app-planet-item>
   </div>
 </div>

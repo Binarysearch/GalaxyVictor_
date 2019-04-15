@@ -1,0 +1,15 @@
+<div class='planet'>
+  <div class="image-container" (click)="selectPlanet()" >
+
+  </div>
+  <div class="right-container">
+    <div class="info-container">
+      <div>{{ ts.strings.orbit }}: {{ planet.orbit }}</div>
+      <div>{{ planetType }} {{ planetSize | lowercase }}</div>
+    </div>
+    <div class="buttons-container">
+      <button class='btn right' *ngIf="isColonizable()" (click)="colonize()">{{ ts.strings.colonize }}</button>
+      <button class='btn right' *ngIf="planet.colony" (click)="selectColony()">{{ ts.strings.viewColony }}</button>
+    </div>
+  </div>
+</div>

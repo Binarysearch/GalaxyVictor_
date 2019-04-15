@@ -1,9 +1,11 @@
-.planet {
-  cursor: pointer;
-  padding:5px;
-  border:1px solid rgba(0,0,0,0.1);
+:host{
+  height: 100%;
+}
+:host>div{
+  height: 100%;
 }
 
-.planet:hover {
-  color: var(--text-color-accent);
+.planet-list {
+  overflow-y: scroll;
+  height: 100%;
 }

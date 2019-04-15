@@ -12,7 +12,9 @@
   width: 100% !important;
   height: 100%;
 }
-
+.body{
+  height:100%;
+}
 
 .close-button{
   padding: 5px;
@@ -36,6 +38,9 @@
   color: yellowgreen;
 }
 
+.tabs-body{
+  height: 90%;
+}
 .tabs-header{
   width: 100%;
   background-color: transparent;

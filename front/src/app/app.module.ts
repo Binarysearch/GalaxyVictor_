@@ -33,6 +33,7 @@ import { DebugComponent } from './debug/debug.component';
 import { ColonyWindowComponent } from './galaxy/colony-window/colony-window.component';
 import { ColonyResearchComponent } from './galaxy/colony-window/colony-research/colony-research.component';
 import { TradeComponent } from './trade/trade.component';
+import { PlanetItemComponent } from './galaxy/star-system-window/star-planets/planet-item/planet-item.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { TradeComponent } from './trade/trade.component';
     DebugComponent,
     ColonyWindowComponent,
     ColonyResearchComponent,
-    TradeComponent
+    TradeComponent,
+    PlanetItemComponent
   ],
   imports: [
     BrowserModule,
