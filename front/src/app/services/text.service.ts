@@ -31,6 +31,7 @@ export class TextService {
     register: 'Crear una cuenta',
     login: 'Iniciar Sesión',
     password: 'Contraseña',
+    enterPassword: 'Introduzca contraseña',
     repeatPassword: 'Repetir Contraseña',
     email: 'Email',
     enterEmail: 'Introduzca email',

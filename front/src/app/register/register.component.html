@@ -15,7 +15,7 @@
         <div class="divider"></div>
         <div class="gv-input">
           <label>{{ ts.strings.password }}</label>
-          <input disabled type="password" formControlName="password" required>
+          <input type="password" formControlName="password" required placeholder="{{ ts.strings.enterPassword }}">
           <div class="error" *ngIf="password.errors && (password.touched && password.dirty)">
             <div *ngIf="!!password.errors.minlength">La contraseña debe tener al menos 5 caracteres</div>
             <div *ngIf="!!password.errors.required">La contraseña es obligatoria</div>
@@ -24,13 +24,14 @@
         <div class="divider"></div>
         <div class="gv-input">
           <label>{{ ts.strings.repeatPassword }}</label>
-          <input type="password" formControlName="repeatPassword" required>
+          <input type="password" formControlName="repeatPassword" required placeholder="{{ ts.strings.enterPassword }}">
           <div class="error" *ngIf="registerData.errors && (repeatPassword.touched && repeatPassword.dirty) && (password.touched && password.dirty)">
             <div *ngIf="!!registerData.errors.notEquals">Las contraseñas no coinciden</div>
           </div>
         </div>
+        <br>
+        <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+        <button [disabled]="!registerData.valid" class="btn" (click)="register()">{{ ts.strings.send }}</button>
       </div>
-      <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
-      <button [disabled]="!registerData.valid" class="btn" (click)="register()">{{ ts.strings.send }}</button>
     </form>
 </div>
