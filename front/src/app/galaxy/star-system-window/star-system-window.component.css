@@ -2,22 +2,17 @@
   position: absolute;
   top: 0%;
   left: 0%;
-  width: 400px;
+  width: 400px !important;
   height: 100%;
-  background-color: rgba(50, 50, 50, 0.9);
 }
 
 .container.maximized{
   top: 0%;
   left: 0%;
-  width: 100%;
+  width: 100% !important;
   height: 100%;
 }
 
-.title{
-  text-align: center;
-  font-size: 18px;
-}
 
 .close-button{
   padding: 5px;
@@ -39,11 +34,6 @@
 }
 .maximize-button:hover, .restore-button:hover{
   color: yellowgreen;
-}
-
-.body{
-  height:100%;
-  width: 100%;
 }
 
 .tabs-header{

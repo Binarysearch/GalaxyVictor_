@@ -5,5 +5,5 @@
 }
 
 .planet:hover {
-  filter: brightness(200%);
+  color: var(--text-color-accent);
 }

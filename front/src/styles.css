@@ -5,14 +5,15 @@
   --footer-height: 22px;
   --aside-menu-width: 280px;
   --border-radius: 4px;
-  --box-shadow-color: rgba(1, 0, 75, 0.3);
+  --box-shadow-color: rgba(1, 0, 75, 0.4);
   --error-background: rgba(255, 0, 0, 0.5);
 
   /** COLORS **/
   --hue: 210; /* Blue */
 
   --text-color-normal: hsla(var(--hue), 65%, 75%, 0.8);
-  --panel-background-color: hsla(var(--hue), 75%, 65%, 0.1);
+  --text-color-accent: hsla(var(--hue), 85%, 95%, 0.9);
+  --panel-background-color: hsla(var(--hue), 100%, 15%, 0.9);
 
   --input-color-placeholder: hsla(var(--hue), 75%, 75%, 0.5);
   --input-color-focus: hsla(var(--hue), 75%, 75%, 0.9);
@@ -53,6 +54,7 @@ body{
   border: 1px solid var(--border-color);
   color: var(--text-color-normal);
   padding: 0 1em 1em;
+  box-shadow: 0px 0px 5px var(--box-shadow-color);
 }
 .gv-panel .header {
   box-sizing: border-box;

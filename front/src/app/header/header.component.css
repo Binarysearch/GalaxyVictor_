@@ -2,7 +2,7 @@
     height: var(--header-height);
     width: 100%;
     position: absolute;
-    background-color: rgb(50, 50, 50);
+    background-color: var(--panel-background-color);
     color: rgb(200, 200, 200);
     box-shadow: 4px 0px 10px var(--box-shadow-color);
     z-index: 1001;
@@ -30,10 +30,10 @@ header > div:last-child {
     height: var(--header-height);
 }
 .btn-nav.active{
-    background-color: rgb(30, 30, 30);
+    background-color: var(--input-background-color);
     color: white;
 }
 .btn-nav:hover{
-    background-color: black;
+    background-color: var(--input-background-color);
     color: white;
 }
