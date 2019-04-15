@@ -1,29 +1,36 @@
-<form class="container" [formGroup]="registerData">
-  <h1>{{ ts.strings.register }}</h1>
-
-  <div class="field">
-    <label>{{ ts.strings.email }}</label>
-    <input type="email" formControlName="email" required>
-    <div class="error" *ngIf="email.errors && (email.touched && email.dirty)">
-      <div *ngIf="!!email.errors.email">Introduzca un email valido</div>
-      <div *ngIf="!!email.errors.required">El email es obligatorio</div>
-    </div>
-  </div>
-  <div class="field">
-    <label>{{ ts.strings.password }}</label>
-    <input type="password" formControlName="password" required>
-    <div class="error" *ngIf="password.errors && (password.touched && password.dirty)">
-      <div *ngIf="!!password.errors.minlength">La contraseña debe tener al menos 5 caracteres</div>
-      <div *ngIf="!!password.errors.required">La contraseña es obligatoria</div>
-    </div>
-  </div>
-  <div class="field">
-    <label>{{ ts.strings.repeatPassword }}</label>
-    <input type="password" formControlName="repeatPassword" required>
-    <div class="error" *ngIf="registerData.errors && (repeatPassword.touched && repeatPassword.dirty) && (password.touched && password.dirty)">
-      <div *ngIf="!!registerData.errors.notEquals">Las contraseñas no coinciden</div>
-    </div>
-  </div>
-  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
-  <button [disabled]="!registerData.valid" class="btn" (click)="register()">{{ ts.strings.send }}</button>
-</form>
+<div class="container">
+  <form spellcheck="false" class="gv-panel" [formGroup]="registerData">
+      <div class='header'>
+        <h1 class='title'>{{ ts.strings.register }}</h1>
+      </div>
+      <div class="body">
+        <div class="gv-input">
+          <label>{{ ts.strings.email }}</label>
+          <input type="email" formControlName="email" required placeholder="{{ ts.strings.enterEmail }}">
+          <div class="error" *ngIf="email.errors && (email.touched && email.dirty)">
+            <div *ngIf="!!email.errors.email">Introduzca un email valido</div>
+            <div *ngIf="!!email.errors.required">El email es obligatorio</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="gv-input">
+          <label>{{ ts.strings.password }}</label>
+          <input disabled type="password" formControlName="password" required>
+          <div class="error" *ngIf="password.errors && (password.touched && password.dirty)">
+            <div *ngIf="!!password.errors.minlength">La contraseña debe tener al menos 5 caracteres</div>
+            <div *ngIf="!!password.errors.required">La contraseña es obligatoria</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="gv-input">
+          <label>{{ ts.strings.repeatPassword }}</label>
+          <input type="password" formControlName="repeatPassword" required>
+          <div class="error" *ngIf="registerData.errors && (repeatPassword.touched && repeatPassword.dirty) && (password.touched && password.dirty)">
+            <div *ngIf="!!registerData.errors.notEquals">Las contraseñas no coinciden</div>
+          </div>
+        </div>
+      </div>
+      <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+      <button [disabled]="!registerData.valid" class="btn" (click)="register()">{{ ts.strings.send }}</button>
+    </form>
+</div>

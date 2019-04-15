@@ -33,6 +33,7 @@ export class TextService {
     password: 'Contraseña',
     repeatPassword: 'Repetir Contraseña',
     email: 'Email',
+    enterEmail: 'Introduzca email',
     name: 'Nombre',
     send: 'Enviar',
     home: 'Inicio',
