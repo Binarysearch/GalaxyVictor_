@@ -1,3 +1,4 @@
+import { TextService } from './../services/text.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ts: TextService) { }
 
   ngOnInit() {
   }

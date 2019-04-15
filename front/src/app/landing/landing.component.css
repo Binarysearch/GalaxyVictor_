@@ -1,0 +1,12 @@
+.container{
+  padding-top: 50px;
+  padding-left: 200px;
+  padding-right: 200px;
+  font: normal 100 14px/1.2em "Exo 2", Arial, sans-serif;
+}
+a {
+  text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: rgb(255, 255, 255);
+}

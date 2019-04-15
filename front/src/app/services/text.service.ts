@@ -88,6 +88,7 @@ export class TextService {
     resourceType: 'Tipo de recurso',
     tradeRoute: 'Ruta comercial',
     newTradeRoute: 'Nueva ruta comercial',
+    startPlayingNow: 'Comienza a jugar ya',
     na: 'N/A'
   };
 
