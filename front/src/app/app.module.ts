@@ -34,6 +34,8 @@ import { ColonyWindowComponent } from './galaxy/colony-window/colony-window.comp
 import { ColonyResearchComponent } from './galaxy/colony-window/colony-research/colony-research.component';
 import { TradeComponent } from './trade/trade.component';
 import { PlanetItemComponent } from './galaxy/star-system-window/star-planets/planet-item/planet-item.component';
+// tslint:disable-next-line: max-line-length
+import { PlanetMiniatureRendererComponent } from './galaxy/star-system-window/star-planets/planet-item/planet-miniature-renderer/planet-miniature-renderer.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,8 @@ import { PlanetItemComponent } from './galaxy/star-system-window/star-planets/pl
     ColonyWindowComponent,
     ColonyResearchComponent,
     TradeComponent,
-    PlanetItemComponent
+    PlanetItemComponent,
+    PlanetMiniatureRendererComponent
   ],
   imports: [
     BrowserModule,
