@@ -82,7 +82,7 @@ export class Store {
 
   public setSession(session: SessionDTO): void {
     this._session = session;
-    if (session.user.currentGalaxy) {
+    if (session && session.user.currentGalaxy) {
       this.setGalaxy(session.user.currentGalaxy);
     }
   }

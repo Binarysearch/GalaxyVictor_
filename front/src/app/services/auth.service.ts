@@ -40,6 +40,7 @@ export class AuthService {
     localStorage.removeItem('sessionToken');
     this.session = null;
     this.router.navigate(['']);
+    this.store.setSession(null);
   }
 
   auth() {
