@@ -11,7 +11,7 @@
   /** COLORS **/
   --hue: 210; /* Blue */
 
-  --text-color-normal: hsla(var(--hue), 65%, 65%, 0.8);
+  --text-color-normal: hsla(var(--hue), 65%, 75%, 0.8);
   --panel-background-color: hsla(var(--hue), 75%, 65%, 0.1);
 
   --input-color-placeholder: hsla(var(--hue), 75%, 75%, 0.5);
