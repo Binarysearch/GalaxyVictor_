@@ -1,6 +1,7 @@
 import { StarSystem } from '../../../game-objects/star-system';
 import { TextService } from './../../../services/text.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { ThreeService } from 'src/app/services/three.service';
 
 @Component({
   selector: 'app-star-planets',
@@ -9,12 +10,15 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class StarPlanetsComponent implements OnInit {
 
+  @ViewChild('canvas') canvas: ElementRef;
+
   @Input() starSystem: StarSystem;
 
 
-  constructor(public ts: TextService) { }
+  constructor(public ts: TextService, private th: ThreeService) { }
 
   ngOnInit() {
+    this.th.setup(this.canvas.nativeElement);
   }
 
 
