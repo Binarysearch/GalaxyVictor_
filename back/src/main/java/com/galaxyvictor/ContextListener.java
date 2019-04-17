@@ -33,7 +33,7 @@ import com.galaxyvictor.websocket.MessagingService;
 @WebListener
 public class ContextListener implements ServletContextListener {
 
-    public static final boolean DROP_AND_CREATE_DATABASE_SCHEMA_ON_STARTUP = true;
+    public static final boolean DROP_AND_CREATE_DATABASE_SCHEMA_ON_STARTUP = Config.DEVELOP;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

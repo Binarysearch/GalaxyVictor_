@@ -22,6 +22,7 @@ public class BaseTest {
     @BeforeAll
     public static void setup() throws SQLException {
         if(!init.getAndSet(true)){
+            Config.DEVELOP = true;
             new ContextListener().contextInitialized(null);
 
             ApiRequest request = mock(ApiRequest.class);
