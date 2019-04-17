@@ -1,7 +1,15 @@
 <div class="container">
-  <div>Id: {{ planet.id }}</div>
-  <div class='link' (click)="clickStarSystem()">{{ ts.strings.starSystem }}: {{ starSystemName }}</div>
-  <div>{{ ts.strings.orbit }}: {{ planet.orbit }}</div>
-  <div>{{ ts.strings.type }}: {{ planetType }}</div>
-  <div>{{ ts.strings.size }}: {{ planetSize }}</div>
+  <div class="planet-info">
+    <div class="image-container">
+      <canvas #canvas id="planets-canvas"></canvas>
+      <app-planet-miniature-renderer [planet]="planet"></app-planet-miniature-renderer>
+    </div>
+    <div class="planet-details">
+      <div>Id: {{ planet.id }}</div>
+      <div class='link' (click)="clickStarSystem()">{{ ts.strings.starSystem }}: {{ starSystemName }}</div>
+      <div>{{ ts.strings.orbit }}: {{ planet.orbit }}</div>
+      <div>{{ ts.strings.type }}: {{ planetType }}</div>
+      <div>{{ ts.strings.size }}: {{ planetSize }}</div>
+    </div>
+  </div>
 </div>

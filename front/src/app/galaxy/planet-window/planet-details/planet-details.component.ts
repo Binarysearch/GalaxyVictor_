@@ -1,8 +1,9 @@
 import { GalaxyMap } from './../../galaxy-map';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Planet } from 'src/app/game-objects/planet';
 import { TextService } from 'src/app/services/text.service';
 import { PLANET_TYPES, PLANET_SIZES } from '../../galaxy-constants';
+import { ThreeService } from 'src/app/services/three.service';
 
 @Component({
   selector: 'app-planet-details',
@@ -11,11 +12,14 @@ import { PLANET_TYPES, PLANET_SIZES } from '../../galaxy-constants';
 })
 export class PlanetDetailsComponent implements OnInit {
 
+  @ViewChild('canvas') canvas: ElementRef;
+
   @Input() planet: Planet;
 
-  constructor(public ts: TextService, private map: GalaxyMap) { }
+  constructor(public ts: TextService, private map: GalaxyMap, private th: ThreeService) { }
 
   ngOnInit() {
+    this.th.setup(this.canvas.nativeElement);
   }
 
   get planetType() {

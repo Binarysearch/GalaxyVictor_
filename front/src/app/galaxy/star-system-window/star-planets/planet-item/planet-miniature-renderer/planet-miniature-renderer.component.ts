@@ -11,10 +11,9 @@ import * as THREE from 'three';
 })
 export class PlanetMiniatureRendererComponent implements OnInit, OnDestroy {
 
+  private _planet: Planet;
 
   @ViewChild('rendererContainer') rendererContainer: ElementRef;
-
-  @Input() planet: Planet;
 
   sceneinfo: SceneInfo;
 
@@ -27,7 +26,29 @@ export class PlanetMiniatureRendererComponent implements OnInit, OnDestroy {
 
   }
 
+
   ngOnInit(): void {
+
+  }
+
+  ngOnDestroy(): void {
+    this.th.removeSceneInfo(this.sceneinfo);
+  }
+
+  @Input()
+  set planet(planet: Planet) {
+    this._planet = planet;
+    this.setScene();
+  }
+
+  get planet(): Planet {
+    return this._planet;
+  }
+
+  private setScene() {
+    if (this.sceneinfo) {
+      this.th.removeSceneInfo(this.sceneinfo);
+    }
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(75, 1, 1, 10000);
@@ -61,10 +82,6 @@ export class PlanetMiniatureRendererComponent implements OnInit, OnDestroy {
     this.sceneinfo = new SceneInfo(scene, camera, this.rendererContainer.nativeElement, mesh, animate);
 
     this.th.addSceneInfo(this.sceneinfo);
-  }
-
-  ngOnDestroy(): void {
-    this.th.removeSceneInfo(this.sceneinfo);
   }
 
   mouseEnter() {
