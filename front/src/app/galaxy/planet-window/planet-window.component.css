@@ -12,7 +12,9 @@
   width: 100% !important;
   height: 100%;
 }
-
+.right{
+  float: right;
+}
 .navigate-btn {
   cursor: pointer;
 }

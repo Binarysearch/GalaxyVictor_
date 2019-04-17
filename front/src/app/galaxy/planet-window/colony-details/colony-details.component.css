@@ -1,0 +1,21 @@
+.container{
+  overflow-y: scroll;
+  height: 75%;
+}
+
+.select-building-btn {
+  background-color: rgba(50, 50, 50, 0.9);
+  cursor: pointer;
+  padding: 3px;
+}
+
+.select-building-btn:hover {
+  filter: brightness(150%);
+}
+
+.select-building-btn.selected {
+  filter: brightness(150%);
+}
+.building-type-resource {
+  font-size: 10px;
+}

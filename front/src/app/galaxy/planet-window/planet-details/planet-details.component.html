@@ -5,11 +5,11 @@
       <app-planet-miniature-renderer [planet]="planet"></app-planet-miniature-renderer>
     </div>
     <div class="planet-details">
-      <div>{{ ts.strings.name }}: {{ planet.name }}</div>
+      <div>{{ this.planet.name }}</div>
+      <div>{{ planetType }} {{ planetSize | lowercase }}</div>
+      <div *ngIf="planet.colony">{{ ts.strings.civilization }}: {{ planet.colony.civilization.name }}</div>
+      <div *ngIf="!planet.colony">{{ ts.strings.notColonized }}</div>
       <div class='link' (click)="clickStarSystem()">{{ ts.strings.starSystem }}: {{ starSystemName }}</div>
-      <div>{{ ts.strings.orbit }}: {{ planet.orbit }}</div>
-      <div>{{ ts.strings.type }}: {{ planetType }}</div>
-      <div>{{ ts.strings.size }}: {{ planetSize }}</div>
     </div>
   </div>
 </div>

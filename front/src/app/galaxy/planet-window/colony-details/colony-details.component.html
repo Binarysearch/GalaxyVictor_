@@ -1,4 +1,29 @@
-<div>
-  <div>{{ ts.strings.civilization }}: {{ colony.civilization.name }}</div>
-  <button class='btn' (click)="viewColonyClicked()">{{ ts.strings.viewColony }}</button>
+<div class='container'>
+  <app-colony-research [colony]="colony"></app-colony-research>
+
+  <div *ngIf="selectingBuildingOrder">
+    <div *ngFor="let buildingType of colony.availableBuildings" (click)="changeBuildingOrder(buildingType.id)" class='select-building-btn' [class.selected]="colony.buildingOrder === buildingType.id">
+      {{ buildingType.name }}:
+      <div class='building-type-resource' *ngFor="let res of buildingType.resources">{{ res.resourceType.name + ' ' + res.quantity }} </div>
+    </div>
+    <div *ngFor="let shipModel of availableShipModels" (click)="changeShipOrder(shipModel.id)" class='select-building-btn' [class.selected]="colony.shipOrder === shipModel.id">
+      {{ shipModel.name }}:
+    </div>
+    <button class='btn'(click)="cancelChangeBuildingOrderClicked()" [title]="ts.strings.cancel">{{ ts.strings.cancel }}</button>
+  </div>
+
+  <div *ngIf="!selectingBuildingOrder">
+    <div>
+      <h4>{{ ts.strings.buildingOrder }}</h4>
+      <button class='btn'(click)="changeBuildingOrderClicked()" [title]="ts.strings.changeBuildingOrder">{{ (colony.buildingOrder)?colony.buildingOrderName:(colony.shipOrder)?colony.shipOrderName:ts.strings.noBuildingOrder }}</button>
+    </div>
+    <div>
+      <h4>{{ ts.strings.buildings }}</h4>
+      <div *ngFor="let building of colony.buildings">{{ building.type.name }}</div>
+    </div>
+    <div>
+      <h4>{{ ts.strings.resources }}</h4>
+      <div *ngFor="let resource of colony.resources">{{ resource.type.name }}: {{ resource.quantity }}</div>
+    </div>
+  </div>
 </div>

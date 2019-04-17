@@ -1,5 +1,5 @@
-<div class='planet'>
-  <div class="image-container" (click)="selectPlanet()" >
+<div class='planet' (click)="selectPlanet()">
+  <div class="image-container" >
     <app-planet-miniature-renderer [planet]="planet"></app-planet-miniature-renderer>
   </div>
   <div class="right-container">
@@ -9,7 +9,6 @@
     </div>
     <div class="buttons-container">
       <button class='btn right' *ngIf="isColonizable()" (click)="colonize()">{{ ts.strings.colonize }}</button>
-      <button class='btn right' *ngIf="planet.colony" (click)="selectColony()">{{ ts.strings.viewColony }}</button>
     </div>
   </div>
 </div>

@@ -12,7 +12,7 @@
         <i class="fa fa-arrow-right navigate-btn" aria-hidden="true" [title]="ts.strings.nextPlanet" (click)="nextPlanet()"></i>
     </div>
     <app-planet-details [planet]="planet"></app-planet-details>
-    <button class='btn' *ngIf="isColonizable()" (click)="colonize()">{{ ts.strings.colonize }}</button>
+    <button class='btn right' *ngIf="isColonizable()" (click)="colonize()">{{ ts.strings.colonize }}</button>
     <app-colony-details *ngIf="planet.colony" [colony]="planet.colony"></app-colony-details>
   </div>
 </div>

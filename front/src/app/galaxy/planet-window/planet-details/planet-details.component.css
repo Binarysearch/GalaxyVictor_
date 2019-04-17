@@ -24,3 +24,11 @@
   background-color: rgba(0,0,255,0.05);
   border: 1px solid rgba(0,0,255,0.3);
 }
+.planet-details{
+  padding-left: 10px;
+}
+
+.planet-info{
+  display: flex;
+  flex-direction: row;
+}

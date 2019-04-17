@@ -89,6 +89,7 @@ export class TextService {
     tradeRoute: 'Ruta comercial',
     newTradeRoute: 'Nueva ruta comercial',
     startPlayingNow: 'Comienza a jugar ya',
+    construction: 'Construcción',
     na: 'N/A'
   };
 
