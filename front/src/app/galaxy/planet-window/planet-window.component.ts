@@ -28,7 +28,7 @@ export class PlanetWindowComponent implements OnInit {
   }
 
   get title(): string {
-    return this.ts.strings.planet + ' ' + this.planet.id;
+    return `${this.ts.strings.planet}: ${this.planet.name}`;
   }
 
   closeButtonClick() {

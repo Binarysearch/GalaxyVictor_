@@ -1,6 +1,6 @@
 <div>
   <h3 *ngIf="starSystem.planets.length === 0">{{ ts.strings.noPlanets }}</h3>
-  <canvas #canvas id="planets-canvas"></canvas>
+  <canvas #canvas id="planets-canvas" ng-style="{ 'display' : (starSystem.planets.length === 0) ? 'none' : 'block' }"></canvas>
   <div class="planet-list">
     <app-planet-item *ngFor="let planet of starSystem.planets" [planet]="planet"></app-planet-item>
   </div>

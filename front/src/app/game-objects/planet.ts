@@ -3,6 +3,7 @@ import { GameObject } from './game-object';
 import { PlanetDTO } from '../dtos/planet';
 import { PLANET_ROTATION_SPEED_MULT, PLANET_ORBIT_SCALE_MULTIPLIER } from '../galaxy/galaxy-constants';
 import { Colony } from './colony';
+import { romanize } from '../roman-numbers';
 
 export class Planet implements GameObject {
   id: number;
@@ -36,5 +37,9 @@ export class Planet implements GameObject {
     const time = new Date().getTime() * 0.001;
     const speed = PLANET_ROTATION_SPEED_MULT / Math.sqrt(this.orbit);
     return (startingAngle + speed * time) % (Math.PI * 2);
+  }
+
+  get name(): string {
+    return `${this.starSystem.name} ${romanize(this.orbit)}`;
   }
 }

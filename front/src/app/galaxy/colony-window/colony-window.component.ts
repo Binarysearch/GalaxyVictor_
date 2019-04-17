@@ -26,7 +26,7 @@ export class ColonyWindowComponent implements OnInit {
   ngOnInit() {  }
 
   get title(): string {
-    return this.ts.strings.colony + ' ' + this.colony.id;
+    return `${this.ts.strings.colony} en ${this.colony.planet.name}`;
   }
 
   closeButtonClick() {
