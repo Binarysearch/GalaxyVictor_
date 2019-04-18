@@ -3,14 +3,16 @@
   <table>
     <thead>
       <tr>
-        <th>{{ ts.strings.planet }}</th>
+        <th class="sortable" (click)="sortBy('name')">{{ ts.strings.planet }} <span *ngIf="orderBy=='name'"><i *ngIf="orderDir==-1" class="fa fa-sort-desc" aria-hidden="true"></i><i *ngIf="orderDir==1" class="fa fa-sort-asc" aria-hidden="true"></i></span></th>
         <th class="sortable" (click)="sortBy('civilizationId')">{{ ts.strings.civilization }} <span *ngIf="orderBy=='civilizationId'"><i *ngIf="orderDir==-1" class="fa fa-sort-desc" aria-hidden="true"></i><i *ngIf="orderDir==1" class="fa fa-sort-asc" aria-hidden="true"></i></span></th>
+        <th style="max-width: 300px;width: 300px;" class="sortable" (click)="sortBy('construction')">{{ ts.strings.construction }} <span *ngIf="orderBy=='construction'"><i *ngIf="orderDir==-1" class="fa fa-sort-desc" aria-hidden="true"></i><i *ngIf="orderDir==1" class="fa fa-sort-asc" aria-hidden="true"></i></span></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let colony of colonies" (click)="clickInColony(colony.id)" [title]="ts.strings.viewColonyInMap">
+      <tr *ngFor="let colony of colonies" (click)="clickInColony(colony)" [title]="ts.strings.viewColonyInMap">
         <td>{{ colony.planet.name }}</td>
         <td>{{ colony.civilization.name }}</td>
+        <td style="max-width: 300px;width: 300px;"><button class='btn right' (click)="changeBuildingOrderClicked(colony)" [title]="ts.strings.changeBuildingOrder">{{ getConstruction(colony) }}</button></td>
       </tr>
     </tbody>
   </table>
