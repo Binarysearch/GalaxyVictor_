@@ -40,9 +40,7 @@ export class CivilizationsService {
 
   private constantDataUrl = this.host + '/api/constant-data';
 
-  private _currentCivilization: UserCivilizationDTO;
   private currentCivilizationSubject: Subject<UserCivilizationDTO> = new Subject<UserCivilizationDTO>();
-  private currentGalaxyId: number;
 
   constructor(private http: HttpClient, private store: Store, private galaxiesService: GalaxiesService,
      private coloniesService: ColoniesService,
@@ -51,10 +49,8 @@ export class CivilizationsService {
       private fleetsService: FleetsService) {
     this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
       if (currentGalaxy) {
+        this.reloadCurrentCivilization();
         this.loadConstantData();
-        this.currentGalaxyId = currentGalaxy.id;
-      } else {
-        this.currentGalaxyId = null;
       }
     });
   }
@@ -125,34 +121,28 @@ export class CivilizationsService {
       {galaxyId: galaxyId, name: civilizationName, homeStarName: homeStarName}
       ).pipe(
       tap<UserCivilizationDTO>((civ: UserCivilizationDTO) => {
-        this.currentCivilizationSubject.next(civ);
-        this.store.serverTime = civ.serverTime;
-        this.store.userCivilization = civ;
-        this._currentCivilization = civ;
+        this.onCivilizationChange(civ);
       })
     );
   }
 
-  public get currentCivilization(): UserCivilizationDTO {
-    return this._currentCivilization;
-  }
-
   reloadCurrentCivilization(): void {
-    if (this.currentGalaxyId) {
-      this.http.get<UserCivilizationDTO>(this.civilizationUrl + `?galaxy=${this.currentGalaxyId}`)
+    if (this.store.galaxy) {
+      this.http.get<UserCivilizationDTO>(this.civilizationUrl)
         .subscribe((data: UserCivilizationDTO) => {
-          this.currentCivilizationSubject.next(data);
-          this.store.serverTime = data.serverTime;
-          this.store.userCivilization = data;
-          this._currentCivilization = data;
-          this.shipModelsService.loadModels();
+          this.onCivilizationChange(data);
         }, (error: any) => {
-          this._currentCivilization = null;
-          console.log(error);
+          this.onCivilizationChange(null);
         });
     } else {
-      this._currentCivilization = null;
+      this.onCivilizationChange(null);
     }
+  }
+
+  onCivilizationChange(civ: UserCivilizationDTO) {
+    this.store.clearCivilization();
+    this.store.setCivilization(civ);
+    this.currentCivilizationSubject.next(civ);
   }
 
   loadCivilizations(): any {
@@ -167,10 +157,6 @@ export class CivilizationsService {
     }, (error: any) => {
       console.log(error);
     });
-  }
-
-  public get hasCivilization(): boolean {
-    return this._currentCivilization != null;
   }
 
   public getCurrentCivilization(): Observable<UserCivilizationDTO> {

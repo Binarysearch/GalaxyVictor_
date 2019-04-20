@@ -46,8 +46,8 @@ export class GalaxyMap {
     this.hoverManager = new HoverManager(store, this.starRenderer, this.fleetRenderer, this.planetRenderer, this.camera);
 
     this.focusHome();
-    core.getCurrentCivilization().subscribe((civ: UserCivilizationDTO) => {
-      this.selectAndFocus(civ.homeworld.id);
+    core.getPlanets().subscribe((planets) => {
+      this.focusHome();
     });
 
     const animate = () => {
@@ -207,18 +207,20 @@ export class GalaxyMap {
   }
 
   focusHome(): void {
-    if (this.core.hasCivilization) {
-      this.selectAndFocus(this.core.currentCivilization.homeworld.id);
+    if (this.store.civilization) {
+      this.selectAndFocus(this.store.civilization.homeworld.id);
     }
   }
 
   selectAndFocus(id: number) {
     const element = this.store.getObjectById(id);
-    this.camera.x = element.x;
-    this.camera.y = element.y;
-    this.camera.zoom = 1;
-    this._selected = element.id;
-    this.camera.follow(element.id);
+    if (element) {
+      this.camera.x = element.x;
+      this.camera.y = element.y;
+      this.camera.zoom = 1;
+      this._selected = element.id;
+      this.camera.follow(element.id);
+    }
   }
 
   public select(id: number) {

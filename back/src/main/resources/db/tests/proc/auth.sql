@@ -12,7 +12,7 @@ begin
   insert into core.users(id, email, password, galaxy) values(1001,'email',crypt('12345', gen_salt('bf', 8)),1000);
   insert into core.sessions(id,usr) values('token', 1001);
 
-  result_ = core.auth('token');
+  result_ = core.auth('token', 12345);
   perform test.session_dto(result_);
 
 end;$function$;

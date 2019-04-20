@@ -16,8 +16,9 @@ public class RegisterController extends ApiServlet {
 	public String postRequest(ApiRequest request) throws SQLException {
 		String email = request.jsonPath("$.email");
 		String password = request.jsonPath("$.password");
-
-		String result = executeQueryForJson("select core.register(?, ?);", email, password);
+		long time = System.currentTimeMillis();
+		
+		String result = executeQueryForJson("select core.register(?, ?, ?);", email, password, time);
 
 		return result;
 	}

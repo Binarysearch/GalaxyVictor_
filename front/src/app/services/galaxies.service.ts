@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { tap } from 'rxjs/operators';
 import { GalaxyDTO } from '../dtos/galaxy';
 import { SessionDTO } from '../dtos/session';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,12 @@ export class GalaxiesService {
 
   private currentGalaxySubject: Subject<GalaxyDTO> = new Subject<GalaxyDTO>();
 
-  constructor(private http: HttpClient, private authService: AuthService, private store: Store) {
+  constructor(private http: HttpClient, private authService: AuthService, private store: Store, private router: Router) {
     this.authService.getCurrentSession().subscribe((session: SessionDTO) => {
       if (session) {
-        this.currentGalaxySubject.next(session.user.currentGalaxy);
+        this.onGalaxyChange(session.user.currentGalaxy);
       } else {
-        this.currentGalaxySubject.next(null);
+        this.onGalaxyChange(null);
       }
     });
   }
@@ -36,10 +37,18 @@ export class GalaxiesService {
   selectGalaxy(id: number): Observable<GalaxyDTO> {
     return this.http.put<GalaxyDTO>(this.currentGalaxyUrl, {id: id}).pipe(
       tap<GalaxyDTO>((galaxy: GalaxyDTO) => {
-        this.currentGalaxySubject.next(galaxy);
-        this.store.setGalaxy(galaxy);
+        this.onGalaxyChange(galaxy);
       })
     );
+  }
+
+  private onGalaxyChange(galaxy: GalaxyDTO) {
+    this.store.clearGalaxy();
+    this.store.setGalaxy(galaxy);
+    this.currentGalaxySubject.next(galaxy);
+    if (galaxy) {
+      this.router.navigate(['galaxy']);
+    }
   }
 
   getCurrentGalaxy(): Observable<GalaxyDTO> {

@@ -43,7 +43,7 @@ begin
 
   count_ = (select count(*) from core.star_systems where not explored and galaxy=galaxy_);
 
-  result_ = (SELECT id FROM core.star_systems OFFSET floor(random()*count_) LIMIT 1);
+  result_ = (SELECT id FROM core.star_systems where not explored and galaxy=galaxy_ OFFSET floor(random()*count_) LIMIT 1);
   
   return result_;
 end;$function$;

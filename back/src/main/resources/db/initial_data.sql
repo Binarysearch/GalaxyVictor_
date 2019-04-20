@@ -4,8 +4,8 @@
 ------------                               ----------------------
 -----------------------------------------------------------------
 
-select core.register('admin@galaxyvictor.com', '12345');
-select core.register('otro@galaxyvictor.com', '12345');
+select core.register('admin@galaxyvictor.com', '12345', 0);
+select core.register('otro@galaxyvictor.com', '12345', 0);
 
 select core.create_galaxy('Via Lactea', 1000, 3);
 select core.create_galaxy('Andromeda', 1000, 3);

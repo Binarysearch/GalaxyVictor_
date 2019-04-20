@@ -20,27 +20,17 @@ export class AuthService {
   private loginUrl = this.host + '/api/login';
   private registerUrl = this.host + '/api/register';
 
-  private session: SessionDTO;
   private currentSessionSubject: Subject<SessionDTO> = new Subject<SessionDTO>();
 
   constructor(private http: HttpClient, private router: Router, private store: Store, private messagingService: MessagingService) {
 
   }
 
-  public get isAuthenticated(): boolean {
-    return this.session != null && this.session.token != null;
-  }
-
-  public get currentSession() {
-    return this.session;
-  }
-
   public logout() {
-    // TODO: logout in server, destroy session
     localStorage.removeItem('sessionToken');
-    this.session = null;
+    this.store.clear();
+    this.currentSessionSubject.next(null);
     this.router.navigate(['']);
-    this.store.setSession(null);
   }
 
   auth() {
@@ -49,8 +39,7 @@ export class AuthService {
       this.http.post<SessionDTO>(this.authUrl, sessionToken).subscribe((session: SessionDTO) => {
         this.onSessionStart(session);
       }, (error) => {
-        console.log(error);
-        localStorage.removeItem('sessionToken');
+        this.logout();
       });
     }
   }
@@ -72,18 +61,13 @@ export class AuthService {
   }
 
   private onSessionStart(session: SessionDTO) {
-    this.session = session;
-    this.store.setSession(session);
     localStorage.setItem('sessionToken', session.token);
-    this.currentSessionSubject.next(this.session);
+    this.store.clear();
+    this.store.setSession(session);
+    this.store.setServerTime(session.serverTime);
+    this.currentSessionSubject.next(session);
     this.router.navigate([this.redirectUrl]);
     this.messagingService.send({type: 'authToken', payload: session.token});
-  }
-
-  public get sessionToken() {
-    if (this.isAuthenticated) {
-      return this.currentSession.token;
-    }
   }
 
   public getCurrentSession(): Observable<SessionDTO> {

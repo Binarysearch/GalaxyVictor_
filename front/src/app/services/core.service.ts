@@ -1,6 +1,6 @@
+import { PlanetsService } from './planets.service';
 import { TradeService } from './trade.service';
 import { ResearchService } from './research.service';
-import { ColonyResourceDTO } from './../dtos/colony-resource';
 import { ShipsService } from './ships.service';
 import { CivilizationsService } from './civilizations.service';
 import { GalaxiesService } from './galaxies.service';
@@ -19,6 +19,7 @@ import { Fleet } from '../game-objects/fleet';
 import { ShipDTO } from '../dtos/ship';
 import { ColoniesService } from './colonies.service';
 import { ColonyBuildingDTO } from '../dtos/colony-building';
+import { Planet } from '../game-objects/planet';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class CoreService {
   constructor(
     private authService: AuthService,
     private starSystemsService: StarSystemsService,
+    private planetsService: PlanetsService,
     private fleetService: FleetsService,
     private shipsService: ShipsService,
     private store: Store,
@@ -70,16 +72,8 @@ export class CoreService {
     return this.civilizationsService.createCivilization(this.store.galaxy.id, civilizationName, homeStarName);
   }
 
-  public get hasCivilization(): boolean {
-    return this.civilizationsService.hasCivilization;
-  }
-
   getCurrentCivilization(): Observable<UserCivilizationDTO> {
     return this.civilizationsService.getCurrentCivilization();
-  }
-
-  public get currentCivilization(): UserCivilizationDTO {
-    return this.civilizationsService.currentCivilization;
   }
 
   public startTravel(fleet: Fleet, destination: StarSystem): void {
@@ -114,4 +108,19 @@ export class CoreService {
     this.tradeService.createTradeRoute(origin, destination, resourceType, quantity);
   }
 
+  getCurrentSession(): Observable<SessionDTO> {
+    return this.authService.getCurrentSession();
+  }
+
+  getCurrentGalaxy(): Observable<GalaxyDTO> {
+    return this.galaxiesService.getCurrentGalaxy();
+  }
+
+  getPlanets(): Observable<Planet[]> {
+    return this.planetsService.getPlanets();
+  }
+
+  auth() {
+    this.authService.auth();
+  }
 }

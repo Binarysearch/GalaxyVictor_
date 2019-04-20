@@ -15,8 +15,9 @@ public class AuthController extends ApiServlet {
 	@Override
 	public String postRequest(ApiRequest request) throws SQLException {
 		String token = request.getRequestBody();
+		long time = System.currentTimeMillis();
 
-		String result = executeQueryForJson("select core.auth(?);", token);
+		String result = executeQueryForJson("select core.auth(?, ?);", token, time);
 
 		return result;
 	}

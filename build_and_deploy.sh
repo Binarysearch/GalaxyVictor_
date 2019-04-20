@@ -6,4 +6,4 @@ mvn clean
 mvn package
 cp ./target/galaxyvictor.war C:/tomcat/webapps/ROOT.war
 cd ..
-pause
+read -p "Press [Enter] key to continue..."

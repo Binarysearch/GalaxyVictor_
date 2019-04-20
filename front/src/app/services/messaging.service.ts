@@ -276,12 +276,12 @@ export class MessagingService {
         if (starSystem) {
           // TODO: remove all fleets and colonies from store that arent owned by user civilization
           starSystem.fleets.forEach((f: Fleet) => {
-            if (f.civilizationId !== this.store.userCivilization.id) {
+            if (f.civilizationId !== this.store.civilization.id) {
               this.store.removeFleet(f);
             }
           });
           starSystem.planets.forEach((p: Planet) => {
-            if (p.colony && p.colony.civilizationId !== this.store.userCivilization.id) {
+            if (p.colony && p.colony.civilizationId !== this.store.civilization.id) {
               this.store.removeColony(p.colony);
             }
           });

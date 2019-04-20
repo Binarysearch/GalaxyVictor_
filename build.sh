@@ -6,3 +6,4 @@ mvn clean
 mvn package
 cp ./target/galaxyvictor.war ./../galaxyvictor.war
 cd ..
+read -p "Press [Enter] key to continue..."

@@ -10,7 +10,7 @@ begin
   
   perform test.clear();
 
-  result_ = core.register(email_, password_);
+  result_ = core.register(email_, password_, 12345);
   perform test.session_dto(result_);
   assert json_typeof((result_->'user')->'currentGalaxy') = 'null', 'CURRENT GALAXY MUST BE NULL AFTER REGISTER';
 

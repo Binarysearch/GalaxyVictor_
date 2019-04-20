@@ -82,13 +82,13 @@ export class Store {
 
   public setSession(session: SessionDTO): void {
     this._session = session;
-    if (session && session.user.currentGalaxy) {
-      this.setGalaxy(session.user.currentGalaxy);
-    }
   }
 
   public setGalaxy(galaxy: GalaxyDTO): void {
     this._galaxy = galaxy;
+    if (this._session) {
+      this._session.user.currentGalaxy = galaxy;
+    }
   }
 
   public addStarSystem(starSystem: StarSystem): void {
@@ -154,13 +154,24 @@ export class Store {
     this.objects.delete(fleet.id);
   }
 
-  public clear(): void {
+  public clearCivilization(): void {
     this.objects.clear();
+    this._userCivilization = null;
     this._fleets = [];
     this._planets = [];
     this._civilizations = [];
     this._colonies = [];
     this._starSystems = [];
+  }
+
+  public clearGalaxy(): void {
+    this._galaxy = null;
+    this.clearCivilization();
+  }
+
+  public clear(): void {
+    this._session = null;
+    this.clearGalaxy();
   }
 
   getObjectById(id: number) {
@@ -172,15 +183,18 @@ export class Store {
     return localTime - this.lag;
   }
 
-  public set serverTime(serverTime: number) {
+  public setServerTime(serverTime: number) {
     this.lag = new Date().getTime() - serverTime;
   }
 
-  public set userCivilization(civ: UserCivilizationDTO) {
+  public setCivilization(civ: UserCivilizationDTO) {
     this._userCivilization = civ;
+    if (this._session) {
+      this._session.user.currentCivilization = civ;
+    }
   }
 
-  public get userCivilization(): UserCivilizationDTO {
+  public get civilization(): UserCivilizationDTO {
     return this._userCivilization;
   }
 

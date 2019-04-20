@@ -75,7 +75,7 @@ export class PlanetWindowComponent implements OnInit {
   isColonizable(): boolean {
     if (!this.planet.colony) {
       const fleet = this.planet.starSystem.fleets.find((f: Fleet, i) => {
-        return f.canColonize && f.civilization.id === this.store.userCivilization.id;
+        return f.canColonize && f.civilization.id === this.store.civilization.id;
       });
       if (fleet) {
         return true;

@@ -67,4 +67,13 @@ export class StarSystem implements GameObject {
     this.invalidatedTechnologies = true;
   }
 
+  clear() {
+    this.fleets = [];
+    this.planets = [];
+    this._technologies = [];
+    this._availableTechnologies = [];
+    this.researchOrder = null;
+    this.invalidatedAvailableTechnologies = true;
+    this.invalidatedTechnologies = true;
+  }
 }

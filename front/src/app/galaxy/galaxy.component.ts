@@ -1,3 +1,4 @@
+import { Store } from './../store';
 import { CoreService } from './../services/core.service';
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { GalaxyMap } from './galaxy-map';
@@ -13,7 +14,7 @@ export class GalaxyComponent implements OnInit {
 
   canvas: HTMLCanvasElement;
 
-  constructor(public galaxyMap: GalaxyMap, private core: CoreService) {}
+  constructor(public galaxyMap: GalaxyMap, private core: CoreService, private store: Store) {}
 
   ngOnInit() {
     this.canvas = (this.canvasRef.nativeElement as HTMLCanvasElement);
@@ -86,6 +87,6 @@ export class GalaxyComponent implements OnInit {
   }
 
   public get createCivilizationWindowVisible(): boolean {
-    return !this.core.hasCivilization;
+    return !this.store.civilization;
   }
 }

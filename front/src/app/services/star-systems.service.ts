@@ -1,6 +1,7 @@
+import { UserCivilizationDTO } from './../dtos/user-civilization';
 import { Store } from './../store';
 import { Injectable, isDevMode } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StarSystemDTO } from '../dtos/star-system';
 import { GalaxyDTO } from '../dtos/galaxy';
@@ -20,19 +21,23 @@ export class StarSystemsService {
   private starSystemsUrl = this.host + '/api/star-systems';
   private starSystemsTechnologiesUrl = this.host + '/api/star-system-technologies';
 
-  private currentGalaxyId: number;
+  private starSystemsSubject: Subject<StarSystem[]> = new Subject();
+
 
   constructor(private http: HttpClient, private galaxiesService: GalaxiesService,
-     private planetsService: PlanetsService,
-     private civilizationsService: CivilizationsService,
-      private store: Store) {
-    this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
-      if (currentGalaxy) {
-        this.currentGalaxyId = currentGalaxy.id;
-      } else {
-        this.currentGalaxyId = null;
-      }
+    private civilizationsService: CivilizationsService,
+    private store: Store) {
+
+    this.civilizationsService.getCurrentCivilization().subscribe((currentCivilization: UserCivilizationDTO) => {
       this.reloadStarSystems();
+      if (currentCivilization) {
+        if (this.store.starSystems.length > 0) {
+          this.store.starSystems.forEach(ss => {
+            ss.clear();
+          });
+          this.starSystemsSubject.next(this.store.starSystems);
+        }
+      }
     });
   }
 
@@ -93,17 +98,19 @@ export class StarSystemsService {
   }
 
   private reloadStarSystems() {
-    this.store.clear();
-    if (this.currentGalaxyId) {
-      this.http.get<StarSystemDTO[]>(this.starSystemsUrl + `?galaxy=${this.currentGalaxyId}`)
+    this.http.get<StarSystemDTO[]>(this.starSystemsUrl)
       .subscribe((data: StarSystemDTO[]) => {
         data.forEach(ss => {
           this.store.addStarSystem(new StarSystem(ss, this));
         });
-        this.planetsService.loadPlanets(this.currentGalaxyId);
+        this.starSystemsSubject.next(this.store.starSystems);
       }, (error: any) => {
         console.log(error);
       });
-    }
+
+  }
+
+  public getStarSystems(): Observable<StarSystem[]> {
+    return this.starSystemsSubject.asObservable();
   }
 }

@@ -1,5 +1,5 @@
-import { AuthService } from './services/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { CoreService } from './services/core.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   asideMenuVisible = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private core: CoreService) {}
 
   closeAsideMenu() {
     this.asideMenuVisible = false;
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.auth();
+    this.core.auth();
   }
 
 }

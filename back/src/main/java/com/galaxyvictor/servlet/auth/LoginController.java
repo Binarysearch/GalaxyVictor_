@@ -16,8 +16,9 @@ public class LoginController extends ApiServlet {
 	public String postRequest(ApiRequest request) throws SQLException {
 		String email = request.jsonPath("$.email");
 		String password = request.jsonPath("$.password");
+		long time = System.currentTimeMillis();
 
-		String result = executeQueryForJson("select core.login(?, ?);", email, password);
+		String result = executeQueryForJson("select core.login(?, ?, ?);", email, password, time);
 
 		return result;
 	}

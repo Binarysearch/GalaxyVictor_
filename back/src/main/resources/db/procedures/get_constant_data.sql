@@ -7,10 +7,14 @@ AS $function$declare
   resource_types_ json;
   colony_building_capability_types_ json;
   colony_building_types_ json;
-  civilization_id_ bigint;
+  user_id_ bigint;
 begin
 
-  civilization_id_ = core.require_civ(token_);
+  user_id_ = usr from core.sessions where id=token_;
+  
+  if (user_id_ is null) then
+    perform core.error(401, 'Invalid token');
+  end if;
 
 
   --TECHNOLOGIES
