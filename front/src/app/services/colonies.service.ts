@@ -9,6 +9,11 @@ import { PlanetsService } from './planets.service';
 import { CivilizationsService } from './civilizations.service';
 import { ColonyDetailsService } from './colony-details.service';
 
+interface StoredColonies {
+  ref: number;
+  colonies: ColonyDTO[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,6 +44,16 @@ export class ColoniesService  {
 
     this.civilizationsService.getCurrentCivilization().subscribe(civ => {
       if (civ) {
+        const storedColoniesString = localStorage.getItem('stored-colonies');
+        if (storedColoniesString) {
+          const storedColonies = JSON.parse(storedColoniesString) as StoredColonies;
+          if (civ.coloniesCache && storedColonies.ref === civ.coloniesCache) {
+            this.colonyDtos = storedColonies.colonies;
+            this.formatColonies();
+            return;
+          }
+        }
+
         this.loadColonies();
       } else {
         this.colonyDtos = null;
@@ -49,6 +64,7 @@ export class ColoniesService  {
   private loadColonies() {
     this.http.get<ColonyDTO[]>(this.coloniesUrl).subscribe((data: ColonyDTO[]) => {
       this.colonyDtos = data;
+      localStorage.setItem('stored-colonies', JSON.stringify({ref: this.store.civilization.coloniesCache, colonies: data}));
       this.formatColonies();
     }, (error: any) => {
       console.log(error);

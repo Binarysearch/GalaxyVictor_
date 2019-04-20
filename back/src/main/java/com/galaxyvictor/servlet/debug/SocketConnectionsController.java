@@ -27,7 +27,7 @@ public class SocketConnectionsController extends ApiServlet {
 	@Override
 	public String getRequest(ApiRequest request) throws SQLException {
 		String token = request.getToken();
-		executeQueryForJson("select core.auth(?);", token);
+		executeQueryForJson("select core.auth(?, 1);", token);
 
 		Map<Long, Map<String, WebSocket>> connections = messagingService.getConnections();
 
