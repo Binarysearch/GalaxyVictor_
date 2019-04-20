@@ -20,6 +20,7 @@ import { ColonyBuilding } from '../game-objects/colony-building';
 import { TradeRoute } from '../game-objects/trade-route';
 import { TradeRouteDTO } from '../dtos/trade-route';
 import { CreationTradeRouteDTO } from '../dtos/creation-trade-route';
+import { ColonyDetailsService } from './colony-details.service';
 
 const DEV_SOCKET_URL = `ws://localhost:8080/socket`;
 const PROD_SOCKET_URL = `wss://galaxyvictor.com/socket/`;
@@ -80,7 +81,7 @@ interface VisibilityLostDTO {
 export class MessagingService {
   private subject: Subject<Message>;
 
-  constructor(wsService: WebsocketService, private store: Store, private coloniesService: ColoniesService) {
+  constructor(wsService: WebsocketService, private store: Store, private colonyDetailsService: ColonyDetailsService) {
     this.subject = <Subject<Message>>wsService
       .connect((isDevMode()) ? DEV_SOCKET_URL : PROD_SOCKET_URL)
       .pipe(
@@ -126,7 +127,7 @@ export class MessagingService {
         }
         if (payload.colonies) {
           payload.colonies.forEach((c: ColonyDTO) => {
-            this.store.addColony(new Colony(c, this.coloniesService));
+            this.store.addColony(new Colony(c, this.colonyDetailsService));
           });
         }
       }
@@ -257,7 +258,7 @@ export class MessagingService {
       if (m.type === 'Colony') {
         const payload = m.payload as ColonyDTO;
         const colony = this.store.getObjectById(payload.id) as Colony;
-        const newColony = new Colony(payload, this.coloniesService);
+        const newColony = new Colony(payload, this.colonyDetailsService);
         if (colony) {
           this.store.removeColony(colony);
         }

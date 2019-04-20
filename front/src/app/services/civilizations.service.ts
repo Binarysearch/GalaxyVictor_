@@ -9,9 +9,7 @@ import { GalaxyDTO } from '../dtos/galaxy';
 import { Store } from '../store';
 import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
-import { ColoniesService } from './colonies.service';
 import { FleetsService } from './fleets.service';
-import { ShipModelsService } from './ship-models.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +22,10 @@ export class CivilizationsService {
   private civilizationsUrl = this.host + '/api/civilizations';
 
   private currentCivilizationSubject: Subject<UserCivilizationDTO> = new Subject<UserCivilizationDTO>();
+  private civilizationsSubject: Subject<Civilization[]> = new Subject<Civilization[]>();
 
-  constructor(private http: HttpClient, private store: Store, private galaxiesService: GalaxiesService,
-     private coloniesService: ColoniesService,
-     private shipModelsService: ShipModelsService,
-     private researchService: ResearchService,
-      private fleetsService: FleetsService) {
+  constructor(private http: HttpClient, private store: Store, private galaxiesService: GalaxiesService) {
+
     this.galaxiesService.getCurrentGalaxy().subscribe((currentGalaxy: GalaxyDTO) => {
       if (currentGalaxy) {
         this.reloadCurrentCivilization();
@@ -75,9 +71,7 @@ export class CivilizationsService {
       data.forEach(p => {
         this.store.addCivilization(new Civilization(p));
       });
-      this.coloniesService.loadColonies();
-      this.fleetsService.loadFleets();
-      this.researchService.loadResearchOrders();
+      this.civilizationsSubject.next(this.store.civilizations);
     }, (error: any) => {
       console.log(error);
     });
@@ -85,6 +79,10 @@ export class CivilizationsService {
 
   public getCurrentCivilization(): Observable<UserCivilizationDTO> {
     return this.currentCivilizationSubject.asObservable();
+  }
+
+  public getCivilizations(): Observable<Civilization[]> {
+    return this.civilizationsSubject.asObservable();
   }
 
 }

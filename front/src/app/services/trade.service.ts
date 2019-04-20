@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { DestructionTradeRouteDTO } from './../dtos/destruction-trade-route';
 import { CreationTradeRoute } from './../game-objects/creation-trade-route';
 import { DestructionTradeRoute } from './../game-objects/destruction-trade-route';
+import { CivilizationsService } from './civilizations.service';
+import { PlanetsService } from './planets.service';
 
 interface TradeRoutesDTO {
   tradeRoutes: TradeRouteDTO[];
@@ -24,7 +26,24 @@ export class TradeService {
 
   private tradeRoutesUrl = this.host + '/rest/trade-routes';
 
-  constructor(private http: HttpClient, private store: Store) { }
+  private tradeRoutesDto: TradeRoutesDTO;
+
+  constructor(private http: HttpClient, private store: Store,
+    private civilizationsService: CivilizationsService,
+    private planetsService: PlanetsService) {
+
+    this.planetsService.getPlanets().subscribe(data => {
+      this.formatTradeRoutes();
+    });
+
+    this.civilizationsService.getCurrentCivilization().subscribe(civ => {
+      if (civ) {
+        this.loadTradeRoutes();
+      } else {
+        this.tradeRoutesDto = null;
+      }
+    });
+  }
 
   createTradeRoute(origin: number, destination: number, resourceType: string, quantity: number): void {
     this.http.post<any>(this.tradeRoutesUrl, {origin: origin, destination: destination, resourceType: resourceType, quantity: quantity})
@@ -32,39 +51,48 @@ export class TradeService {
   }
 
   loadTradeRoutes() {
-    this.http.get<TradeRoutesDTO>(this.tradeRoutesUrl)
-      .subscribe((data) => {
-
-        if (data.tradeRoutes) {
-          data.tradeRoutes.forEach(r => {
-            const route = new TradeRoute(r);
-            route.origin = this.store.getObjectById(r.origin) as Planet;
-            route.destination = this.store.getObjectById(r.destination) as Planet;
-            route.resourceType = this.store.getResourceType(r.resourceType);
-            this.store.addTradeRoute(route);
-          });
-        }
-
-        if (data.creationTradeRoutes) {
-          data.creationTradeRoutes.forEach(r => {
-            const route = new CreationTradeRoute(r);
-            route.origin = this.store.getObjectById(r.origin) as Planet;
-            route.destination = this.store.getObjectById(r.destination) as Planet;
-            route.resourceType = this.store.getResourceType(r.resourceType);
-            this.store.addCreationTradeRoute(route);
-          });
-        }
-
-        if (data.destructionTradeRoutes) {
-          data.destructionTradeRoutes.forEach(r => {
-            const route = new DestructionTradeRoute(r);
-            route.origin = this.store.getObjectById(r.origin) as Planet;
-            route.destination = this.store.getObjectById(r.destination) as Planet;
-            route.resourceType = this.store.getResourceType(r.resourceType);
-            this.store.addDestructionTradeRoute(route);
-          });
-        }
-
-      });
+    this.http.get<TradeRoutesDTO>(this.tradeRoutesUrl).subscribe((data) => {
+      this.tradeRoutesDto = data;
+      this.formatTradeRoutes();
+    });
   }
+
+  formatTradeRoutes() {
+    const loadedPlanets = this.store.planets.length > 0;
+    if (loadedPlanets && this.tradeRoutesDto) {
+      if (this.tradeRoutesDto.tradeRoutes) {
+        this.tradeRoutesDto.tradeRoutes.forEach(r => {
+          const route = new TradeRoute(r);
+          route.origin = this.store.getObjectById(r.origin) as Planet;
+          route.destination = this.store.getObjectById(r.destination) as Planet;
+          route.resourceType = this.store.getResourceType(r.resourceType);
+          this.store.addTradeRoute(route);
+        });
+      }
+
+      if (this.tradeRoutesDto.creationTradeRoutes) {
+        this.tradeRoutesDto.creationTradeRoutes.forEach(r => {
+          const route = new CreationTradeRoute(r);
+          route.origin = this.store.getObjectById(r.origin) as Planet;
+          route.destination = this.store.getObjectById(r.destination) as Planet;
+          route.resourceType = this.store.getResourceType(r.resourceType);
+          this.store.addCreationTradeRoute(route);
+        });
+      }
+
+      if (this.tradeRoutesDto.destructionTradeRoutes) {
+        this.tradeRoutesDto.destructionTradeRoutes.forEach(r => {
+          const route = new DestructionTradeRoute(r);
+          route.origin = this.store.getObjectById(r.origin) as Planet;
+          route.destination = this.store.getObjectById(r.destination) as Planet;
+          route.resourceType = this.store.getResourceType(r.resourceType);
+          this.store.addDestructionTradeRoute(route);
+        });
+      }
+
+      this.tradeRoutesDto = null;
+    }
+  }
+
+
 }

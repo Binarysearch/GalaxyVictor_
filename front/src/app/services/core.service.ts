@@ -21,6 +21,7 @@ import { ColoniesService } from './colonies.service';
 import { ColonyBuildingDTO } from '../dtos/colony-building';
 import { Planet } from '../game-objects/planet';
 import { ConstantDataService } from './constant-data.service';
+import { ShipModelsService } from './ship-models.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,7 @@ export class CoreService {
     private researchService: ResearchService,
     private tradeService: TradeService,
     private constantDataService: ConstantDataService,
+    private shipModelsService: ShipModelsService,
     private galaxiesService: GalaxiesService
   ) { }
 
@@ -84,10 +86,6 @@ export class CoreService {
 
   public getFleetShips(fleetId: number): Observable<ShipDTO[]> {
     return this.shipsService.getFleetShips(fleetId);
-  }
-
-  public getColonyBuildings(colonyId: number): Observable<ColonyBuildingDTO[]> {
-    return this.coloniesService.getColonyBuildings(colonyId);
   }
 
   public changeColonyBuildingOrder(colonyId: number, buildingTypeId: string): void {

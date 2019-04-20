@@ -6,6 +6,7 @@ import { Civilization } from './civilization';
 import { ColonyBuilding } from './colony-building';
 import { ColonyResource } from './colony-resource';
 import { ColoniesService } from '../services/colonies.service';
+import { ColonyDetailsService } from '../services/colony-details.service';
 
 export class Colony implements GameObject {
 
@@ -32,7 +33,7 @@ export class Colony implements GameObject {
   civilizationId: number;
   canBuildShips: boolean;
 
-  constructor(data: ColonyDTO, private coloniesService: ColoniesService) {
+  constructor(data: ColonyDTO, private colonyDetailsService: ColonyDetailsService) {
     this.id = data.id;
     this.planetId = data.planet;
     this.civilizationId = data.civilization;
@@ -55,7 +56,7 @@ export class Colony implements GameObject {
 
   get buildings(): ColonyBuilding[] {
     if (this.invalidatedBuildings) {
-      this.coloniesService.loadColonyBuildings(this);
+      this.colonyDetailsService.loadColonyBuildings(this);
       this.invalidatedBuildings = false;
     }
     return this._buildings;
@@ -67,7 +68,7 @@ export class Colony implements GameObject {
 
   get resources(): ColonyResource[] {
     if (this.invaliadatedResources) {
-      this.coloniesService.loadColonyResources(this);
+      this.colonyDetailsService.loadColonyResources(this);
       this.invaliadatedResources = false;
     }
     return this._resources;
@@ -91,7 +92,7 @@ export class Colony implements GameObject {
 
   get availableBuildings(): ColonyBuildingType[] {
     if (this.invalidatedAvailableBuildings) {
-      this.coloniesService.loadColonyAvailableBuildingTypes(this);
+      this.colonyDetailsService.loadColonyAvailableBuildingTypes(this);
       this.invalidatedAvailableBuildings = false;
     }
     return this._availableBuildingTypes;

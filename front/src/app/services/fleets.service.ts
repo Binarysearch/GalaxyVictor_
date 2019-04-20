@@ -1,3 +1,5 @@
+import { StarSystemsService } from './star-systems.service';
+import { CivilizationsService } from './civilizations.service';
 import { TravelDTO } from './../dtos/travel';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
@@ -16,19 +18,46 @@ export class FleetsService {
   private fleetsUrl = this.host + '/api/fleets';
   private travelsUrl = this.host + '/api/travels';
 
+  private fleetDtos: FleetDTO[];
 
-  constructor(private http: HttpClient, private store: Store) {
+  constructor(private http: HttpClient,
+    private store: Store,
+    private starSystemsService: StarSystemsService,
+    private civilizationsService: CivilizationsService) {
+
+    this.civilizationsService.getCurrentCivilization().subscribe(civ => {
+      if (civ) {
+        this.loadFleets();
+      } else {
+        this.fleetDtos = null;
+      }
+    });
+
+    this.starSystemsService.getStarSystems().subscribe(data => {
+      this.formatFleets();
+    });
+
+    this.civilizationsService.getCivilizations().subscribe(data => {
+      this.formatFleets();
+    });
 
   }
 
-  public loadFleets() {
-    this.http.get<FleetDTO[]>(this.fleetsUrl)
-    .subscribe((data: FleetDTO[]) => {
-      data.forEach(f => {
+  formatFleets() {
+    const loadedStarSystems = this.store.starSystems.length > 0;
+    const loadedCivilizations = this.store.civilizations.length > 0;
+    if (loadedStarSystems && loadedCivilizations && this.fleetDtos) {
+      this.fleetDtos.forEach(f => {
         this.store.addFleet(new Fleet(f));
       });
-    }, (error: any) => {
-      console.log(error);
+      this.fleetDtos = null;
+    }
+  }
+
+  loadFleets() {
+    this.http.get<FleetDTO[]>(this.fleetsUrl).subscribe((data) => {
+      this.fleetDtos = data;
+      this.formatFleets();
     });
   }
 

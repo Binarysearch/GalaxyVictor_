@@ -3,6 +3,7 @@ import { Injectable, isDevMode } from '@angular/core';
 import { Store } from '../store';
 import { ShipModelDTO } from '../dtos/ship-model';
 import { ShipModel } from '../game-objects/ship-model';
+import { CivilizationsService } from './civilizations.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,12 @@ export class ShipModelsService {
   private shipModelsUrl = this.host + '/api/ship-models';
 
 
-  constructor(private http: HttpClient, private store: Store) {
-
+  constructor(private http: HttpClient, private store: Store, private civilizationsService: CivilizationsService) {
+    this.civilizationsService.getCurrentCivilization().subscribe(civ => {
+      if (civ) {
+        this.loadModels();
+      }
+    });
   }
 
   public loadModels() {
