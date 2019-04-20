@@ -31,22 +31,23 @@ export class Store {
   private colonyBuildingCapabilityTypes: Map<string, ColonyBuildingCapabilityType> = new Map();
 
   private _starSystems: StarSystem[] = [];
-  private _colonyBuildingTypes: ColonyBuildingType[] = [];
   private _shipModels: ShipModel[] = [];
   private _planets: Planet[] = [];
   private _researchOrders: ResearchOrder[] = [];
-  private _resourceTypes: ResourceType[] = [];
   private _tradeRoutes: TradeRoute[] = [];
   private _creationTradeRoutes: CreationTradeRoute[] = [];
   private _destructionTradeRoutes: DestructionTradeRoute[] = [];
   private _civilizations: Civilization[] = [];
   private _colonies: Colony[] = [];
-  private _technologies: Technology[] = [];
   private _fleets: Fleet[] = [];
   private _session: SessionDTO;
   private _galaxy: GalaxyDTO;
   private _userCivilization: UserCivilizationDTO;
   private lag = 0;
+
+  private _resourceTypes: ResourceType[] = [];
+  private _colonyBuildingTypes: ColonyBuildingType[] = [];
+  private _technologies: Technology[] = [];
 
   public get session(): SessionDTO {
     return this._session;
@@ -162,6 +163,11 @@ export class Store {
     this._civilizations = [];
     this._colonies = [];
     this._starSystems = [];
+    this._shipModels = [];
+    this._tradeRoutes = [];
+    this._creationTradeRoutes = [];
+    this._destructionTradeRoutes = [];
+    this._researchOrders = [];
   }
 
   public clearGalaxy(): void {

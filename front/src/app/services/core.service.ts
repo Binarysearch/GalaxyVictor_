@@ -20,6 +20,7 @@ import { ShipDTO } from '../dtos/ship';
 import { ColoniesService } from './colonies.service';
 import { ColonyBuildingDTO } from '../dtos/colony-building';
 import { Planet } from '../game-objects/planet';
+import { ConstantDataService } from './constant-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class CoreService {
     private coloniesService: ColoniesService,
     private researchService: ResearchService,
     private tradeService: TradeService,
+    private constantDataService: ConstantDataService,
     private galaxiesService: GalaxiesService
   ) { }
 
