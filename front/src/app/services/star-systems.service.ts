@@ -4,12 +4,14 @@ import { Injectable, isDevMode } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StarSystemDTO } from '../dtos/star-system';
-import { GalaxyDTO } from '../dtos/galaxy';
 import { GalaxiesService } from './galaxies.service';
 import { StarSystem } from '../game-objects/star-system';
-import { PlanetsService } from './planets.service';
 import { CivilizationsService } from './civilizations.service';
-import { Technology } from '../game-objects/technology';
+
+interface StoredGalaxy {
+  id: number;
+  starSystems: StarSystemDTO[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -98,8 +100,22 @@ export class StarSystemsService {
   }
 
   private reloadStarSystems() {
+    const storedGalaxyString = localStorage.getItem('stored-galaxy');
+    if (storedGalaxyString) {
+      const storedGalaxy = JSON.parse(storedGalaxyString) as StoredGalaxy;
+      if (storedGalaxy.id === this.store.galaxy.id) {
+        storedGalaxy.starSystems.forEach(ss => {
+          this.store.addStarSystem(new StarSystem(ss, this));
+        });
+        this.starSystemsSubject.next(this.store.starSystems);
+        return;
+      }
+    }
+
+
     this.http.get<StarSystemDTO[]>(this.starSystemsUrl)
       .subscribe((data: StarSystemDTO[]) => {
+        localStorage.setItem('stored-galaxy', JSON.stringify({id: this.store.galaxy.id, starSystems: data}));
         data.forEach(ss => {
           this.store.addStarSystem(new StarSystem(ss, this));
         });
