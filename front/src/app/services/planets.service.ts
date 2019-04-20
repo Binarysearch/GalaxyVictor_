@@ -7,6 +7,11 @@ import { Planet } from '../game-objects/planet';
 import { CivilizationsService } from './civilizations.service';
 import { Subject, Observable } from 'rxjs';
 
+interface StoredPlanets {
+  ref: number;
+  planets: PlanetDTO[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,9 +33,20 @@ export class PlanetsService {
 
       civilizationsService.getCurrentCivilization().subscribe(civ => {
         if (civ) {
+          const storedPlanetsString = localStorage.getItem('stored-planets');
+          if (storedPlanetsString) {
+            const storedPlanets = JSON.parse(storedPlanetsString) as StoredPlanets;
+            if (civ.planetsCache && storedPlanets.ref === civ.planetsCache) {
+              this.planetDtos = storedPlanets.planets;
+              this.formatPlanets();
+              return;
+            }
+          }
+
           this.http.get<PlanetDTO[]>(this.planetsUrl)
           .subscribe((data: PlanetDTO[]) => {
             this.planetDtos = data;
+            localStorage.setItem('stored-planets', JSON.stringify({ref: civ.planetsCache, planets: data}));
             this.formatPlanets();
           }, (error: any) => {
             console.log(error);

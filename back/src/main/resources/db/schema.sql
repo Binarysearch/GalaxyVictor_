@@ -72,7 +72,14 @@ CREATE TABLE civilizations(
     galaxy bigint NOT NULL REFERENCES galaxies(id) ON UPDATE CASCADE ON DELETE CASCADE,
     name text NOT NULL,
     homeworld bigint NOT NULL REFERENCES planets(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    usr bigint NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+    usr bigint NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    trade_routes_cache integer, 
+    research_orders_cache integer, 
+    ship_models_cache integer, 
+    civilizations_cache integer, 
+    planets_cache integer, 
+    colonies_cache integer, 
+    fleets_cache integer
 );
 
 CREATE TABLE known_star_systems(

@@ -1,4 +1,3 @@
-import { ResearchService } from './research.service';
 import { Injectable, isDevMode } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { UserCivilizationDTO } from '../dtos/user-civilization';
@@ -9,7 +8,6 @@ import { GalaxyDTO } from '../dtos/galaxy';
 import { Store } from '../store';
 import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
-import { FleetsService } from './fleets.service';
 
 @Injectable({
   providedIn: 'root'

@@ -21,7 +21,14 @@ begin
     (select row_to_json(cc) from (
 
     select c.id, c.name, 
-    (select row_to_json(h) from (select p.id, p.star_system as "starSystem", p.orbit, p.type, p.size from core.planets p where p.id=c.homeworld) as h) as homeworld 
+    (select row_to_json(h) from (select p.id, p.star_system as "starSystem", p.orbit, p.type, p.size from core.planets p where p.id=c.homeworld) as h) as homeworld,
+    trade_routes_cache as "tradeRoutesCache", 
+    research_orders_cache as "researchOrdersCache", 
+    ship_models_cache as "shipModelsCache", 
+    civilizations_cache as "civilizationsCache", 
+    planets_cache as "planetsCache", 
+    colonies_cache as "coloniesCache", 
+    fleets_cache as "fleetsCache" 
     from core.civilizations c 
     where c.usr=user_id_ and c.galaxy=u.galaxy
 

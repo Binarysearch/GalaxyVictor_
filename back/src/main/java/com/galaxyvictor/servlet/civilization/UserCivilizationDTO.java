@@ -9,6 +9,14 @@ public class UserCivilizationDTO {
     private long serverTime = System.currentTimeMillis();
     private PlanetDTO homeworld;
 
+    private long tradeRoutesCache;
+    private long researchOrdersCache;
+    private long shipModelsCache;
+    private long civilizationsCache;
+    private long planetsCache;
+    private long coloniesCache;
+    private long fleetsCache;
+
     public UserCivilizationDTO() {
     }
 
@@ -66,6 +74,104 @@ public class UserCivilizationDTO {
      */
     public void setId(long id) {
         this.id = id;
+    }
+
+    /**
+     * @return the tradeRoutesCache
+     */
+    public long getTradeRoutesCache() {
+        return tradeRoutesCache;
+    }
+
+    /**
+     * @param tradeRoutesCache the tradeRoutesCache to set
+     */
+    public void setTradeRoutesCache(long tradeRoutesCache) {
+        this.tradeRoutesCache = tradeRoutesCache;
+    }
+
+    /**
+     * @return the researchOrdersCache
+     */
+    public long getResearchOrdersCache() {
+        return researchOrdersCache;
+    }
+
+    /**
+     * @param researchOrdersCache the researchOrdersCache to set
+     */
+    public void setResearchOrdersCache(long researchOrdersCache) {
+        this.researchOrdersCache = researchOrdersCache;
+    }
+
+    /**
+     * @return the shipModelsCache
+     */
+    public long getShipModelsCache() {
+        return shipModelsCache;
+    }
+
+    /**
+     * @param shipModelsCache the shipModelsCache to set
+     */
+    public void setShipModelsCache(long shipModelsCache) {
+        this.shipModelsCache = shipModelsCache;
+    }
+
+    /**
+     * @return the civilizationsCache
+     */
+    public long getCivilizationsCache() {
+        return civilizationsCache;
+    }
+
+    /**
+     * @param civilizationsCache the civilizationsCache to set
+     */
+    public void setCivilizationsCache(long civilizationsCache) {
+        this.civilizationsCache = civilizationsCache;
+    }
+
+    /**
+     * @return the planetsCache
+     */
+    public long getPlanetsCache() {
+        return planetsCache;
+    }
+
+    /**
+     * @param planetsCache the planetsCache to set
+     */
+    public void setPlanetsCache(long planetsCache) {
+        this.planetsCache = planetsCache;
+    }
+
+    /**
+     * @return the coloniesCache
+     */
+    public long getColoniesCache() {
+        return coloniesCache;
+    }
+
+    /**
+     * @param coloniesCache the coloniesCache to set
+     */
+    public void setColoniesCache(long coloniesCache) {
+        this.coloniesCache = coloniesCache;
+    }
+
+    /**
+     * @return the fleetsCache
+     */
+    public long getFleetsCache() {
+        return fleetsCache;
+    }
+
+    /**
+     * @param fleetsCache the fleetsCache to set
+     */
+    public void setFleetsCache(long fleetsCache) {
+        this.fleetsCache = fleetsCache;
     }
 
 }

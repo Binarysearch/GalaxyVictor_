@@ -6,4 +6,11 @@ export interface UserCivilizationDTO {
   name: string;
   serverTime: number;
   homeworld: PlanetDTO;
+  planetsCache: number;
+  tradeRoutesCache: number;
+  researchOrdersCache: number;
+  shipModelsCache: number;
+  civilizationsCache: number;
+  coloniesCache: number;
+  fleetsCache: number;
 }
