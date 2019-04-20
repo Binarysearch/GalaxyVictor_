@@ -27,6 +27,14 @@ begin
   insert into core.known_civilizations(knows, known) select civilization_, civilization from core.visible_star_systems where star_system=destination_  
   and not exists(select 1 from core.known_civilizations where knows=civilization_ and known=civilization);
 
+  insert into core.known_civilizations(knows, known) select civilization, civilization_ from core.visible_star_systems where star_system=destination_  
+  and not exists(select 1 from core.known_civilizations where knows=civilization and known=civilization_);
+
+  --incoming fleet civs
+  insert into core.known_civilizations(knows, known) select civilization_, civilization from core.fleets where destination=destination_  
+  and not exists(select 1 from core.known_civilizations where knows=civilization_ and known=civilization);
+
+
   if (existing_fleet_ is not null) then
     update core.ships set fleet=existing_fleet_ where fleet=fleet_;
     delete from core.fleets where id=fleet_;
