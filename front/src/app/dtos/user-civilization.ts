@@ -11,6 +11,4 @@ export interface UserCivilizationDTO {
   researchOrdersCache: number;
   shipModelsCache: number;
   civilizationsCache: number;
-  coloniesCache: number;
-  fleetsCache: number;
 }
