@@ -1,0 +1,65 @@
+package com.galaxyvictor.db;
+
+import com.galaxyvictor.Config;
+
+public class DbData {
+
+    private static boolean DEVELOP_CONNECTION = Config.DEVELOP;
+
+    public static DatabaseConnectionData getConnectionData(){
+        if(DEVELOP_CONNECTION){
+            return new DatabaseConnectionData(){
+
+                @Override
+                public String getUrl() {
+                    return "jdbc:postgresql://localhost:5432/";
+                }
+    
+                @Override
+                public String getUsername() {
+                    return "postgres";
+                }
+    
+                @Override
+                public String getPassword() {
+                    return "";
+                }
+    
+                @Override
+                public String getDatabaseName() {
+                    return "gv_develop";
+                }
+    
+            };
+        } else {
+            return new DatabaseConnectionData(){
+
+                @Override
+                public String getUrl() {
+                    return "jdbc:postgresql://galaxyvictor.com:5432/";
+                }
+    
+                @Override
+                public String getUsername() {
+                    return "postgres";
+                }
+    
+                @Override
+                public String getPassword() {
+                    return "";
+                }
+    
+                @Override
+                public String getDatabaseName() {
+                    return "gv";
+                }
+    
+            };
+        }
+        
+    }
+
+    public static void setDevelopMode() {
+        DEVELOP_CONNECTION = true;
+    }
+}
