@@ -77,9 +77,7 @@ CREATE TABLE civilizations(
     research_orders_cache integer, 
     ship_models_cache integer, 
     civilizations_cache integer, 
-    planets_cache integer, 
-    colonies_cache integer, 
-    fleets_cache integer
+    planets_cache integer
 );
 
 CREATE TABLE known_star_systems(

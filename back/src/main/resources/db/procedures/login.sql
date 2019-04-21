@@ -30,9 +30,7 @@ begin
     research_orders_cache as "researchOrdersCache", 
     ship_models_cache as "shipModelsCache", 
     civilizations_cache as "civilizationsCache", 
-    planets_cache as "planetsCache", 
-    colonies_cache as "coloniesCache", 
-    fleets_cache as "fleetsCache" 
+    planets_cache as "planetsCache"
     from core.civilizations c 
     where c.usr=user_id_ and c.galaxy=u.galaxy
 

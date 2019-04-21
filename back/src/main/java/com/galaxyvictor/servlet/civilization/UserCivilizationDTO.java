@@ -14,8 +14,6 @@ public class UserCivilizationDTO {
     private long shipModelsCache;
     private long civilizationsCache;
     private long planetsCache;
-    private long coloniesCache;
-    private long fleetsCache;
 
     public UserCivilizationDTO() {
     }
@@ -145,33 +143,4 @@ public class UserCivilizationDTO {
     public void setPlanetsCache(long planetsCache) {
         this.planetsCache = planetsCache;
     }
-
-    /**
-     * @return the coloniesCache
-     */
-    public long getColoniesCache() {
-        return coloniesCache;
-    }
-
-    /**
-     * @param coloniesCache the coloniesCache to set
-     */
-    public void setColoniesCache(long coloniesCache) {
-        this.coloniesCache = coloniesCache;
-    }
-
-    /**
-     * @return the fleetsCache
-     */
-    public long getFleetsCache() {
-        return fleetsCache;
-    }
-
-    /**
-     * @param fleetsCache the fleetsCache to set
-     */
-    public void setFleetsCache(long fleetsCache) {
-        this.fleetsCache = fleetsCache;
-    }
-
 }
