@@ -9,6 +9,11 @@ import { Store } from '../store';
 import { CivilizationDTO } from '../dtos/civilization';
 import { Civilization } from '../game-objects/civilization';
 
+interface StoredCivilizations {
+  ref: number;
+  civilizations: CivilizationDTO[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +23,8 @@ export class CivilizationsService {
 
   private civilizationUrl = this.host + '/api/civilization';
   private civilizationsUrl = this.host + '/api/civilizations';
+
+  civilizationDtos: CivilizationDTO[];
 
   private currentCivilizationSubject: Subject<UserCivilizationDTO> = new Subject<UserCivilizationDTO>();
   private civilizationsSubject: Subject<Civilization[]> = new Subject<Civilization[]>();
@@ -64,15 +71,32 @@ export class CivilizationsService {
   }
 
   loadCivilizations(): any {
+    const storedCivilizationsString = localStorage.getItem('stored-civilizations');
+    const civ = this.store.civilization;
+    if (storedCivilizationsString) {
+      const storedCivilizations = JSON.parse(storedCivilizationsString) as StoredCivilizations;
+      if (civ.civilizationsCache && storedCivilizations.ref === civ.civilizationsCache) {
+        this.civilizationDtos = storedCivilizations.civilizations;
+        this.formatCivilizations();
+        return;
+      }
+    }
+
     this.http.get<CivilizationDTO[]>(this.civilizationsUrl)
     .subscribe((data: CivilizationDTO[]) => {
-      data.forEach(p => {
-        this.store.addCivilization(new Civilization(p));
-      });
-      this.civilizationsSubject.next(this.store.civilizations);
+      this.civilizationDtos = data;
+      localStorage.setItem('stored-civilizations', JSON.stringify({ref: civ.civilizationsCache, civilizations: data}));
+      this.formatCivilizations();
     }, (error: any) => {
       console.log(error);
     });
+  }
+
+  private formatCivilizations() {
+    this.civilizationDtos.forEach(p => {
+      this.store.addCivilization(new Civilization(p));
+    });
+    this.civilizationsSubject.next(this.store.civilizations);
   }
 
   public getCurrentCivilization(): Observable<UserCivilizationDTO> {
