@@ -9,11 +9,6 @@ import { PlanetsService } from './planets.service';
 import { CivilizationsService } from './civilizations.service';
 import { ColonyDetailsService } from './colony-details.service';
 
-interface StoredColonies {
-  ref: number;
-  colonies: ColonyDTO[];
-}
-
 @Injectable({
   providedIn: 'root'
 })
