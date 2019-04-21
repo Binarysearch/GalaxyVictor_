@@ -24,7 +24,7 @@ begin
     perform core.error(400, 'Technological prerequisites not met');
   end if;
 
-  finish_time_ = time_ + 100000;
+  finish_time_ = time_ + 10000;
 
   update core.research_orders set technology = technology_, started_time=time_, finish_time=finish_time_ where stellar_government=stellar_government_;
   insert into core.research_orders(stellar_government, technology, started_time, finish_time) 

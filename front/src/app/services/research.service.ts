@@ -7,6 +7,11 @@ import { Injectable, isDevMode } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ResearchOrder } from '../game-objects/research-order';
 
+interface StoredResearchOrders {
+  ref: number;
+  researchOrders: ResearchOrderDTO[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -58,8 +63,20 @@ export class ResearchService {
   }
 
   loadResearchOrders() {
+    const storedresearchOrdersString = localStorage.getItem('stored-research-orders');
+    const civ = this.store.civilization;
+    if (storedresearchOrdersString) {
+      const storedresearchOrders = JSON.parse(storedresearchOrdersString) as StoredResearchOrders;
+      if (civ.researchOrdersCache && storedresearchOrders.ref === civ.researchOrdersCache) {
+        this.researchOrderDtos = storedresearchOrders.researchOrders;
+        this.formatResearchOrders();
+        return;
+      }
+    }
+
     this.http.get<ResearchOrderDTO[]>(this.researchOrdersUrl).subscribe((data) => {
       this.researchOrderDtos = data;
+      localStorage.setItem('stored-research-orders', JSON.stringify({ref: civ.researchOrdersCache, researchOrders: data}));
       this.formatResearchOrders();
     });
   }
