@@ -73,11 +73,11 @@ CREATE TABLE civilizations(
     name text NOT NULL,
     homeworld bigint NOT NULL REFERENCES planets(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     usr bigint NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    trade_routes_cache integer, 
-    research_orders_cache integer, 
-    ship_models_cache integer, 
-    civilizations_cache integer, 
-    planets_cache integer
+    trade_routes_cache integer NOT NULL DEFAULT (random()*1000000)::integer, 
+    research_orders_cache integer NOT NULL DEFAULT (random()*1000000)::integer, 
+    ship_models_cache integer NOT NULL DEFAULT (random()*1000000)::integer, 
+    civilizations_cache integer NOT NULL DEFAULT (random()*1000000)::integer, 
+    planets_cache integer NOT NULL DEFAULT (random()*1000000)::integer
 );
 
 CREATE TABLE known_star_systems(
